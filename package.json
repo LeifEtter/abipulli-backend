@@ -15,11 +15,11 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/express": "^5.0.1",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@types/express": "^5.0.1",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "pino": "^9.6.0",
