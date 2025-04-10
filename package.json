@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx index.ts",
+    "dev": "tsx src/index.ts",
     "check": "tsc --noEmit",
-    "start": "npm run check && tsx index.ts"
+    "start": "npm run check && tsx src/index.ts",
+    "start-prod": "tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",
