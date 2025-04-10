@@ -136,3 +136,5 @@ dist
 .pnp.*
 
 ./src/logging/app.log
+
+**/.DS_Store
