@@ -13,8 +13,9 @@ const logger = pino({
       {
         target: "pino/file",
         options: {
-          destination: `${path.dirname(fileURLToPath(import.meta.url))}/app.log
-        `,
+          destination: `${path.dirname(
+            fileURLToPath(import.meta.url)
+          )}/app.log`,
         },
       },
     ],
