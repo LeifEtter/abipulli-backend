@@ -1,10 +1,9 @@
 import {
+  serial,
   pgTable,
-  unique,
   integer,
   varchar,
   foreignKey,
-  bigint,
   text,
   timestamp,
   smallint,
@@ -15,160 +14,184 @@ import {
 export const imageToDesign = pgTable(
   "image_to_design",
   {
-    imageId: bigint("image_id", { mode: "number" }).notNull(),
-    designId: bigint("design_id", { mode: "number" }).notNull(),
-    position: bigint({ mode: "number" }),
+    image_id: integer().notNull(),
+    design_id: integer().notNull(),
+    x_position: integer(),
+    y_position: integer(),
   },
   (table) => [
     foreignKey({
-      columns: [table.imageId],
+      columns: [table.image_id],
       foreignColumns: [image.id],
-      name: "fk_image_to_design_image_id_image_id",
+      name: "fk_image_to_design_image",
     }),
     foreignKey({
-      columns: [table.designId],
+      columns: [table.design_id],
       foreignColumns: [design.id],
-      name: "fk_image_to_design_design_id_design_id",
+      name: "fk_image_to_design_design",
     }),
   ]
 );
 
+export type InsertImageToDesign = typeof imageToDesign.$inferInsert;
+export type SelectImageToDesign = typeof imageToDesign.$inferSelect;
+
 export const user = pgTable(
   "user",
   {
-    id: bigint({ mode: "number" }).notNull(),
+    id: serial().notNull().primaryKey(),
     name: varchar().notNull(),
     email: varchar().notNull(),
-    password: varchar().notNull(),
+    password: varchar(),
     school: varchar(),
-    roleId: bigint("role_id", { mode: "number" }),
+    role_id: integer().notNull().default(0),
   },
   (table) => [
     foreignKey({
-      columns: [table.roleId],
+      columns: [table.role_id],
       foreignColumns: [role.id],
-      name: "fk_user_role_id_role_id",
+      name: "fk_user_role",
     }),
   ]
 );
 
 export type InsertUser = typeof user.$inferInsert;
+export type SelectUser = typeof user.$inferSelect;
 
 export const chat = pgTable(
   "chat",
   {
-    id: bigint({ mode: "number" }).notNull(),
-    content: text(),
-    userId: varchar("user_id"),
-    lastMessageAt: timestamp("last_message_at", { mode: "string" }),
-    createdAt: bigint("created_at", { mode: "number" }),
-    orderId: bigint("order_id", { mode: "number" }),
+    id: serial().notNull().primaryKey(),
+    user_id: integer().notNull(),
+    last_message_at: timestamp(),
+    created_at: timestamp().defaultNow(),
+    order_id: integer().notNull(),
   },
   (table) => [
     foreignKey({
-      columns: [table.orderId],
+      columns: [table.order_id],
       foreignColumns: [order.id],
-      name: "fk_chat_order_id_order_id",
+      name: "fk_chat_order",
+    }),
+    foreignKey({
+      columns: [table.order_id],
+      foreignColumns: [order.id],
+      name: "fk_chat_user",
     }),
   ]
 );
+
+export type InsertChat = typeof chat.$inferInsert;
+export type SelectChat = typeof chat.$inferSelect;
 
 export const design = pgTable(
   "design",
   {
-    id: bigint({ mode: "number" }).notNull(),
-    orderId: bigint("order_id", { mode: "number" }),
-    customerId: bigint("customer_id", { mode: "number" }),
+    id: serial().notNull().primaryKey(),
+    order_id: integer().notNull(),
+    customer_id: integer().notNull(),
   },
   (table) => [
     foreignKey({
-      columns: [table.orderId],
+      columns: [table.order_id],
       foreignColumns: [order.id],
-      name: "fk_design_order_id_order_id",
+      name: "fk_design_order",
     }),
     foreignKey({
-      columns: [table.customerId],
+      columns: [table.customer_id],
       foreignColumns: [user.id],
-      name: "fk_design_customer_id_user_id",
+      name: "fk_design_customer",
     }),
   ]
 );
 
+export type InsertDesign = typeof design.$inferInsert;
+export type SelectDesign = typeof design.$inferSelect;
+
 export const message = pgTable(
   "message",
   {
-    id: bigint({ mode: "number" }).notNull(),
-    chatId: bigint("chat_id", { mode: "number" }),
-    senderId: bigint("sender_id", { mode: "number" }),
-    content: bigint({ mode: "number" }),
+    id: serial().notNull().primaryKey(),
+    chat_id: integer().notNull(),
+    sender_id: integer().notNull(),
+    content: text(),
   },
   (table) => [
     foreignKey({
-      columns: [table.senderId],
+      columns: [table.sender_id],
       foreignColumns: [user.id],
       name: "fk_message_sender_id_user_id",
     }),
     foreignKey({
-      columns: [table.chatId],
+      columns: [table.chat_id],
       foreignColumns: [chat.id],
       name: "fk_message_chat_id_chat_id",
     }),
   ]
 );
 
+export type InsertMessage = typeof design.$inferInsert;
+export type SelectMessage = typeof design.$inferSelect;
+
 export const designSuggestion = pgTable(
   "design_suggestion",
   {
-    id: bigint({ mode: "number" }).notNull(),
-    chatId: bigint("chat_id", { mode: "number" }),
-    designId: bigint("design_id", { mode: "number" }),
-    accepted: bigint({ mode: "number" }),
-    denied: bigint({ mode: "number" }),
+    id: serial().notNull().primaryKey(),
+    chat_id: integer().notNull(),
+    design_id: integer().notNull(),
+    accepted: boolean().default(false),
+    denied: boolean().default(false),
   },
   (table) => [
     foreignKey({
-      columns: [table.designId],
+      columns: [table.design_id],
       foreignColumns: [design.id],
-      name: "fk_design_suggestion_design_id_design_id",
+      name: "fk_design_suggestion_design",
     }),
     foreignKey({
-      columns: [table.chatId],
+      columns: [table.chat_id],
       foreignColumns: [chat.id],
-      name: "fk_design_suggestion_chat_id_chat_id",
+      name: "fk_design_suggestion_chat",
     }),
   ]
 );
 
+export type InsertDesignSuggestion = typeof designSuggestion.$inferInsert;
+export type SelectDesignSuggestion = typeof designSuggestion.$inferSelect;
+
 export const order = pgTable(
   "order",
   {
-    id: bigint({ mode: "number" }).notNull(),
+    id: serial().notNull().primaryKey(),
     title: varchar(),
     content: text(),
-    userId: smallint("user_id"),
-    createdAt: timestamp("created_at", { mode: "string" }),
-    deadline: timestamp({ mode: "string" }),
+    user_id: integer().notNull(),
+    created_at: timestamp().defaultNow(),
+    deadline: timestamp(),
   },
   (table) => [
     foreignKey({
-      columns: [table.userId],
+      columns: [table.user_id],
       foreignColumns: [user.id],
       name: "fk_order_user_id_user_id",
     }),
   ]
 );
 
+export type InsertOrder = typeof order.$inferInsert;
+export type SelectOrder = typeof order.$inferSelect;
+
 export const image = pgTable(
   "image",
   {
-    id: bigint({ mode: "number" }).notNull(),
-    creationAt: timestamp("creation_at", { mode: "string" }).notNull(),
-    creationCost: smallint("creation_cost"),
-    origin: bigint({ mode: "number" }),
-    generated: boolean(),
-    prompt: bigint({ mode: "number" }),
-    userId: bigint("user_id", { mode: "number" }),
-    orderId: bigint("order_id", { mode: "number" }),
+    id: serial().notNull().primaryKey(),
+    created_at: timestamp("creation_at", { mode: "string" }).notNull(),
+    creation_cost: smallint("creation_cost"),
+    origin: varchar(),
+    generated: boolean().default(false),
+    prompt: text(),
+    user_id: integer(),
+    order_id: integer().notNull(),
   },
   (table) => [
     index("image_index_1").using(
@@ -176,20 +199,26 @@ export const image = pgTable(
       table.generated.asc().nullsLast().op("bool_ops")
     ),
     foreignKey({
-      columns: [table.orderId],
+      columns: [table.order_id],
       foreignColumns: [order.id],
-      name: "fk_image_order_id_order_id",
+      name: "fk_image_order",
     }),
     foreignKey({
-      columns: [table.userId],
+      columns: [table.user_id],
       foreignColumns: [user.id],
-      name: "fk_image_user_id_user_id",
+      name: "fk_image_user",
     }),
   ]
 );
 
+export type InsertImage = typeof image.$inferInsert;
+export type SelectImage = typeof image.$inferSelect;
+
 export const role = pgTable("role", {
-  id: bigint({ mode: "number" }).notNull(),
-  roleName: varchar("role_name").notNull(),
-  rolePower: bigint("role_power", { mode: "number" }).notNull(),
+  id: serial("id").primaryKey().notNull(),
+  role_name: varchar().notNull(),
+  role_power: smallint().notNull(),
 });
+
+export type InsertRole = typeof role.$inferInsert;
+export type SelectRole = typeof role.$inferSelect;
