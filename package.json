@@ -8,7 +8,8 @@
     "dev": "tsx src/index.ts",
     "check": "tsc --noEmit",
     "start": "npm run check && tsx src/index.ts",
-    "start-prod": "tsc && node dist/index.js"
+    "start-prod": "tsc && node dist/index.js",
+    "seed": "tsx src/db/seed/seed.ts"
   },
   "keywords": [],
   "author": "",
