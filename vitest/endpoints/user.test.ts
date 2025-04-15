@@ -2,24 +2,12 @@ import request from "supertest";
 import { afterAll, beforeAll, expect, it } from "vitest";
 import { describe } from "node:test";
 import { deleteUser } from "components/user/user.util";
-
 import app from "app";
 const mockUser = {
   name: "Super Tester",
   email: "supertesting@Test.com",
   password: "Test@1234",
 };
-
-// jest.mock("../src/logging/logger.ts", () => ({
-//   logger: {
-//     info: jest.fn(),
-//     error: jest.fn(),
-//   },
-// }));
-
-// beforeAll(async () => {
-//   await deleteUser({ email: mockUser.email });
-// });
 
 afterAll(async () => {
   await deleteUser({ email: mockUser.email });
@@ -37,7 +25,8 @@ describe("Testing User Registration/Login Flow", () => {
       .expect(201)
       .then((res) => {});
   });
-  it("should test registration and login flow", async () => {
+
+  it("should respond with error when user tries to register with an already registered email", async () => {
     await request(app)
       .post("/user/register")
       .send({
@@ -58,7 +47,7 @@ describe("Testing User Registration/Login Flow", () => {
       });
   });
 
-  it("should respond with error when user tries to register with an already registered email", async () => {
+  it("should test user login with correct credentials", async () => {
     await request(app)
       .post("/user/login")
       .send({ email: mockUser.email, password: mockUser.password })
@@ -72,8 +61,4 @@ describe("Testing User Registration/Login Flow", () => {
         );
       });
   });
-
-  it("should respond with error when user tries to register with an already registered email", async () => {});
-
-  it("should test user login", async () => {});
 });
