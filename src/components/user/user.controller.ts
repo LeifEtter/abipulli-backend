@@ -7,7 +7,13 @@ import type {
   UserRegistrationSchemaType,
 } from "../../validation/schemas/userSchemas";
 import db from "../../db/db";
-import { order, role, user, type SelectUser } from "../../db/schema";
+import {
+  order,
+  role,
+  user,
+  type SelectUser,
+  type SelectUserWithRole,
+} from "../../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { logger } from "../../logging/logger";
@@ -64,6 +70,14 @@ export const registerUser = async (
   }
 };
 
+const getUserByEmail = async (
+  email: string
+): Promise<SelectUserWithRole | undefined> =>
+  await db.query.user.findFirst({
+    where: eq(user.email, email),
+    with: { role: true },
+  });
+
 /** Sign in Email and Password User */
 export const loginWithEmail = async (
   req: Request,
@@ -71,10 +85,7 @@ export const loginWithEmail = async (
   next: NextFunction
 ) => {
   const body: UserLoginSchemaType = req.body;
-  const userLoggingIn = await db.query.user.findFirst({
-    where: eq(user.email, body.email),
-    with: { role: true },
-  });
+  const userLoggingIn = await getUserByEmail(body.email);
   if (
     !userLoggingIn ||
     !(await bcrypt.compare(body.password, userLoggingIn.password!))
