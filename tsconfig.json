@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDirs": ["src", "__tests__"],
 
     "strict": true,
     "esModuleInterop": true,
@@ -19,6 +19,6 @@
     // "moduleDetection": "force",
     // "isolatedModules": true
   },
-  "include": ["src"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["dist", "node_modules"]
 }
