@@ -11,6 +11,8 @@ app.use(
     logger,
   })
 );
+app.use(router);
+
 
 app.route("/test").get((req: express.Request, res: express.Response): void => {
   res.status(200).send({ message: "Working" });
