@@ -1,4 +1,8 @@
-const errorMessages = {
+export interface ErrorInfo {
+  code: number;
+  msg: string;
+}
+const errorMessages: { [index: string]: ErrorInfo } = {
   emailNotFound: {
     code: 0,
     msg: "Kein Nutzer mit dieser Email konnte gefunden werden",
