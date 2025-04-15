@@ -31,10 +31,8 @@ export const registerUser = async (
 ) => {
   const body: UserRegistrationSchemaType = req.body;
   try {
-    const existingEmail = await db.query.user.findFirst({
-      where: eq(user.email, body.email),
-    });
-    if (existingEmail) {
+    const existingUser = getUserByEmail(body.email);
+    if (existingUser != null) {
       next(
         new ApiError({
           code: 400,
@@ -67,14 +65,6 @@ export const registerUser = async (
     next(error);
   }
 };
-
-const getUserByEmail = async (
-  email: string
-): Promise<SelectUserWithRole | undefined> =>
-  await db.query.user.findFirst({
-    where: eq(user.email, email),
-    with: { role: true },
-  });
 
 /** Sign in Email and Password User */
 export const loginWithEmail = async (
