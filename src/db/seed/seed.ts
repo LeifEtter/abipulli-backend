@@ -1,4 +1,4 @@
-import logger from "../../logging/logger";
+import { logger } from "../../logging/logger";
 import insertRoles from "./insert-roles";
 
 async function main() {
