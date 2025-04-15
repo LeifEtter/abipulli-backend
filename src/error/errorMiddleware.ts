@@ -11,7 +11,9 @@ export function apiErrorHandler(
   logger.error(err);
 
   if (err instanceof ApiError) {
-    res.status(err.code).json({ err_code: err.code, err_msg: err.info.msg });
+    res
+      .status(err.code)
+      .json({ err_code: err.info.code, err_msg: err.info.msg });
     return;
   }
   res.status(500).json("Uh Oh, Something went Wrong (╥﹏╥) ");
