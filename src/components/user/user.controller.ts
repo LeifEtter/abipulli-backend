@@ -27,8 +27,9 @@ export const registerUser = async (
 ) => {
   const body: UserRegistrationSchemaType = req.body;
   try {
-    if (getUserByEmail(body.email)! != null) {
-      next(
+    const existingUser = await getUserByEmail(body.email);
+    if (existingUser != null) {
+      return next(
         new ApiError({
           code: 400,
           info: getErr("emailAlreadyRegistered")!,
