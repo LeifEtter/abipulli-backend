@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { z, ZodError } from "zod";
-import logger from "../logging/logger";
+import { logger } from "../logging/logger";
 
 const validateBody =
   (schema: z.ZodObject<any, any>) =>

@@ -1,6 +1,6 @@
 import express from "express";
 import { pinoHttp } from "pino-http";
-import logger from "./logging/logger";
+import { httpLogger, logger } from "./logging/logger";
 import router from "./route";
 import { apiErrorHandler } from "./error/errorMiddleware";
 const app = express();

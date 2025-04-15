@@ -10,7 +10,7 @@ import db from "../../db/db";
 import { order, role, user, type SelectUser } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
-import logger from "../../logging/logger";
+import { logger } from "../../logging/logger";
 import "../../db/relation";
 import jwt from "jsonwebtoken";
 

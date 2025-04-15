@@ -2,7 +2,7 @@ import path from "path";
 import { destination, pino } from "pino";
 import { fileURLToPath } from "url";
 
-const logger = pino({
+export const logger = pino({
   level: "info",
   transport: {
     targets: [
@@ -22,4 +22,3 @@ const logger = pino({
   },
 });
 
-export default logger;

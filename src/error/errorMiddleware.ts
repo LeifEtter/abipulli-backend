@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import logger from "../logging/logger";
+import { logger } from "../logging/logger";
 import ApiError from "../error/ApiError";
 
 export function apiErrorHandler(
@@ -8,7 +8,6 @@ export function apiErrorHandler(
   res: Response,
   next: NextFunction
 ) {
-
   logger.error(err);
 
   if (err instanceof ApiError) {
