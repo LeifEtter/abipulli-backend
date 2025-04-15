@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
 import {
   serial,
   pgTable,
@@ -66,6 +67,10 @@ export const user = pgTable(
 
 export type InsertUser = typeof user.$inferInsert;
 export type SelectUser = typeof user.$inferSelect;
+
+export type SelectUserWithRole = typeof user.$inferSelect & {
+  role: typeof role.$inferSelect;
+};
 
 export const chat = pgTable(
   "chat",
