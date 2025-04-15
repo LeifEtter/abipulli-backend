@@ -10,6 +10,7 @@ import {
 } from "../../db/schema";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "../../constants/misc";
+import jwt from "jsonwebtoken";
 
 export const deleteUser = async ({ email }: { email: string }) => {
   const userToDelete = await db.query.user.findFirst({
@@ -42,3 +43,17 @@ export const createUser = async (newUser: InsertUser) =>
 
 export const encryptPassword = async (password: string): Promise<string> =>
   await bcrypt.hash(password, SALT_ROUNDS);
+
+export const passwordIsValid = async (
+  pass1: string,
+  pass2: string
+): Promise<boolean> => await bcrypt.compare(pass1, pass2);
+
+export const createToken = (userId: number, rolePower: number): string =>
+  jwt.sign(
+    {
+      user_id: userId,
+      role_power: rolePower,
+    },
+    process.env.JWT_SECRET!
+  );
