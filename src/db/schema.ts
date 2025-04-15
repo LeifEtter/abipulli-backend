@@ -36,12 +36,21 @@ export const imageToDesign = pgTable(
 export type InsertImageToDesign = typeof imageToDesign.$inferInsert;
 export type SelectImageToDesign = typeof imageToDesign.$inferSelect;
 
+export const role = pgTable("role", {
+  id: serial("id").primaryKey().notNull(),
+  role_name: varchar().notNull(),
+  role_power: smallint().notNull(),
+});
+
+export type InsertRole = typeof role.$inferInsert;
+export type SelectRole = typeof role.$inferSelect;
+
 export const user = pgTable(
   "user",
   {
     id: serial().notNull().primaryKey(),
     name: varchar().notNull(),
-    email: varchar().notNull(),
+    email: varchar().notNull().unique(),
     password: varchar(),
     school: varchar(),
     role_id: integer().notNull().default(0),
@@ -74,8 +83,8 @@ export const chat = pgTable(
       name: "fk_chat_order",
     }),
     foreignKey({
-      columns: [table.order_id],
-      foreignColumns: [order.id],
+      columns: [table.user_id],
+      foreignColumns: [user.id],
       name: "fk_chat_user",
     }),
   ]
@@ -130,8 +139,8 @@ export const message = pgTable(
   ]
 );
 
-export type InsertMessage = typeof design.$inferInsert;
-export type SelectMessage = typeof design.$inferSelect;
+export type InsertMessage = typeof message.$inferInsert;
+export type SelectMessage = typeof message.$inferSelect;
 
 export const designSuggestion = pgTable(
   "design_suggestion",
@@ -185,7 +194,7 @@ export const image = pgTable(
   "image",
   {
     id: serial().notNull().primaryKey(),
-    created_at: timestamp("creation_at", { mode: "string" }).notNull(),
+    created_at: timestamp("created_at", { mode: "string" }).notNull(),
     creation_cost: smallint("creation_cost"),
     origin: varchar(),
     generated: boolean().default(false),
@@ -213,12 +222,3 @@ export const image = pgTable(
 
 export type InsertImage = typeof image.$inferInsert;
 export type SelectImage = typeof image.$inferSelect;
-
-export const role = pgTable("role", {
-  id: serial("id").primaryKey().notNull(),
-  role_name: varchar().notNull(),
-  role_power: smallint().notNull(),
-});
-
-export type InsertRole = typeof role.$inferInsert;
-export type SelectRole = typeof role.$inferSelect;
