@@ -4,11 +4,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx src/index.ts",
-    "check": "tsc --noEmit",
+    "test": "npx tsx __tests__/routes/test.user.ts",
+    "dev": "NODE_ENV=development tsx --watch src/index.ts",
     "start": "npm run check && tsx src/index.ts",
-    "start-prod": "tsc && node dist/index.js",
+    "start-prod": "NODE_ENV=production tsc && node dist/index.js",
+    "check": "tsc --noEmit",
     "seed": "tsx src/db/seed/seed.ts"
   },
   "keywords": [],
