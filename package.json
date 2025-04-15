@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx tsx __tests__/routes/test.user.ts",
+    "test": "NODE_ENV=testing vitest",
     "dev": "NODE_ENV=development tsx --watch src/index.ts",
     "start": "npm run check && tsx src/index.ts",
     "start-prod": "NODE_ENV=production tsc && node dist/index.js",
