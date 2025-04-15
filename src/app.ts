@@ -4,6 +4,8 @@ import logger from "./logging/logger";
 
 const app = express();
 
+app.use(express.json());
+
 app.use(
   pinoHttp({
     logger,
