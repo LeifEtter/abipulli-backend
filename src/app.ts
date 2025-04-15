@@ -7,11 +7,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use(
-  pinoHttp({
-    logger,
-  })
-);
+app.use(httpLogger);
 app.use(router);
 
 app.use(apiErrorHandler);

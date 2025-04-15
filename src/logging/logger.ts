@@ -1,5 +1,7 @@
+import type { Request, Response } from "express";
 import path from "path";
 import { destination, pino } from "pino";
+import { pinoHttp } from "pino-http";
 import { fileURLToPath } from "url";
 
 export const logger = pino({
@@ -22,3 +24,20 @@ export const logger = pino({
   },
 });
 
+export const httpLogger = pinoHttp({
+  logger,
+  serializers: {
+    req(req: Request) {
+      return {
+        method: req.method,
+        url: req.url,
+        cookiePassed: req.headers.cookie ? true : false,
+      };
+    },
+    res(res: Response) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
+});
