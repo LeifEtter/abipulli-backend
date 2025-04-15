@@ -24,8 +24,6 @@ import jwt from "jsonwebtoken";
 /** Sign in Anonymous User */
 /** Sign in SSO User */
 
-const SALT_ROUNDS = 10;
-
 export const registerUser = async (
   req: Request,
   res: Response,
