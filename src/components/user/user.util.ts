@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import db from "../../db/db";
-import { user } from "../../db/schema";
 import {
   role,
   user,
@@ -31,3 +30,15 @@ export const getUserByEmail = async (
     where: eq(user.email, email),
     with: { role: true },
   });
+
+export const getRole = async (
+  power: number
+): Promise<SelectRole | undefined> => {
+  return await db.query.role.findFirst({ where: eq(role.role_power, power) });
+};
+
+export const createUser = async (newUser: InsertUser) =>
+  await db.insert(user).values(newUser).returning();
+
+export const encryptPassword = async (password: string): Promise<string> =>
+  await bcrypt.hash(password, SALT_ROUNDS);

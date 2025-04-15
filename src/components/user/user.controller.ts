@@ -19,6 +19,12 @@ import bcrypt from "bcrypt";
 import { logger } from "../../logging/logger";
 import "../../db/relation";
 import jwt from "jsonwebtoken";
+import {
+  createUser,
+  encryptPassword,
+  getRole,
+  getUserByEmail,
+} from "./user.util";
 
 /** */
 /** Sign in Anonymous User */
@@ -40,25 +46,16 @@ export const registerUser = async (
         })
       );
     }
-    const encryptedPassword: string = await bcrypt.hash(
-      body.password,
-      SALT_ROUNDS
-    );
-    const roleToGive = await db.query.role.findFirst({
-      where: eq(role.role_power, 0),
+    const password = await encryptPassword(body.password);
+    const createdUser = await createUser({
+      name: body.name,
+      email: body.email,
+      password: password,
+      role_id: (await getRole(0))?.id,
     });
-    const createdUser = await db
-      .insert(user)
-      .values({
-        name: body.name,
-        email: body.email,
-        password: encryptedPassword,
-        role_id: roleToGive?.id,
-      })
-      .returning();
     res.status(201).json({
       msg: "Account created successfully",
-      user_id: createdUser[0]?.id,
+      user_id: createdUser[0]!.id,
     });
   } catch (error) {
     logger.error(error);
