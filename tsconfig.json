@@ -4,21 +4,15 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDirs": ["src", "__tests__"],
-
+    "baseUrl": "src",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    // "skipLibCheck": true,
-
+    "skipLibCheck": true,
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "verbatimModuleSyntax": true
-
-    // "moduleDetection": "force",
-    // "isolatedModules": true
+    "noImplicitOverride": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*", "vitest/endpoints/*"],
   "exclude": ["dist", "node_modules"]
 }
