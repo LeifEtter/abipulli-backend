@@ -1,23 +1,25 @@
+import type { ErrorInfo } from "../constants/errorMessages";
+
 interface ApiErrorParams {
   code: number;
-  message: string;
+  info: ErrorInfo;
 }
 
 class ApiError {
   code: number;
-  message: string;
+  info: ErrorInfo;
 
-  constructor({ code, message }: ApiErrorParams) {
+  constructor({ code, info }: ApiErrorParams) {
     this.code = code;
-    this.message = message;
+    this.info = info;
   }
 
-  static badRequest(msg: string) {
-    return new ApiError({ code: 400, message: msg });
+  static badRequest(errorInfo: ErrorInfo) {
+    return new ApiError({ code: 400, info: errorInfo });
   }
 
-  static internal(msg: string) {
-    return new ApiError({ code: 500, message: msg });
+  static internal(errorInfo: ErrorInfo) {
+    return new ApiError({ code: 500, info: errorInfo });
   }
 }
 
