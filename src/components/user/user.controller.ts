@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import ApiError from "../../error/ApiError";
-import { getErr } from "../../constants/errorMessages";
 import type {
   AnonymousLoginSchema,
   GoogleSignOnSchema,
@@ -19,6 +18,7 @@ import {
   passwordIsValid,
 } from "./user.util";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
+import { errorMessages } from "constants/errorMessages";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -61,7 +61,7 @@ export const googleSSOLogin = async (
       return next(
         new ApiError({
           code: 401,
-          info: getErr("Dein Google IDToken ist ungültig")!,
+          info: errorMessages.faultyToken,
         })
       );
     }
@@ -83,7 +83,7 @@ export const registerUser = async (
       return next(
         new ApiError({
           code: 400,
-          info: getErr("emailAlreadyRegistered")!,
+          info: errorMessages.emailAlreadyRegistered,
         })
       );
     }
@@ -122,7 +122,7 @@ export const loginWithEmail = async (
       return next(
         new ApiError({
           code: 400,
-          info: getErr("faultyLoginCredentials")!,
+          info: errorMessages.faultyLoginCredentials,
         })
       );
     }
