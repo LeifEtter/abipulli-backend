@@ -1,4 +1,3 @@
-import type { InferSelectModel } from "drizzle-orm";
 import {
   serial,
   pgTable,
@@ -177,11 +176,13 @@ export const orders = pgTable(
   "orders",
   {
     id: serial().notNull().primaryKey(),
-    title: varchar(),
-    content: text(),
+    destination_country: varchar(),
+    student_amount: integer(),
     user_id: integer().notNull(),
     created_at: timestamp().defaultNow(),
     deadline: timestamp(),
+    school_name: varchar(),
+    motto: varchar(),
   },
   (table) => [
     foreignKey({
