@@ -15,6 +15,10 @@ const errorMessages: { [index: string]: ErrorInfo } = {
     code: 2,
     msg: "Email und/oder Passwort ist falsch",
   },
+  faultySSOCredentials: {
+    code: 3,
+    msg: "Dein Google IDToken ist ungültig",
+  },
 };
 
 export type ErrorCode = keyof typeof errorMessages;
