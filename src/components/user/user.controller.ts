@@ -2,12 +2,15 @@ import type { NextFunction, Request, Response } from "express";
 import ApiError from "../../error/ApiError";
 import { getErr } from "../../constants/errorMessages";
 import type {
+  AnonymousLoginSchema,
+  GoogleSignOnSchema,
   UserLoginSchemaType,
   UserRegistrationSchemaType,
 } from "../../validation/schemas/userSchemas";
 import { logger } from "../../logging/logger";
 import "../../db/relation";
 import {
+  createAnonymousToken,
   createToken,
   createUser,
   encryptPassword,
@@ -18,6 +21,26 @@ import {
 
 /** */
 /** Sign in Anonymous User */
+export const signInAnonymous = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body: AnonymousLoginSchema = req.body;
+    const token: string = createAnonymousToken(body.ip_address);
+    res.status(200).send({ token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const googleSSORegistration = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
+
 /** Sign in SSO User */
 
 export const registerUser = async (
