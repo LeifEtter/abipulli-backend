@@ -1,6 +1,13 @@
 import { Router } from "express";
-import { loginWithEmail, registerUser } from "./user.controller";
 import {
+  googleSSOLogin,
+  loginWithEmail,
+  registerUser,
+  signInAnonymous,
+} from "./user.controller";
+import {
+  anonymousLoginSchema,
+  googleSignOnSchema,
   userLoginSchema,
   userRegistrationSchema,
 } from "../../validation/schemas/userSchemas";
@@ -13,5 +20,13 @@ router
   .post(validateBody(userRegistrationSchema), registerUser);
 
 router.route("/login").post(validateBody(userLoginSchema), loginWithEmail);
+
+router
+  .route("/anonymous")
+  .post(validateBody(anonymousLoginSchema), signInAnonymous);
+
+router
+  .route("/googleSignOn")
+  .post(validateBody(googleSignOnSchema), googleSSOLogin);
 
 export default router;
