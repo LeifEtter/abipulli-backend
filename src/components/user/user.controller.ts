@@ -45,6 +45,31 @@ export const googleSSORegistration = async (
 ) => {};
 
 /** Sign in SSO User */
+export const googleSSOLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body: GoogleSignOnSchema = req.body;
+    const token = await client.verifyIdToken({
+      idToken: body.google_id,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload: TokenPayload | undefined = token.getPayload();
+    if (!payload || payload.email == undefined) {
+      return next(
+        new ApiError({
+          code: 401,
+          info: getErr("Dein Google IDToken ist ungültig")!,
+        })
+      );
+    }
+    const userLoggingIn = getUserByEmail(payload.email!);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const registerUser = async (
   req: Request,
