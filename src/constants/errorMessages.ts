@@ -10,7 +10,11 @@ type ErrorName =
   | "faultySSOCredentials"
   | "faultyToken"
   | "missingToken"
-  | "rolePowerTooLow";
+  | "rolePowerTooLow"
+  | "paramIdMissing"
+  | "paramIdMalformed"
+  | "resourceNotFound"
+  | "resourceNotOwned";
 
 export const errorMessages: Record<ErrorName, ErrorInfo> = {
   emailNotFound: {
@@ -40,5 +44,21 @@ export const errorMessages: Record<ErrorName, ErrorInfo> = {
   rolePowerTooLow: {
     code: 6,
     msg: "Dein Power Level ist zu tief für Zugriff auf diesen Endpunkt.",
+  },
+  paramIdMissing: {
+    code: 7,
+    msg: "Bitte füge ein id in der Endpunkt url hinzu (e.g. http://.../endpunkt/5)",
+  },
+  paramIdMalformed: {
+    code: 7,
+    msg: "Stelle sicher dass du eine ID als nummer angegeben hast",
+  },
+  resourceNotFound: {
+    code: 8,
+    msg: "Es konnte kein Objekt mit der von dir angegebenen ID gefunden werden",
+  },
+  resourceNotOwned: {
+    code: 9,
+    msg: "Das Objekt was du bearbeiten willst wurde von einen anderen Nutzer erstellt",
   },
 };
