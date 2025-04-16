@@ -1,112 +1,112 @@
 import { relations } from "drizzle-orm";
 import {
-  chat,
-  design,
-  user,
+  chats,
+  designs,
+  users,
   imageToDesign,
-  role,
-  designSuggestion,
-  order,
-  image,
+  roles,
+  designSuggestions,
+  orders,
+  images,
   message,
 } from "./schema";
 
-export const roleRelations = relations(role, ({ many }) => ({
-  users: many(user),
+export const roleRelations = relations(roles, ({ many }) => ({
+  users: many(users),
 }));
 
-export const userRelations = relations(user, ({ one, many }) => ({
-  role: one(role, {
-    fields: [user.role_id],
-    references: [role.id],
+export const userRelations = relations(users, ({ one, many }) => ({
+  role: one(roles, {
+    fields: [users.role_id],
+    references: [roles.id],
   }),
-  orders: many(order),
-  images: many(image),
+  orders: many(orders),
+  images: many(images),
   messages: many(message),
-  designs: many(design),
-  chats: many(chat),
+  designs: many(designs),
+  chats: many(chats),
 }));
 
-export const orderRelations = relations(order, ({ one, many }) => ({
-  user: one(user, {
-    fields: [order.user_id],
-    references: [user.id],
+export const orderRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.user_id],
+    references: [users.id],
   }),
-  chats: many(chat),
-  images: many(image),
-  designs: many(design),
+  chats: many(chats),
+  images: many(images),
+  designs: many(designs),
 }));
 
-export const chatRelations = relations(chat, ({ one, many }) => ({
-  user: one(user, {
-    fields: [chat.user_id],
-    references: [user.id],
+export const chatRelations = relations(chats, ({ one, many }) => ({
+  user: one(users, {
+    fields: [chats.user_id],
+    references: [users.id],
   }),
-  order: one(order, {
-    fields: [chat.order_id],
-    references: [order.id],
+  order: one(orders, {
+    fields: [chats.order_id],
+    references: [orders.id],
   }),
   messages: many(message),
-  designSuggestions: many(designSuggestion),
+  designSuggestions: many(designSuggestions),
 }));
 
 export const messageRelations = relations(message, ({ one }) => ({
-  chat: one(chat, {
+  chat: one(chats, {
     fields: [message.chat_id],
-    references: [chat.id],
+    references: [chats.id],
   }),
-  sender: one(user, {
+  sender: one(users, {
     fields: [message.sender_id],
-    references: [user.id],
+    references: [users.id],
   }),
 }));
 
-export const designRelations = relations(design, ({ one, many }) => ({
-  customer: one(user, {
-    fields: [design.customer_id],
-    references: [user.id],
+export const designRelations = relations(designs, ({ one, many }) => ({
+  customer: one(users, {
+    fields: [designs.customer_id],
+    references: [users.id],
   }),
-  order: one(order, {
-    fields: [design.order_id],
-    references: [order.id],
+  order: one(orders, {
+    fields: [designs.order_id],
+    references: [orders.id],
   }),
   imageLinks: many(imageToDesign),
-  designSuggestions: many(designSuggestion),
+  designSuggestions: many(designSuggestions),
 }));
 
-export const imageRelations = relations(image, ({ one, many }) => ({
-  user: one(user, {
-    fields: [image.user_id],
-    references: [user.id],
+export const imageRelations = relations(images, ({ one, many }) => ({
+  user: one(users, {
+    fields: [images.user_id],
+    references: [users.id],
   }),
-  order: one(order, {
-    fields: [image.order_id],
-    references: [order.id],
+  order: one(orders, {
+    fields: [images.order_id],
+    references: [orders.id],
   }),
   imageLinks: many(imageToDesign),
 }));
 
 export const imageToDesignRelations = relations(imageToDesign, ({ one }) => ({
-  image: one(image, {
+  image: one(images, {
     fields: [imageToDesign.image_id],
-    references: [image.id],
+    references: [images.id],
   }),
-  design: one(design, {
+  design: one(designs, {
     fields: [imageToDesign.design_id],
-    references: [design.id],
+    references: [designs.id],
   }),
 }));
 
 export const designSuggestionRelations = relations(
-  designSuggestion,
+  designSuggestions,
   ({ one }) => ({
-    chat: one(chat, {
-      fields: [designSuggestion.chat_id],
-      references: [chat.id],
+    chat: one(chats, {
+      fields: [designSuggestions.chat_id],
+      references: [chats.id],
     }),
-    design: one(design, {
-      fields: [designSuggestion.design_id],
-      references: [design.id],
+    design: one(designs, {
+      fields: [designSuggestions.design_id],
+      references: [designs.id],
     }),
   })
 );

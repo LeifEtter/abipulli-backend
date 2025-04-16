@@ -1,10 +1,10 @@
 import db from "../db";
-import { role, type InsertRole } from "../schema";
+import { roles, type InsertRole } from "../schema";
 
 async function insertRoles(): Promise<object[]> {
-  await db.delete(role);
+  await db.delete(roles);
 
-  const roles: InsertRole[] = [
+  const newRoles: InsertRole[] = [
     {
       role_name: "anonymous",
       role_power: 0,
@@ -19,7 +19,7 @@ async function insertRoles(): Promise<object[]> {
     },
   ];
 
-  const insertedRoles = await db.insert(role).values(roles).returning();
+  const insertedRoles = await db.insert(roles).values(newRoles).returning();
   return insertedRoles;
 }
 

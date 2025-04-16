@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import db from "../../db/db";
 import {
-  role,
-  user,
+  roles,
+  users,
   type InsertUser,
   type SelectRole,
   type SelectUser,
@@ -13,13 +13,13 @@ import { SALT_ROUNDS } from "../../constants/misc";
 import jwt from "jsonwebtoken";
 
 export const deleteUser = async ({ email }: { email: string }) => {
-  const userToDelete = await db.query.user.findFirst({
-    where: eq(user.email, email),
+  const userToDelete = await db.query.users.findFirst({
+    where: eq(users.email, email),
   });
   if (userToDelete == null) {
     console.log("User doesn't exist");
   } else {
-    await db.delete(user).where(eq(user.email, email));
+    await db.delete(users).where(eq(users.email, email));
   }
 };
 
@@ -27,19 +27,19 @@ export const deleteUser = async ({ email }: { email: string }) => {
 export const getUserByEmail = async (
   email: string
 ): Promise<SelectUserWithRole | undefined> =>
-  await db.query.user.findFirst({
-    where: eq(user.email, email),
+  await db.query.users.findFirst({
+    where: eq(users.email, email),
     with: { role: true },
   });
 
 export const getRole = async (
   power: number
 ): Promise<SelectRole | undefined> => {
-  return await db.query.role.findFirst({ where: eq(role.role_power, power) });
+  return await db.query.roles.findFirst({ where: eq(roles.role_power, power) });
 };
 
 export const createUser = async (newUser: InsertUser) =>
-  await db.insert(user).values(newUser).returning();
+  await db.insert(users).values(newUser).returning();
 
 export const encryptPassword = async (password: string): Promise<string> =>
   await bcrypt.hash(password, SALT_ROUNDS);
@@ -57,3 +57,6 @@ export const createToken = (userId: number, rolePower: number): string =>
     },
     process.env.JWT_SECRET!
   );
+
+export const createAnonymousToken = (ipAddress: string): string =>
+  jwt.sign({ ip_address: ipAddress }, process.env.JWT_SECRET!);
