@@ -1,3 +1,4 @@
+import { isIP } from "net";
 import { z } from "zod";
 
 export const userRegistrationSchema = z.object({
@@ -14,3 +15,16 @@ export const userLoginSchema = z.object({
 });
 
 export type UserLoginSchemaType = z.infer<typeof userLoginSchema>;
+
+export const anonymousLoginSchema = z.object({
+  ip_address: z.string().refine((str) => isIP(str)),
+  fingerprint_info: z.object({}).optional(),
+});
+
+export type AnonymousLoginSchema = z.infer<typeof anonymousLoginSchema>;
+
+export const googleSignOnSchema = z.object({
+  google_id: z.string(),
+});
+
+export type GoogleSignOnSchema = z.infer<typeof googleSignOnSchema>;
