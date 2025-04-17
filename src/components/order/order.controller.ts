@@ -26,7 +26,7 @@ export const createOrder = async (
       .insert(orders)
       .values(newOrder)
       .returning({ order_id: orders.id });
-    res.status(200).send({ order_id: createdOrder[0]?.order_id });
+    res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
     next(error);
   }
