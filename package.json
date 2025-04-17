@@ -30,6 +30,7 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.7.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
