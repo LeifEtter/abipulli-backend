@@ -90,7 +90,7 @@ export const chats = pgTable(
       columns: [table.user_id],
       foreignColumns: [users.id],
       name: "fk_chats_users",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
@@ -114,7 +114,7 @@ export const designs = pgTable(
       columns: [table.customer_id],
       foreignColumns: [users.id],
       name: "fk_design_customer",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
@@ -139,7 +139,7 @@ export const message = pgTable(
       columns: [table.chat_id],
       foreignColumns: [chats.id],
       name: "fk_message_chat_id_chat_id",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
@@ -189,7 +189,7 @@ export const orders = pgTable(
       columns: [table.user_id],
       foreignColumns: [users.id],
       name: "fk_order_user_id_user_id",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
@@ -222,7 +222,7 @@ export const images = pgTable(
       columns: [table.user_id],
       foreignColumns: [users.id],
       name: "fk_image_user",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
