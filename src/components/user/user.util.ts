@@ -9,7 +9,7 @@ import {
   type SelectUserWithRole,
 } from "../../db/schema";
 import bcrypt from "bcrypt";
-import { SALT_ROUNDS } from "../../constants/misc";
+import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";
 
 export const deleteUser = async ({ email }: { email: string }) => {
