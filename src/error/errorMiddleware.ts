@@ -9,7 +9,7 @@ export function apiErrorHandler(
   next: NextFunction
 ) {
   logger.error(err);
-
+  console.error(err);
   if (err instanceof ApiError) {
     res
       .status(err.code)
