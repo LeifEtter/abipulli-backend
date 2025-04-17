@@ -18,7 +18,7 @@ import {
   passwordIsValid,
 } from "./user.util";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
-import { errorMessages } from "constants/errorMessages";
+import { errorMessages } from "error/errorMessages";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

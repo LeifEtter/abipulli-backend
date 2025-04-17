@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ApiError from "error/ApiError";
-import { errorMessages } from "constants/errorMessages";
+import { errorMessages } from "error/errorMessages";
 import jwt from "jsonwebtoken";
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];

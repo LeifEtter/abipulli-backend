@@ -1,4 +1,4 @@
-import type { ErrorInfo } from "../constants/errorMessages";
+import type { ErrorInfo } from "./errorMessages";
 
 interface ApiErrorParams {
   code: number;

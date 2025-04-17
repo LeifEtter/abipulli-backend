@@ -50,15 +50,15 @@ export const errorMessages: Record<ErrorName, ErrorInfo> = {
     msg: "Bitte füge ein id in der Endpunkt url hinzu (e.g. http://.../endpunkt/5)",
   },
   paramIdMalformed: {
-    code: 7,
+    code: 8,
     msg: "Stelle sicher dass du eine ID als nummer angegeben hast",
   },
   resourceNotFound: {
-    code: 8,
+    code: 9,
     msg: "Es konnte kein Objekt mit der von dir angegebenen ID gefunden werden",
   },
   resourceNotOwned: {
-    code: 9,
+    code: 10,
     msg: "Das Objekt was du bearbeiten willst wurde von einen anderen Nutzer erstellt",
   },
 };

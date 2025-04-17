@@ -1,4 +1,4 @@
-import { errorMessages } from "constants/errorMessages";
+import { errorMessages } from "error/errorMessages";
 import ApiError from "error/ApiError";
 import { NextFunction, Request, Response } from "express";
 

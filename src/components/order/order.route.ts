@@ -5,7 +5,7 @@ import { createOrder, updateOrder } from "./order.controller";
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
 import ApiError from "error/ApiError";
-import { errorMessages } from "constants/errorMessages";
+import { errorMessages } from "error/errorMessages";
 
 const router: Router = Router();
 

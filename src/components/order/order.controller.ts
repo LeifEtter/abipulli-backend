@@ -4,7 +4,7 @@ import { NextFunction, Response, Request } from "express";
 import { UserOrderCreateUpdateType } from "validation/schemas/orderSchemas";
 import { getOrderById } from "./order.util";
 import ApiError from "error/ApiError";
-import { errorMessages } from "constants/errorMessages";
+import { errorMessages } from "error/errorMessages";
 import { eq } from "drizzle-orm";
 
 export const createOrder = async (
