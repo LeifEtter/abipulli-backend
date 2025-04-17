@@ -52,7 +52,7 @@ export const updateOrder = async (
     if (order == undefined)
       next(new ApiError({ code: 404, info: errorMessages.resourceNotFound }));
     if (order!.user_id != res.locals.user.user_id)
-      next(new ApiError({ code: 404, info: errorMessages.resourceNotOwned }));
+      next(new ApiError({ code: 401, info: errorMessages.resourceNotOwned }));
 
     await db
       .update(orders)
