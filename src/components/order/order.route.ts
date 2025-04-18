@@ -1,29 +1,11 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { orderCreateUpdateSchema } from "validation/schemas/orderSchemas";
-import validateBody from "validation/validationMiddleware";
+import { validateBody, validateParam } from "validation/validationMiddleware";
 import { createOrder, deleteOrder, updateOrder } from "./order.controller";
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
-import ApiError from "error/ApiError";
-import { errorMessages } from "error/errorMessages";
 
 const router: Router = Router();
-
-const validateParam = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.params["id"]) {
-    return next(
-      new ApiError({ code: 400, info: errorMessages.paramIdMissing })
-    );
-  }
-  const paramId: number = parseInt(req.params["id"]);
-  if (!paramId) {
-    return next(
-      new ApiError({ code: 400, info: errorMessages.paramIdMalformed })
-    );
-  }
-  res.locals.id = paramId;
-  next();
-};
 
 router
   .route("/create")
