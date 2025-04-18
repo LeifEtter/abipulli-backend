@@ -14,7 +14,8 @@ type ErrorName =
   | "paramIdMissing"
   | "paramIdMalformed"
   | "resourceNotFound"
-  | "resourceNotOwned";
+  | "resourceNotOwned"
+  | "tokenUserDoesNotExist";
 
 export const errorMessages: Record<ErrorName, ErrorInfo> = {
   emailNotFound: {
@@ -60,5 +61,9 @@ export const errorMessages: Record<ErrorName, ErrorInfo> = {
   resourceNotOwned: {
     code: 10,
     msg: "Das Objekt was du bearbeiten willst wurde von einen anderen Nutzer erstellt",
+  },
+  tokenUserDoesNotExist: {
+    code: 11,
+    msg: "Der Benutzer mit diesem Token existiert nicht mehr",
   },
 };
