@@ -66,4 +66,31 @@ export const updateOrder = async (
       .where(eq(orders.id, res.locals.id));
     res.status(200).send("Success");
   } catch (error) {}
+
+export const deleteOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId: number = res.locals.id;
+    const { user_id, role_power } = res.locals.user;
+    const deletedOrders = await db
+      .delete(orders)
+      .where(eq(orders.id, orderId))
+      .returning();
+    if (deletedOrders.length == 0) {
+      return next(
+        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
+      );
+    }
+    if (role_power < 10 && deletedOrders[0]?.user_id != user_id) {
+      return next(
+        new ApiError({ code: 401, info: errorMessages.resourceNotOwned })
+      );
+    }
+    res.status(200).send("Delete Successful");
+  } catch (error) {
+    next(error);
+  }
 };
