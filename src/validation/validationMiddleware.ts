@@ -12,7 +12,7 @@ const validateBody =
       }
 
       req.body = result.data;
-      next();
+      return next();
     } catch (err) {
       if (err instanceof ZodError) {
         logger.error(err);
