@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { orderCreateUpdateSchema } from "validation/schemas/orderSchemas";
 import validateBody from "validation/validationMiddleware";
-import { createOrder, updateOrder } from "./order.controller";
+import { createOrder, deleteOrder, updateOrder } from "./order.controller";
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
 import ApiError from "error/ApiError";
@@ -43,5 +43,9 @@ router
     validateParam,
     updateOrder
   );
+
+router
+  .route("/delete/:id")
+  .delete(authenticate, minPower(1), validateParam, deleteOrder);
 
 export default router;
