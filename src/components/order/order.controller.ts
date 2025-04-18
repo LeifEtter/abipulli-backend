@@ -13,18 +13,19 @@ export const createOrder = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      school_name,
-      destination_country,
-      student_amount,
-      deadline,
-    }: UserOrderCreateUpdateType = req.body;
-    const newOrder: InsertOrder = {
+    let orderData: UserOrderCreateUpdateType = req.body;
+    console.log(res.locals.user.user_id);
+    const order: InsertOrder = {
+      deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
       user_id: res.locals.user.user_id,
+      destination_country: orderData.destination_country,
+      student_amount: orderData.student_amount,
+      motto: orderData.motto,
+      school_name: orderData.school_name,
     };
     const createdOrder = await db
       .insert(orders)
-      .values(newOrder)
+      .values(order)
       .returning({ order_id: orders.id });
     res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
@@ -50,9 +51,13 @@ export const updateOrder = async (
       : undefined;
     const order: SelectOrder | undefined = await getOrderById(res.locals.id);
     if (order == undefined)
-      next(new ApiError({ code: 404, info: errorMessages.resourceNotFound }));
+      return next(
+        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
+      );
     if (order!.user_id != res.locals.user.user_id)
-      next(new ApiError({ code: 401, info: errorMessages.resourceNotOwned }));
+      return next(
+        new ApiError({ code: 401, info: errorMessages.resourceNotOwned })
+      );
 
     await db
       .update(orders)
@@ -65,7 +70,10 @@ export const updateOrder = async (
       })
       .where(eq(orders.id, res.locals.id));
     res.status(200).send("Success");
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteOrder = async (
   req: Request,
