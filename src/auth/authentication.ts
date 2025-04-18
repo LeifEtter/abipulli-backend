@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import ApiError from "error/ApiError";
 import { errorMessages } from "error/errorMessages";
 import jwt from "jsonwebtoken";
+import { SelectUserWithRole } from "db/schema";
+import { getUserById } from "components/user/user.util";
+
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];
 
@@ -9,12 +12,15 @@ const extractUserDataFromToken = (
   payload: string | jwt.JwtPayload
 ): TokenContent | undefined =>
   typeof payload == "string" ||
-  payload["user_id"] == undefined ||
-  payload["role_power"] == undefined
+  parseInt(payload["user_id"]) == undefined ||
+  parseInt(payload["role_power"]) == undefined
     ? undefined
-    : { user_id: payload["user_id"], role_power: payload["role_power"] };
+    : {
+        user_id: parseInt(payload["user_id"]),
+        role_power: parseInt(payload["role_power"]),
+      };
 
-export const authenticate = (
+export const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -35,7 +41,15 @@ export const authenticate = (
     if (!userData) {
       return next(new ApiError({ code: 401, info: errorMessages.faultyToken }));
     }
-    res.locals.user = userData;
+    const user: SelectUserWithRole | undefined = await getUserById(
+      userData.user_id
+    );
+    if (user == undefined) {
+      return next(
+        new ApiError({ code: 401, info: errorMessages.tokenUserDoesNotExist })
+      );
+    }
+    res.locals.user = { user_id: user.id, role_power: user.role.role_power };
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
