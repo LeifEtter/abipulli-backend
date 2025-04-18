@@ -50,6 +50,22 @@ describe("order functionality", () => {
     );
   });
 
+  it("should test order creation with less params", async () => {
+    const order = mockUtils.order({ userId: exampleUserId1 });
+    order.deadline = undefined;
+    order.motto = undefined;
+    const res = await request(app)
+      .post("/order/create")
+      .set("Authorization", "bearer " + exampleAuthToken)
+      .send(mockUtils.order({ userId: exampleUserId1 }))
+      .expect(201);
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        order_id: expect.any(Number),
+      })
+    );
+  });
+
   it("should test order creation with incorrect token", async () => {
     const res = await request(app)
       .post("/order/create")
