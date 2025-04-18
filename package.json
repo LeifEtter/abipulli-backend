@@ -30,6 +30,7 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.787.0",
     "@faker-js/faker": "^9.7.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
@@ -39,6 +40,7 @@
     "express": "^5.1.0",
     "google-auth-library": "^9.15.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.2",
     "pg": "^8.14.1",
     "pino": "^9.6.0",
     "pino-http": "^10.4.0",
