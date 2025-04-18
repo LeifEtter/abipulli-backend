@@ -32,7 +32,9 @@ export const getUserByEmail = async (
     with: { role: true },
   });
 
-export const getUserById = async (id: number) =>
+export const getUserById = async (
+  id: number
+): Promise<SelectUserWithRole | undefined> =>
   await db.query.users.findFirst({
     where: eq(users.id, id),
     with: { role: true },
