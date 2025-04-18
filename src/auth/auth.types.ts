@@ -1,4 +1,4 @@
 interface TokenContent {
-  user_id: string;
+  user_id: number;
   role_power: number;
 }
