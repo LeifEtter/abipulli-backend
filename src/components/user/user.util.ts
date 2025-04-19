@@ -5,25 +5,13 @@ import {
   users,
   type InsertUser,
   type SelectRole,
-  type SelectUser,
   type SelectUserWithRole,
 } from "../../db/schema";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";
+import { deleteAllImagesInFolder } from "components/image/image.util";
 
-export const deleteUser = async ({ email }: { email: string }) => {
-  const userToDelete = await db.query.users.findFirst({
-    where: eq(users.email, email),
-  });
-  if (userToDelete == null) {
-    console.log("User doesn't exist");
-  } else {
-    await db.delete(users).where(eq(users.email, email));
-  }
-};
-
-// export const createJwt = ({ password }: { password: string }): string => {};
 export const getUserByEmail = async (
   email: string
 ): Promise<SelectUserWithRole | undefined> =>
@@ -68,3 +56,8 @@ export const createToken = (userId: number, rolePower: number): string =>
 
 export const createAnonymousToken = (ipAddress: string): string =>
   jwt.sign({ ip_address: ipAddress }, process.env.JWT_SECRET!);
+
+export const deleteAllUserData = async (id: number) => {
+  await deleteAllImagesInFolder(`${process.env.NODE_ENV}/users/${id}/`);
+  await db.delete(users).where(eq(users.id, id));
+};
