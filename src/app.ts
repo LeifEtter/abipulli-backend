@@ -1,6 +1,5 @@
 import express from "express";
-import { pinoHttp } from "pino-http";
-import { httpLogger, logger } from "./logging/logger";
+import { httpLogger } from "./logging/logger";
 import router from "./route";
 import { apiErrorHandler } from "./error/errorMiddleware";
 import cookieParser from "cookie-parser";
