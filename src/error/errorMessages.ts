@@ -15,7 +15,10 @@ type ErrorName =
   | "paramIdMalformed"
   | "resourceNotFound"
   | "resourceNotOwned"
-  | "tokenUserDoesNotExist";
+  | "tokenUserDoesNotExist"
+  | "missingImage"
+  | "imageUploadFailed"
+  | "cantDeleteSelf";
 
 export const errorMessages: Record<ErrorName, ErrorInfo> = {
   emailNotFound: {
@@ -65,5 +68,17 @@ export const errorMessages: Record<ErrorName, ErrorInfo> = {
   tokenUserDoesNotExist: {
     code: 11,
     msg: "Der Benutzer mit diesem Token existiert nicht mehr",
+  },
+  missingImage: {
+    code: 12,
+    msg: "Bild fehlt. Bitte füge im Feld 'image' ein Bild hinzu",
+  },
+  imageUploadFailed: {
+    code: 13,
+    msg: "Der Image Upload es fehlgeschlagen",
+  },
+  cantDeleteSelf: {
+    code: 14,
+    msg: "Bitte benutze den Endpunkt /user/ um dich selber zu löschen",
   },
 };
