@@ -12,9 +12,11 @@ import {
   createAnonymousToken,
   createToken,
   createUser,
+  deleteAllUserData,
   encryptPassword,
   getRole,
   getUserByEmail,
+  getUserById,
   passwordIsValid,
 } from "./user.util";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
@@ -22,8 +24,6 @@ import { errorMessages } from "error/errorMessages";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-/** */
-/** Sign in Anonymous User */
 export const signInAnonymous = async (
   req: Request,
   res: Response,
@@ -104,7 +104,6 @@ export const registerUser = async (
   }
 };
 
-/** Sign in Email and Password User */
 export const loginWithEmail = async (
   req: Request,
   res: Response,
@@ -132,5 +131,49 @@ export const loginWithEmail = async (
     });
   } catch (err) {
     next(err);
+  }
+};
+
+export const deleteUserSelf = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId: number = res.locals.user!.user_id!;
+    await deleteAllUserData(userId);
+    res.status(200).send("You're account was deleted.");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userToDeleteId = res.locals.params!.userId!;
+    if (userToDeleteId == res.locals.user!.user_id!) {
+      return next(
+        new ApiError({ code: 400, info: errorMessages.cantDeleteSelf })
+      );
+    }
+    const userToDelete = await getUserById(userToDeleteId);
+    if (!userToDelete) {
+      return next(
+        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
+      );
+    }
+    if (userToDelete.role.role_power >= 10) {
+      return next(
+        new ApiError({ code: 401, info: errorMessages.rolePowerTooLow })
+      );
+    }
+    await deleteAllUserData(userToDeleteId);
+    res.status(200).send(`User with id ${userToDeleteId} deleted`);
+  } catch (error) {
+    next(error);
   }
 };
