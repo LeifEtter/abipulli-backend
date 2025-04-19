@@ -1,8 +1,9 @@
 import request from "supertest";
 import { afterAll, beforeAll, expect, it } from "vitest";
 import { describe } from "node:test";
-import { deleteUser } from "components/user/user.util";
+import { deleteAllUserData } from "components/user/user.util";
 import app from "app";
+import { tDeleteUser } from "./utils";
 const mockUser = {
   name: "Super Tester",
   email: "supertesting@Test.com",
@@ -10,7 +11,7 @@ const mockUser = {
 };
 
 afterAll(async () => {
-  await deleteUser({ email: mockUser.email });
+  await tDeleteUser(mockUser.email);
 });
 
 describe("Testing User Registration/Login Flow", () => {

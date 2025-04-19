@@ -37,3 +37,6 @@ const exampleOrder = {
   school_name: "Otto-Schott-Gymnasium",
   motto: "AbIns Bett",
 };
+
+export const tDeleteUser = async (email: string) =>
+  await db.delete(users).where(eq(users.email, email));
