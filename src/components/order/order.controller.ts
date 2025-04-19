@@ -14,7 +14,6 @@ export const createOrder = async (
 ) => {
   try {
     let orderData: UserOrderCreateUpdateType = req.body;
-    console.log(res.locals.user.user_id);
     const order: InsertOrder = {
       deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
       user_id: res.locals.user.user_id,
