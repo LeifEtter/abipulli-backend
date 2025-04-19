@@ -25,22 +25,23 @@ export const validateBody =
     }
   };
 
-export const validateParam = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.params["id"]) {
-    return next(
-      new ApiError({ code: 400, info: errorMessages.paramIdMissing })
-    );
-  }
-  const paramId: number = parseInt(req.params["id"]);
-  if (!paramId) {
-    return next(
-      new ApiError({ code: 400, info: errorMessages.paramIdMalformed })
-    );
-  }
-  res.locals.id = paramId;
-  next();
-};
+export const validateParams =
+  ({ requiredParams }: { requiredParams: ParamKey[] }) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    res.locals.params = {};
+    for (let param of requiredParams) {
+      if (!req.params[param]) {
+        return next(
+          new ApiError({ code: 400, info: errorMessages.paramIdMissing })
+        );
+      }
+      const paramId: number = parseInt(req.params[param]);
+      if (!paramId || Number.isNaN(paramId)) {
+        return next(
+          new ApiError({ code: 400, info: errorMessages.paramIdMalformed })
+        );
+      }
+      res.locals.params[param] = paramId;
+    }
+    next();
+  };
