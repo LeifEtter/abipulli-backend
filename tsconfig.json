@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src/**/*", "vitest/endpoints/*"],
   "exclude": ["dist", "node_modules"]
