@@ -1,5 +1,7 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import {
+  deleteUser,
+  deleteUserSelf,
   googleSSOLogin,
   loginWithEmail,
   registerUser,
@@ -11,8 +13,12 @@ import {
   userLoginSchema,
   userRegistrationSchema,
 } from "../../validation/schemas/userSchemas";
-import validateBody from "../../validation/validationMiddleware";
-
+import {
+  validateBody,
+  validateParams,
+} from "../../validation/validationMiddleware";
+import { authenticate } from "auth/authentication";
+import { minPower } from "auth/authorization";
 const router: Router = Router();
 
 router
@@ -28,5 +34,16 @@ router
 router
   .route("/googleSignOn")
   .post(validateBody(googleSignOnSchema), googleSSOLogin);
+
+router
+  .route("/:userId")
+  .delete(
+    authenticate,
+    minPower(10),
+    validateParams({ requiredParams: ["userId"] }),
+    deleteUser
+  );
+
+router.route("/").delete(authenticate, minPower(1), deleteUserSelf);
 
 export default router;
