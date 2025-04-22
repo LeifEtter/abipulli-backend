@@ -121,8 +121,8 @@ export const designs = pgTable(
 export type InsertDesign = typeof designs.$inferInsert;
 export type SelectDesign = typeof designs.$inferSelect;
 
-export const message = pgTable(
-  "message",
+export const messages = pgTable(
+  "messages",
   {
     id: serial().notNull().primaryKey(),
     chat_id: integer().notNull(),
@@ -143,8 +143,8 @@ export const message = pgTable(
   ]
 );
 
-export type InsertMessage = typeof message.$inferInsert;
-export type SelectMessage = typeof message.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;
+export type SelectMessage = typeof messages.$inferSelect;
 
 export const designSuggestions = pgTable(
   "design_suggestions",
