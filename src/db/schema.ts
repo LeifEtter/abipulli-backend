@@ -14,6 +14,7 @@ import {
 export const imageToDesign = pgTable(
   "image_to_design",
   {
+    id: serial().notNull().primaryKey(),
     image_id: integer().notNull(),
     design_id: integer().notNull(),
     x_position: integer(),
