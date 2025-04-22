@@ -3,6 +3,9 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
+import db from "db/db";
+import { images, SelectImage } from "db/schema";
+import { eq } from "drizzle-orm";
 import { logger } from "logging/logger";
 import s3 from "storage/s3Client";
 
@@ -62,3 +65,8 @@ export const deleteAllImagesInFolder = async (
     return false;
   }
 };
+
+export const getImageById = async (
+  imageId: number
+): Promise<SelectImage | undefined> =>
+  await db.query.images.findFirst({ where: eq(images.id, imageId) });
