@@ -92,7 +92,7 @@ export const registerUser = async (
       name: body.name,
       email: body.email,
       password: password,
-      role_id: (await getRole(0))?.id,
+      role_id: (await getRole(1))?.id,
     });
     res.status(201).json({
       msg: "Account created successfully",
