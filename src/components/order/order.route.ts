@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Router } from "express";
 import { orderCreateUpdateSchema } from "validation/schemas/orderSchemas";
 import { validateBody, validateParams } from "validation/validationMiddleware";
 import { createOrder, deleteOrder, updateOrder } from "./order.controller";
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
 import { saveImage } from "components/image/image.controller";
+import designRouter from "components/design/design.route";
 import multer from "multer";
 
 const router: Router = Router();
@@ -18,16 +19,6 @@ router
     minPower(1),
     validateBody(orderCreateUpdateSchema),
     createOrder
-  );
-
-router
-  .route("/:id/image")
-  .post(
-    authenticate,
-    minPower(1),
-    validateParams({ requiredParams: ["id"] }),
-    multerClient.single("image"),
-    saveImage
   );
 
 router
@@ -48,5 +39,7 @@ router
     validateParams({ requiredParams: ["id"] }),
     deleteOrder
   );
+
+router.use("/:orderId/design", designRouter);
 
 export default router;
