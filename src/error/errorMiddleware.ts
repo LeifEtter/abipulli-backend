@@ -13,7 +13,11 @@ export function apiErrorHandler(
   if (err instanceof ApiError) {
     res
       .status(err.code)
-      .json({ err_code: err.info.code, err_msg: err.info.msg });
+      .json({
+        err_code: err.info.code,
+        err_msg: err.info.msg,
+        err_resource: err.resource,
+      });
     return;
   }
   res.status(500).json("Uh Oh, Something went Wrong (╥﹏╥) ");
