@@ -80,10 +80,6 @@ export const imageRelations = relations(images, ({ one, many }) => ({
     fields: [images.user_id],
     references: [users.id],
   }),
-  order: one(orders, {
-    fields: [images.order_id],
-    references: [orders.id],
-  }),
   imageLinks: many(imageToDesign),
 }));
 
