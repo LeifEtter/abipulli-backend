@@ -231,18 +231,12 @@ export const images = pgTable(
     generated: boolean().default(false),
     prompt: text(),
     user_id: integer(),
-    order_id: integer().notNull(),
   },
   (table) => [
     index("image_index_1").using(
       "btree",
       table.generated.asc().nullsLast().op("bool_ops")
     ),
-    foreignKey({
-      columns: [table.order_id],
-      foreignColumns: [orders.id],
-      name: "fk_image_order",
-    }),
     foreignKey({
       columns: [table.user_id],
       foreignColumns: [users.id],
