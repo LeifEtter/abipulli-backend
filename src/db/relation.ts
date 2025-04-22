@@ -107,3 +107,10 @@ export const designSuggestionRelations = relations(
     }),
   })
 );
+
+export const textElementsRelations = relations(textElements, ({ one }) => ({
+  design: one(designs, {
+    fields: [textElements.design_id],
+    references: [designs.id],
+  }),
+}));
