@@ -9,6 +9,7 @@ import {
   smallint,
   index,
   boolean,
+  real,
 } from "drizzle-orm/pg-core";
 
 export const imageToDesign = pgTable(
@@ -104,6 +105,9 @@ export const designs = pgTable(
     id: serial().notNull().primaryKey(),
     order_id: integer().notNull(),
     customer_id: integer().notNull(),
+    pullover_color: varchar(),
+    pullover_model: varchar(),
+    design_cost: integer(),
   },
   (table) => [
     foreignKey({
