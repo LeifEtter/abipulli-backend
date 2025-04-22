@@ -8,7 +8,8 @@ import {
   designSuggestions,
   orders,
   images,
-  message,
+  messages,
+  textElements,
 } from "./schema";
 
 export const roleRelations = relations(roles, ({ many }) => ({
@@ -22,7 +23,7 @@ export const userRelations = relations(users, ({ one, many }) => ({
   }),
   orders: many(orders),
   images: many(images),
-  messages: many(message),
+  messages: many(messages),
   designs: many(designs),
   chats: many(chats),
 }));
@@ -46,17 +47,17 @@ export const chatRelations = relations(chats, ({ one, many }) => ({
     fields: [chats.order_id],
     references: [orders.id],
   }),
-  messages: many(message),
+  messages: many(messages),
   designSuggestions: many(designSuggestions),
 }));
 
-export const messageRelations = relations(message, ({ one }) => ({
+export const messageRelations = relations(messages, ({ one }) => ({
   chat: one(chats, {
-    fields: [message.chat_id],
+    fields: [messages.chat_id],
     references: [chats.id],
   }),
   sender: one(users, {
-    fields: [message.sender_id],
+    fields: [messages.sender_id],
     references: [users.id],
   }),
 }));
