@@ -251,3 +251,14 @@ export const images = pgTable(
 
 export type InsertImage = typeof images.$inferInsert;
 export type SelectImage = typeof images.$inferSelect;
+
+export const prompts = pgTable("prompts", {
+  id: serial().notNull().primaryKey(),
+  title: varchar().notNull(),
+  description: varchar().notNull(),
+  content: varchar().notNull(),
+  purpose: varchar(),
+});
+
+export type InsertPrompt = typeof prompts.$inferInsert;
+export type SelectPrompt = typeof prompts.$inferSelect;
