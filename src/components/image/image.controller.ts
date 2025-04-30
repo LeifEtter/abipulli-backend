@@ -7,11 +7,19 @@ import { images } from "db/schema";
 import { logger } from "logging/logger";
 import { eq } from "drizzle-orm";
 
-const insertImageIntoDb = async (userId: number): Promise<{ id: number }[]> =>
-  await db
+const insertImageIntoDb = async (userId: number): Promise<number> => {
+  const result = await db
     .insert(images)
     .values({ user_id: userId })
     .returning({ id: images.id });
+  if (result[0] == null) {
+    throw ApiError.internal({
+      code: 500,
+      msg: "Issue inserting Image into DB",
+    });
+  }
+  return result[0].id;
+};
 
 export const saveImage = async (
   req: Request,
