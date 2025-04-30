@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const improveImageQuerySchema = z.object({
-  theme: z.string(),
+  motto: z.string(),
   description: z.string().optional(),
-  styles: z.array(z.string()),
+  style_tags: z.array(z.string()),
 });
 
 export type ImproveImageQuerySchemaType = z.infer<
