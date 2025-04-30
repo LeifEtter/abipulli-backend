@@ -90,6 +90,25 @@ const buildBasicPrompt = ({
   return prompt;
 };
 
+export const improvePrompt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { motto, description, style_tags }: ImproveImageQuerySchemaType =
+      req.body;
+    const prompt = buildBasicPrompt({ motto, description, style_tags });
+    const improveResult = await requestImprovedPrompt(prompt);
+    res.status(200).send({
+      improved_prompt: improveResult.prompt,
+      cost: improveResult.cost,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
     });
   } catch (error) {
     next(error);
