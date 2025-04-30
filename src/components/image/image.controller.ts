@@ -1,11 +1,19 @@
 import ApiError from "error/ApiError";
 import { errorMessages } from "error/errorMessages";
 import { NextFunction, Request, Response } from "express";
-import { uploadImageToHetzner } from "./image.util";
+import {
+  getFileFromImageUrl,
+  queryImageFromIdeogram,
+  requestImprovedPrompt,
+  uploadImageToHetzner,
+} from "./image.util";
 import db from "db/db";
 import { images } from "db/schema";
-import { logger } from "logging/logger";
 import { eq } from "drizzle-orm";
+import {
+  GenerateImageSchemaType,
+  ImproveImageQuerySchemaType,
+} from "validation/schemas/imageSchema";
 
 const insertImageIntoDb = async (userId: number): Promise<number> => {
   const result = await db
@@ -35,26 +43,27 @@ export const saveImage = async (
       );
     }
     const userId: number = res.locals.user!.user_id;
-    const insertImageResult = await insertImageIntoDb(userId);
-    if (insertImageResult.length == 0) {
-      return next(
-        new ApiError({ code: 500, info: errorMessages.imageUploadFailed })
-      );
-    }
+    const insertedImageId = await insertImageIntoDb(userId);
     const uploadResult = await uploadImageToHetzner({
       file: file.buffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
-      filename: `${insertImageResult[0]?.id}`,
+      filename: `${insertedImageId}`,
       imageType: "image/png",
     });
     if (!uploadResult) {
-      await db.delete(images).where(eq(images.id, insertImageResult[0]!.id!));
+      await db.delete(images).where(eq(images.id, insertedImageId));
       return next(
         new ApiError({ code: 400, info: errorMessages.imageUploadFailed })
       );
     }
     res.status(200).send({
-      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertImageResult[0]?.id}`,
+      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
     });
   } catch (error) {
     next(error);
