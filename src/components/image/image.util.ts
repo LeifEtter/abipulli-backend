@@ -145,3 +145,11 @@ export const queryImageFromIdeogram = async (
   return imageUrl;
 };
 
+export const getFileFromImageUrl = async (
+  imageUrl: string
+): Promise<Buffer> => {
+  const res = await fetch(imageUrl);
+  const arrayBuffer = await res.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  return buffer;
+};
