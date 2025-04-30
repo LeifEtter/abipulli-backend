@@ -18,7 +18,9 @@ type ErrorName =
   | "tokenUserDoesNotExist"
   | "missingImage"
   | "imageUploadFailed"
-  | "cantDeleteSelf";
+  | "cantDeleteSelf"
+  | "issueUploadingImage"
+  | "missingBodyInfo";
 
 export const errorMessages: Record<ErrorName, ErrorInfo> = {
   emailNotFound: {
@@ -79,6 +81,14 @@ export const errorMessages: Record<ErrorName, ErrorInfo> = {
   },
   cantDeleteSelf: {
     code: 14,
-    msg: "Bitte benutze den Endpunkt /user/ um dich selber zu löschen",
+    msg: "Bitte benutze den Endpunkt /user ohne id um dich selber zu löschen",
+  },
+  issueUploadingImage: {
+    code: 15,
+    msg: "Es gab ein Problem während hochladen des Bildes. Bitte versuche es später nochmals",
+  },
+  missingBodyInfo: {
+    code: 16,
+    msg: "In deinem Request fehlen Informationen. Bitte füge den folgenden Key hinzu:",
   },
 };
