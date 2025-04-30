@@ -109,6 +109,30 @@ export const improvePrompt = async (
   }
 };
 
+export const generateImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { prompt, style_tags }: GenerateImageSchemaType = req.body;
+    const userId: number = res.locals.user.user_id;
+    const imageUrl: string = await queryImageFromIdeogram(prompt);
+    const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
+    const insertedImageId: number = await insertImageIntoDb(userId);
+    const uploadResult = await uploadImageToHetzner({
+      file: imageBuffer,
+      path: `${process.env.NODE_ENV}/users/${userId}`,
+      filename: `${insertedImageId}-generated`,
+      imageType: "image/png",
+    });
+    if (!uploadResult) {
+      next(
+        new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
+      );
+    }
+    res.status(200).send({
+      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}-generated`,
     });
   } catch (error) {
     next(error);
