@@ -6,15 +6,17 @@ import {
 import db from "db/db";
 import { images, SelectImage } from "db/schema";
 import { eq } from "drizzle-orm";
+import ApiError from "error/ApiError";
 import { logger } from "logging/logger";
 import s3 from "storage/s3Client";
-
 interface UploadImageParams {
   file: Buffer;
   path: string;
   filename: string;
   imageType: "image/jpeg" | "image/png" | "image/webp";
 }
+
+const GPT_4o_COST = 5 / 1000000;
 
 export const uploadImageToHetzner = async ({
   file,
@@ -70,3 +72,40 @@ export const getImageById = async (
   imageId: number
 ): Promise<SelectImage | undefined> =>
   await db.query.images.findFirst({ where: eq(images.id, imageId) });
+
+export const requestImprovedPrompt = async (
+  oldPrompt: string
+): Promise<{ prompt: string; cost: number }> => {
+  const res = await fetch(process.env.OPENAI_URL!, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAPI_KEY}`,
+    },
+    body: JSON.stringify({
+      model: process.env.OPENAPI_MODEL,
+      input: oldPrompt,
+    }),
+  });
+  if (!res.ok) {
+    logger.error(await res.text());
+    throw ApiError.internal({
+      msg: "Issue getting prompt from GPT API",
+      code: 51,
+    });
+  }
+  const body = await res.json();
+  const improvedPrompt: string | undefined =
+    body["output"][0]["content"][0]["text"];
+
+  if (improvedPrompt == undefined || improvedPrompt == "") {
+    logger.error(body);
+    throw ApiError.internal({
+      msg: "Issue getting prompt from GPT API",
+      code: 51,
+    });
+  }
+  const cost: number = body["usage"]["total_tokens"] * GPT_4o_COST;
+  return { prompt: improvedPrompt, cost };
+};
+
