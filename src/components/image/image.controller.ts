@@ -22,8 +22,10 @@ const insertImageIntoDb = async (userId: number): Promise<number> => {
     .returning({ id: images.id });
   if (result[0] == null) {
     throw ApiError.internal({
-      code: 500,
-      msg: "Issue inserting Image into DB",
+      errorInfo: {
+        code: 500,
+        msg: "Issue inserting Image into DB",
+      },
     });
   }
   return result[0].id;
