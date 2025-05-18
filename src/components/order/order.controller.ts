@@ -1,5 +1,5 @@
 import db from "db/db";
-import { InsertOrder, orders, SelectOrder } from "db/schema";
+import { InsertOrder, orders, SelectOrder } from "db/index";
 import { NextFunction, Response, Request } from "express";
 import { UserOrderCreateUpdateType } from "validation/schemas/orderSchemas";
 import { getOrderById } from "./order.util";

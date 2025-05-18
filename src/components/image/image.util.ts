@@ -4,7 +4,7 @@ import {
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
 import db from "db/db";
-import { images, SelectImage } from "db/schema";
+import { images, SelectImage } from "db/index";
 import { eq } from "drizzle-orm";
 import ApiError from "error/ApiError";
 import { logger } from "logging/logger";

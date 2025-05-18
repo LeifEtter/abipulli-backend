@@ -1,5 +1,5 @@
 import db from "db/db";
-import { designs, imageToDesign, InsertDesign } from "db/schema";
+import { designs, imageToDesign, InsertDesign } from "db/index";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "logging/logger";
 import {

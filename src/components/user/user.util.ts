@@ -6,7 +6,7 @@ import {
   type InsertUser,
   type SelectRole,
   type SelectUserWithRole,
-} from "../../db/schema";
+} from "../../db/index";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";

@@ -7,7 +7,7 @@ import type {
   UserRegistrationSchemaType,
 } from "../../validation/schemas/userSchemas";
 import { logger } from "../../logging/logger";
-import "../../db/relation";
+
 import {
   createAnonymousToken,
   createToken,

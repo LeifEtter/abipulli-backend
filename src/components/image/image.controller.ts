@@ -8,7 +8,7 @@ import {
   uploadImageToHetzner,
 } from "./image.util";
 import db from "db/db";
-import { images } from "db/schema";
+import { images } from "db/index";
 import { eq } from "drizzle-orm";
 import {
   GenerateImageSchemaType,

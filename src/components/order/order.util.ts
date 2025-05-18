@@ -1,5 +1,5 @@
 import db from "db/db";
-import { orders, SelectOrder } from "db/schema";
+import { orders, SelectOrder } from "db/index";
 import { eq } from "drizzle-orm";
 
 export const getOrderById = async (
