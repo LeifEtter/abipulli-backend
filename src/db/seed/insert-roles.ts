@@ -1,5 +1,5 @@
 import db from "../db";
-import { roles, type InsertRole } from "../schema";
+import { roles, type InsertRole } from "../index";
 
 async function insertRoles(): Promise<object[]> {
   await db.delete(roles);

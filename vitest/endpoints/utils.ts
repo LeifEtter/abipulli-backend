@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import db from "db/db";
-import { InsertOrder, InsertUser, orders, users } from "db/schema";
+import { InsertOrder, InsertUser, orders, users } from "db/index";
 import { eq } from "drizzle-orm";
 
 export const testUtils = {

@@ -1,8 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it, test } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import jwt from "jsonwebtoken";
-import db from "db/db";
-import { users } from "db/schema";
-import { eq } from "drizzle-orm";
 import app from "app";
 import request from "supertest";
 import { mockUtils, testUtils } from "./utils";

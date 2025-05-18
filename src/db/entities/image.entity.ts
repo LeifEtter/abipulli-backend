@@ -11,11 +11,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { orders } from "./order.entity";
 import { users } from "./user.entity";
-import { messages } from "./message.entity";
 import { imageToDesign } from "./imageToDesign.entity";
-import { designSuggestions } from "./chat.entity";
 
 export const images = pgTable(
   "images",

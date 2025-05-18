@@ -4,7 +4,6 @@ import { validateBody, validateParams } from "validation/validationMiddleware";
 import { createOrder, deleteOrder, updateOrder } from "./order.controller";
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
-import { saveImage } from "components/image/image.controller";
 import designRouter from "components/design/design.route";
 import multer from "multer";
 

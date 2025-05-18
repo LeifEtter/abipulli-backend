@@ -6,7 +6,6 @@ import {
   serial,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { images } from "./image.entity";
 import { designs } from "./design.entity";
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";

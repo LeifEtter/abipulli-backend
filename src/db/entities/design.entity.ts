@@ -1,18 +1,13 @@
 import {
-  boolean,
   foreignKey,
   integer,
   pgTable,
   serial,
-  smallint,
-  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { images } from "./image.entity";
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
 import { users } from "./user.entity";
-import { messages } from "./message.entity";
 import { imageToDesign } from "./imageToDesign.entity";
 import { designSuggestions } from "./chat.entity";
 

@@ -38,12 +38,6 @@ export const signInAnonymous = async (
   }
 };
 
-export const googleSSORegistration = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {};
-
 /** Sign in SSO User */
 export const googleSSOLogin = async (
   req: Request,

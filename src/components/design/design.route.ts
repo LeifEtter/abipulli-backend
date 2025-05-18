@@ -7,7 +7,6 @@ import {
   createDesignSchema,
   placeImageOnDesignSchema,
 } from "validation/schemas/designSchema";
-import imageRouter from "components/image/image.route";
 
 const router = Router({ mergeParams: true });
 
