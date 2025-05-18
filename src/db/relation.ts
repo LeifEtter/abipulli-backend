@@ -51,7 +51,7 @@ export const chatRelations = relations(chats, ({ one, many }) => ({
   designSuggestions: many(designSuggestions),
 }));
 
-export const messageRelations = relations(messages, ({ one }) => ({
+export const messageRelations = relations(messages, ({ one, many }) => ({
   chat: one(chats, {
     fields: [messages.chat_id],
     references: [chats.id],
@@ -60,6 +60,11 @@ export const messageRelations = relations(messages, ({ one }) => ({
     fields: [messages.sender_id],
     references: [users.id],
   }),
+  design: one(designs, {
+    fields: [messages.design_id],
+    references: [designs.id],
+  }),
+  images: many(images),
 }));
 
 export const designRelations = relations(designs, ({ one, many }) => ({

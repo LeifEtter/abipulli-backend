@@ -78,8 +78,12 @@ export const chats = pgTable(
   {
     id: serial().notNull().primaryKey(),
     user_id: integer().notNull(),
+    assigned_admin_id: integer(),
     last_message_at: timestamp(),
     created_at: timestamp().defaultNow(),
+    updated_at: timestamp()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
     order_id: integer().notNull(),
   },
   (table) => [
@@ -155,6 +159,11 @@ export const messages = pgTable(
     chat_id: integer().notNull(),
     sender_id: integer().notNull(),
     content: text(),
+    design_id: integer(),
+    created_at: timestamp().defaultNow(),
+    updated_at: timestamp()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
   },
   (table) => [
     foreignKey({
@@ -167,6 +176,11 @@ export const messages = pgTable(
       foreignColumns: [chats.id],
       name: "fk_message_chat_id_chat_id",
     }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.design_id],
+      foreignColumns: [designs.id],
+      name: "fk_message_design_id_design_id",
+    }).onDelete("set null"),
   ]
 );
 
@@ -235,6 +249,7 @@ export const images = pgTable(
     generated: boolean().default(false),
     prompt: text(),
     user_id: integer(),
+    message_id: integer(),
   },
   (table) => [
     index("image_index_1").using(
