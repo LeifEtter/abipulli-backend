@@ -177,3 +177,17 @@ export const deleteUser = async (
     next(error);
   }
 };
+
+export const checkToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.user_id;
+    res.status(200).send({ userId });
+  } catch (error) {
+    logger.error(error);
+    next(ApiError.internal({ errorInfo: null }));
+  }
+};

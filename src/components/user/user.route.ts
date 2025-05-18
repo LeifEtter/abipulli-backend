@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import {
+  checkToken,
   deleteUser,
   deleteUserSelf,
   googleSSOLogin,
@@ -20,6 +21,8 @@ import {
 import { authenticate } from "auth/authentication";
 import { minPower } from "auth/authorization";
 const router: Router = Router();
+
+router.route("/authenticate").get(authenticate, checkToken);
 
 router
   .route("/register")
