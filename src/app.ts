@@ -4,6 +4,10 @@ import router from "./route";
 import { apiErrorHandler } from "./error/errorMiddleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
+import { swaggerOptions } from "../swagger.config";
+
 const app = express();
 
 app.use(express.json());
@@ -23,6 +27,12 @@ app.use(
 );
 
 app.use(router);
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerJsdoc(swaggerOptions))
+);
 
 app.use(apiErrorHandler);
 
