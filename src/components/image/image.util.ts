@@ -90,8 +90,10 @@ export const requestImprovedPrompt = async (
   if (!res.ok) {
     logger.error(await res.text());
     throw ApiError.internal({
-      msg: "Issue getting prompt from GPT API",
-      code: 51,
+      errorInfo: {
+        msg: "Issue getting prompt from GPT API",
+        code: 51,
+      },
     });
   }
   const body = await res.json();
@@ -101,8 +103,10 @@ export const requestImprovedPrompt = async (
   if (improvedPrompt == undefined || improvedPrompt == "") {
     logger.error(body);
     throw ApiError.internal({
-      msg: "Issue getting prompt from GPT API",
-      code: 51,
+      errorInfo: {
+        msg: "Issue getting prompt from GPT API",
+        code: 51,
+      },
     });
   }
   const cost: number = body["usage"]["total_tokens"] * GPT_4o_COST;
@@ -130,16 +134,20 @@ export const queryImageFromIdeogram = async (
   if (!res.ok) {
     logger.error(await res.text());
     throw ApiError.internal({
-      msg: "Ideogram Query failed",
-      code: 50,
+      errorInfo: {
+        msg: "Ideogram Query failed",
+        code: 50,
+      },
     });
   }
   const body = await res.json();
   const imageUrl: string | undefined = body.data[0].url;
   if (imageUrl == undefined) {
     throw ApiError.internal({
-      msg: "Couldn't find Image Url in Ideogram Response",
-      code: 50,
+      errorInfo: {
+        msg: "Couldn't find Image Url in Ideogram Response",
+        code: 50,
+      },
     });
   }
   return imageUrl;
