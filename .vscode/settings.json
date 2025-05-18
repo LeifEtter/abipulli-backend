@@ -2,6 +2,8 @@
   "prettier.tabWidth": 2,
   "editor.tabSize": 2,
   "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
