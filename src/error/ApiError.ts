@@ -21,8 +21,15 @@ class ApiError {
     return new ApiError({ code: 400, info: errorInfo });
   }
 
-  static internal(errorInfo: ErrorInfo) {
-    return new ApiError({ code: 500, info: errorInfo });
+  static internal({ errorInfo }: { errorInfo: ErrorInfo | null }) {
+    if (errorInfo) {
+      return new ApiError({ code: 500, info: errorInfo });
+    } else {
+      return new ApiError({
+        code: 500,
+        info: { msg: "Some Internal Issue", code: 500 },
+      });
+    }
   }
 
   static notFound(resource: string) {
