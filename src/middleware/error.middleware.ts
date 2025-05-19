@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { logger } from "../logging/logger";
-import ApiError from "./ApiError";
+import { logger } from "../lib/logger";
+import { ApiError } from "abipulli-types";
 
 export function apiErrorHandler(
   err: Error,
@@ -11,13 +11,11 @@ export function apiErrorHandler(
   logger.error(err);
   console.error(err);
   if (err instanceof ApiError) {
-    res
-      .status(err.code)
-      .json({
-        err_code: err.info.code,
-        err_msg: err.info.msg,
-        err_resource: err.resource,
-      });
+    res.status(err.code).json({
+      err_code: err.info.code,
+      err_msg: err.info.msg,
+      err_resource: err.resource,
+    });
     return;
   }
   res.status(500).json("Uh Oh, Something went Wrong (╥﹏╥) ");

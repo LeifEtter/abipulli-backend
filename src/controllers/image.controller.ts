@@ -1,19 +1,18 @@
-import ApiError from "error/ApiError";
-import { errorMessages } from "error/errorMessages";
 import { NextFunction, Request, Response } from "express";
 import {
   getFileFromImageUrl,
   queryImageFromIdeogram,
   requestImprovedPrompt,
   uploadImageToHetzner,
-} from "./image.util";
+} from "../services/image.service";
 import db from "db/db";
 import { images } from "db/index";
 import { eq } from "drizzle-orm";
 import {
   GenerateImageSchemaType,
   ImproveImageQuerySchemaType,
-} from "validation/schemas/imageSchema";
+} from "schemas/imageSchema";
+import { ApiError, errorMessages } from "abipulli-types";
 
 const insertImageIntoDb = async (userId: number): Promise<number> => {
   const result = await db

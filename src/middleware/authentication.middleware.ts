@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import ApiError from "error/ApiError";
-import { errorMessages } from "error/errorMessages";
 import jwt from "jsonwebtoken";
-import { getUserById } from "components/user/user.util";
 import { SelectUserWithRole } from "db";
+import { getUserById } from "services/user.service";
+import { ApiError, errorMessages } from "abipulli-types";
 
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];

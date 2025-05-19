@@ -1,16 +1,16 @@
 import { eq } from "drizzle-orm";
-import db from "../../db/db";
 import {
   roles,
   users,
   type InsertUser,
   type SelectRole,
   type SelectUserWithRole,
-} from "../../db/index";
+} from "../db/index";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";
-import { deleteAllImagesInFolder } from "components/image/image.util";
+import { deleteAllImagesInFolder } from "services/image.service";
+import db from "db/db";
 
 export const getUserByEmail = async (
   email: string

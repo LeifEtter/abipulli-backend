@@ -1,15 +1,14 @@
 import db from "db/db";
 import { designs, imageToDesign, InsertDesign } from "db/index";
 import { NextFunction, Request, Response } from "express";
-import { logger } from "logging/logger";
+import { logger } from "lib/logger";
 import {
   CreateDesignSchemaType,
   PlaceImageOnDesignSchemaType,
-} from "validation/schemas/designSchema";
-import ApiError from "error/ApiError";
-import { errorMessages } from "error/errorMessages";
-import { getDesignById } from "./design.util";
-import { getImageById } from "components/image/image.util";
+} from "schemas/designSchema";
+import { getImageById } from "services/image.service";
+import { ApiError, errorMessages } from "abipulli-types";
+import { getDesignById } from "services/design.service";
 
 export const createDesign = async (
   req: Request,

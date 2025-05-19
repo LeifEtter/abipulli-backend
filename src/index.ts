@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-import { logger } from "./logging/logger.js";
+import { logger } from "./lib/logger.js";
 import app from "./app.js";
 
 const abortMessage: string = "--- Aborting Initialization Process ---";

@@ -1,8 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z, ZodError, ZodIssue } from "zod";
-import { logger } from "../logging/logger";
-import ApiError from "error/ApiError";
-import { errorMessages } from "error/errorMessages";
+import { logger } from "../lib/logger";
+import { ApiError, errorMessages } from "abipulli-types";
 
 export const extractIssues = (issues: ZodIssue[]): string[] =>
   issues.map(

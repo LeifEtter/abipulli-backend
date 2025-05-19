@@ -1,12 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
-import ApiError from "error/ApiError";
 import type {
   AnonymousLoginSchema,
   GoogleSignOnSchema,
   UserLoginSchemaType,
   UserRegistrationSchemaType,
-} from "../../validation/schemas/userSchemas";
-import { logger } from "../../logging/logger";
+} from "../schemas/userSchemas";
 
 import {
   createAnonymousToken,
@@ -18,9 +16,10 @@ import {
   getUserByEmail,
   getUserById,
   passwordIsValid,
-} from "./user.util";
+} from "../services/user.service";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
-import { errorMessages } from "error/errorMessages";
+import { ApiError, errorMessages } from "abipulli-types";
+import { logger } from "lib/logger";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

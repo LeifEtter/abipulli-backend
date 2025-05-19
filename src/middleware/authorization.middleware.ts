@@ -1,5 +1,4 @@
-import { errorMessages } from "error/errorMessages";
-import ApiError from "error/ApiError";
+import { ApiError, errorMessages } from "abipulli-types";
 import { NextFunction, Request, Response } from "express";
 
 export const minPower =

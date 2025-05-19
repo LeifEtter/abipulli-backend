@@ -7,19 +7,19 @@ import {
   loginWithEmail,
   registerUser,
   signInAnonymous,
-} from "./user.controller";
+} from "../controllers/user.controller";
 import {
   anonymousLoginSchema,
   googleSignOnSchema,
   userLoginSchema,
   userRegistrationSchema,
-} from "../../validation/schemas/userSchemas";
+} from "../schemas/userSchemas";
 import {
   validateBody,
   validateParams,
-} from "../../validation/validationMiddleware";
-import { authenticate } from "auth/authentication";
-import { minPower } from "auth/authorization";
+} from "../middleware/validation.middleware";
+import { authenticate } from "middleware/authentication.middleware";
+import { minPower } from "middleware/authorization.middleware";
 const router: Router = Router();
 
 /**

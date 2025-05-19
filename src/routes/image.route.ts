@@ -1,13 +1,17 @@
 import { Router } from "express";
-import { generateImage, improvePrompt, saveImage } from "./image.controller";
+import {
+  generateImage,
+  improvePrompt,
+  saveImage,
+} from "../controllers/image.controller";
 import multer from "multer";
-import { minPower } from "auth/authorization";
-import { authenticate } from "auth/authentication";
-import { validateBody } from "validation/validationMiddleware";
+import { minPower } from "middleware/authorization.middleware";
+import { authenticate } from "middleware/authentication.middleware";
+import { validateBody } from "middleware/validation.middleware";
 import {
   generateImageSchema,
   improveImageQuerySchema,
-} from "validation/schemas/imageSchema";
+} from "schemas/imageSchema";
 
 const multerClient = multer();
 const router = Router({ mergeParams: true });

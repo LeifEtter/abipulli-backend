@@ -1,11 +1,15 @@
 import { Router } from "express";
-import { orderCreateUpdateSchema } from "validation/schemas/orderSchemas";
-import { validateBody, validateParams } from "validation/validationMiddleware";
-import { createOrder, deleteOrder, updateOrder } from "./order.controller";
-import { authenticate } from "auth/authentication";
-import { minPower } from "auth/authorization";
-import designRouter from "components/design/design.route";
+import { orderCreateUpdateSchema } from "schemas/orderSchemas";
+import { validateBody, validateParams } from "middleware/validation.middleware";
+import { authenticate } from "middleware/authentication.middleware";
+import { minPower } from "middleware/authorization.middleware";
+import designRouter from "./design.route";
 import multer from "multer";
+import {
+  createOrder,
+  deleteOrder,
+  updateOrder,
+} from "controllers/order.controller";
 
 const router: Router = Router();
 

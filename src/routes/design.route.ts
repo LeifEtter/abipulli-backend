@@ -1,12 +1,15 @@
-import { authenticate } from "auth/authentication";
-import { minPower } from "auth/authorization";
+import { authenticate } from "middleware/authentication.middleware";
+import { minPower } from "middleware/authorization.middleware";
 import { Router } from "express";
-import { validateBody, validateParams } from "validation/validationMiddleware";
-import { createDesign, placeImageOnDesign } from "./design.controller";
+import { validateBody, validateParams } from "middleware/validation.middleware";
 import {
   createDesignSchema,
   placeImageOnDesignSchema,
-} from "validation/schemas/designSchema";
+} from "schemas/designSchema";
+import {
+  createDesign,
+  placeImageOnDesign,
+} from "controllers/design.controller";
 
 const router = Router({ mergeParams: true });
 

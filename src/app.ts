@@ -1,12 +1,12 @@
 import express from "express";
-import { httpLogger } from "./logging/logger";
-import router from "./route";
-import { apiErrorHandler } from "./error/errorMiddleware";
+import { httpLogger } from "./lib/logger";
+import { apiErrorHandler } from "./middleware/error.middleware";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { swaggerOptions } from "../swagger.config";
+import router from "routes";
 
 const app = express();
 
