@@ -3,10 +3,10 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
-import { ApiError } from "abipulli-types";
 import db from "db/db";
 import { images, SelectImage } from "db/index";
 import { eq } from "drizzle-orm";
+import { ApiError } from "error/ApiError";
 import { logger } from "lib/logger";
 import s3 from "lib/storage/s3Client";
 interface UploadImageParams {

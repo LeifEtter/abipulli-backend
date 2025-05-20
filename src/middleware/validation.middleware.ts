@@ -1,14 +1,17 @@
 import type { NextFunction, Request, Response } from "express";
 import { z, ZodError, ZodIssue } from "zod";
 import { logger } from "../lib/logger";
-import { ApiError, errorMessages } from "abipulli-types";
+import { errorMessages } from "abipulli-types";
+import { ApiError } from "error/ApiError";
 
 export const extractIssues = (issues: ZodIssue[]): string[] =>
-  issues.map(
-    (issue: ZodIssue) => " " + (issue.path[0] ?? "unknown").toString()
-  );
+  issues.map((issue: ZodIssue) => {
+    const path = issue.path.join(".");
+    const message = issue.message;
 
-//TODO: Implement Correct Error Message on Faulty Value for a specific key, e.g. string instead of array of strings
+    return `Field '${path}': ${message}`;
+  });
+
 export const validateBody =
   (schema: z.ZodObject<any, any>) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -16,9 +19,10 @@ export const validateBody =
       const result = schema.safeParse(req.body);
       if (!result.success) {
         const issues: string[] = extractIssues(result.error.issues);
-        res.status(400).send({
+        res.status(400).json({
           err_code: 16,
-          err_msg: `Deinem Request Body fehlen folgende/r Key:${issues}`,
+          err_msg: "Validation Error",
+          details: issues,
         });
       } else {
         req.body = result.data;
@@ -27,9 +31,17 @@ export const validateBody =
     } catch (err) {
       if (err instanceof ZodError) {
         logger.error(err);
-        res.status(400).json("Error during Validation.");
+        res.status(400).json({
+          err_code: 16,
+          err_msg: "Error during Validation",
+          details: extractIssues(err.issues),
+        });
       } else {
-        res.status(500).json("Uh Oh, Something went Wrong (╥﹏╥) ");
+        res.status(500).json({
+          err_code: 500,
+          err_msg: "Internal Server Error",
+          details: "An unexpected error occurred during validation",
+        });
       }
     }
   };

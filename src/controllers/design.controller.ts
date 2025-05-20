@@ -7,8 +7,8 @@ import {
   PlaceImageOnDesignSchemaType,
 } from "schemas/designSchema";
 import { getImageById } from "services/image.service";
-import { ApiError, errorMessages } from "abipulli-types";
 import { getDesignById } from "services/design.service";
+import { ApiError } from "error/ApiError";
 
 export const createDesign = async (
   req: Request,

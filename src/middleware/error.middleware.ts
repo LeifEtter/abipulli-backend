@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { logger } from "../lib/logger";
-import { ApiError } from "abipulli-types";
+import { ApiError } from "error/ApiError";
 
 export function apiErrorHandler(
   err: Error,
@@ -12,8 +12,8 @@ export function apiErrorHandler(
   console.error(err);
   if (err instanceof ApiError) {
     res.status(err.code).json({
-      err_code: err.info.code,
-      err_msg: err.info.msg,
+      err_code: err.code,
+      err_msg: err.message,
       err_resource: err.resource,
     });
     return;

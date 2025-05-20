@@ -18,8 +18,8 @@ import {
   passwordIsValid,
 } from "../services/user.service";
 import { OAuth2Client, TokenPayload } from "google-auth-library";
-import { ApiError, errorMessages } from "abipulli-types";
 import { logger } from "lib/logger";
+import { ApiError } from "error/ApiError";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
