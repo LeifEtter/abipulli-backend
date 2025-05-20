@@ -8,10 +8,7 @@ import multer from "multer";
 import { minPower } from "middleware/authorization.middleware";
 import { authenticate } from "middleware/authentication.middleware";
 import { validateBody } from "middleware/validation.middleware";
-import {
-  generateImageSchema,
-  improveImageQuerySchema,
-} from "schemas/imageSchema";
+import { GenerateImageSchema, ImproveImageQuerySchema } from "abipulli-types";
 
 const multerClient = multer();
 const router = Router({ mergeParams: true });
@@ -25,7 +22,7 @@ router
   .post(
     authenticate,
     minPower(1),
-    validateBody(improveImageQuerySchema),
+    validateBody(ImproveImageQuerySchema),
     improvePrompt
   );
 
@@ -34,7 +31,7 @@ router
   .post(
     authenticate,
     minPower(1),
-    validateBody(generateImageSchema),
+    validateBody(GenerateImageSchema),
     generateImage
   );
 

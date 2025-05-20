@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from "express";
-import type {
-  AnonymousLoginSchema,
-  GoogleSignOnSchema,
-  UserLoginSchemaType,
-  UserRegistrationSchemaType,
-} from "../schemas/userSchemas";
+// import type {
+//   AnonymousLoginSchema,
+//   GoogleSignOnSchema,
+//   UserLoginSchemaType,
+//   UserRegistrationSchemaType,
+// } from "../schemas/userSchemas";
 
 import {
   createAnonymousToken,
@@ -17,59 +17,60 @@ import {
   getUserById,
   passwordIsValid,
 } from "../services/user.service";
-import { OAuth2Client, TokenPayload } from "google-auth-library";
+import { OAuth2Client } from "google-auth-library";
+import { errorMessages, UserCreate, UserLogin } from "abipulli-types";
 import { logger } from "lib/logger";
 import { ApiError } from "error/ApiError";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-export const signInAnonymous = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const body: AnonymousLoginSchema = req.body;
-    const token: string = createAnonymousToken(body.ip_address);
-    res.status(200).send({ token });
-  } catch (error) {
-    next(error);
-  }
-};
+// export const signInAnonymous = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const body: AnonymousLoginSchema = req.body;
+//     const token: string = createAnonymousToken(body.ip_address);
+//     res.status(200).send({ token });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 /** Sign in SSO User */
-export const googleSSOLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const body: GoogleSignOnSchema = req.body;
-    const token = await client.verifyIdToken({
-      idToken: body.google_id,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const payload: TokenPayload | undefined = token.getPayload();
-    if (!payload || payload.email == undefined) {
-      return next(
-        new ApiError({
-          code: 401,
-          info: errorMessages.faultyToken,
-        })
-      );
-    }
-    const userLoggingIn = getUserByEmail(payload.email!);
-  } catch (error) {
-    next(error);
-  }
-};
+// export const googleSSOLogin = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const body: GoogleSignOnSchema = req.body;
+//     const token = await client.verifyIdToken({
+//       idToken: body.google_id,
+//       audience: process.env.GOOGLE_CLIENT_ID,
+//     });
+//     const payload: TokenPayload | undefined = token.getPayload();
+//     if (!payload || payload.email == undefined) {
+//       return next(
+//         new ApiError({
+//           code: 401,
+//           info: errorMessages.faultyToken,
+//         })
+//       );
+//     }
+//     const userLoggingIn = getUserByEmail(payload.email!);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 export const registerUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const body: UserRegistrationSchemaType = req.body;
+  const body: UserCreate = req.body;
   try {
     const existingUser = await getUserByEmail(body.email);
     if (existingUser != null) {
@@ -82,7 +83,8 @@ export const registerUser = async (
     }
     const password = await encryptPassword(body.password);
     const createdUser = await createUser({
-      name: body.name,
+      first_name: body.firstName,
+      last_name: body.lastName,
       email: body.email,
       password: password,
       role_id: (await getRole(1))?.id,
@@ -103,7 +105,7 @@ export const loginWithEmail = async (
   next: NextFunction
 ) => {
   try {
-    const body: UserLoginSchemaType = req.body;
+    const body: UserLogin = req.body;
     const storedUser = await getUserByEmail(body.email);
     if (
       storedUser == null ||

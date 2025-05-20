@@ -8,11 +8,13 @@ import {
 import db from "db/db";
 import { images } from "db/index";
 import { eq } from "drizzle-orm";
+
 import {
-  GenerateImageSchemaType,
-  ImproveImageQuerySchemaType,
-} from "schemas/imageSchema";
-import { ApiError, errorMessages } from "abipulli-types";
+  errorMessages,
+  GenerateImage,
+  ImproveImageQuery,
+} from "abipulli-types";
+import { ApiError } from "error/ApiError";
 
 const insertImageIntoDb = async (userId: number): Promise<number> => {
   const result = await db
@@ -68,8 +70,8 @@ export const saveImage = async (
 const buildBasicPrompt = ({
   motto,
   description,
-  style_tags,
-}: ImproveImageQuerySchemaType): string => {
+  styleTags,
+}: ImproveImageQuery): string => {
   const prompt = `
     You are generating a visual design prompt for Ideogram.ai. The design is for graduation pullovers (Abitur), to be printed on fabric. 
     This means: 
@@ -84,7 +86,7 @@ const buildBasicPrompt = ({
       - Art style (e.g. screen print, cartoon, retro) 
     Include the word ${motto} prominently in the design. 
     Theme ${description}
-    Style Tags: ${style_tags.toString()}
+    Style Tags: ${styleTags.toString()}
     Output only a single paragraph of plain text describing the scene. 
     Avoid using any formatting like asterisks (**), bullet points, or newline characters. 
     Do not include labels like 'Theme' or 'Style' — just describe the visual composition naturally, as if giving a scene prompt to an image generator.`;
@@ -97,9 +99,12 @@ export const improvePrompt = async (
   next: NextFunction
 ) => {
   try {
-    const { motto, description, style_tags }: ImproveImageQuerySchemaType =
-      req.body;
-    const prompt = buildBasicPrompt({ motto, description, style_tags });
+    const { motto, description, styleTags }: ImproveImageQuery = req.body;
+    const prompt = buildBasicPrompt({
+      motto,
+      description,
+      styleTags,
+    });
     const improveResult = await requestImprovedPrompt(prompt);
     res.status(200).send({
       improved_prompt: improveResult.prompt,
@@ -116,7 +121,7 @@ export const generateImage = async (
   next: NextFunction
 ) => {
   try {
-    const { prompt, style_tags }: GenerateImageSchemaType = req.body;
+    const { prompt, styleTags }: GenerateImage = req.body;
     const userId: number = res.locals.user.user_id;
     const imageUrl: string = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);

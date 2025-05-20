@@ -3,23 +3,16 @@ import {
   checkToken,
   deleteUser,
   deleteUserSelf,
-  googleSSOLogin,
   loginWithEmail,
   registerUser,
-  signInAnonymous,
 } from "../controllers/user.controller";
-import {
-  anonymousLoginSchema,
-  googleSignOnSchema,
-  userLoginSchema,
-  userRegistrationSchema,
-} from "../schemas/userSchemas";
 import {
   validateBody,
   validateParams,
 } from "../middleware/validation.middleware";
 import { authenticate } from "middleware/authentication.middleware";
 import { minPower } from "middleware/authorization.middleware";
+import { UserCreateSchema, UserLoginSchema } from "abipulli-types";
 const router: Router = Router();
 
 /**
@@ -69,19 +62,17 @@ router.route("/authenticate").get(authenticate, checkToken);
  *       '409':
  *         description: User already exists
  */
-router
-  .route("/register")
-  .post(validateBody(userRegistrationSchema), registerUser);
+router.route("/register").post(validateBody(UserCreateSchema), registerUser);
 
-router.route("/login").post(validateBody(userLoginSchema), loginWithEmail);
+router.route("/login").post(validateBody(UserLoginSchema), loginWithEmail);
 
-router
-  .route("/anonymous")
-  .post(validateBody(anonymousLoginSchema), signInAnonymous);
+// router
+//   .route("/anonymous")
+//   .post(validateBody(anonymousLoginSchema), signInAnonymous);
 
-router
-  .route("/googleSignOn")
-  .post(validateBody(googleSignOnSchema), googleSSOLogin);
+// router
+//   .route("/googleSignOn")
+//   .post(validateBody(googleSignOnSchema), googleSSOLogin);
 
 router
   .route("/:userId")

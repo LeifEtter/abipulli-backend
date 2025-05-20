@@ -1,8 +1,8 @@
 import db from "db/db";
 import { InsertOrder, orders, SelectOrder } from "db/index";
 import { NextFunction, Response, Request } from "express";
-import { UserOrderCreateUpdateType } from "schemas/orderSchemas";
 import { eq } from "drizzle-orm";
+import { errorMessages, OrderCreate, OrderUpdate } from "abipulli-types";
 import { getOrderById } from "services/order.service";
 import { ApiError } from "error/ApiError";
 
@@ -12,14 +12,14 @@ export const createOrder = async (
   next: NextFunction
 ) => {
   try {
-    let orderData: UserOrderCreateUpdateType = req.body;
+    let orderData: OrderCreate = req.body;
     const order: InsertOrder = {
       deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
       user_id: res.locals.user.user_id,
-      destination_country: orderData.destination_country,
-      student_amount: orderData.student_amount,
+      destination_country: orderData.schoolCountry,
+      student_amount: orderData.studentAmount,
       motto: orderData.motto,
-      school_name: orderData.school_name,
+      school_name: orderData.school,
     };
     const createdOrder = await db
       .insert(orders)
@@ -38,12 +38,8 @@ export const updateOrder = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      school_name,
-      motto,
-      destination_country,
-      student_amount,
-    }: UserOrderCreateUpdateType = req.body;
+    const { school, motto, schoolCountry, studentAmount }: OrderUpdate =
+      req.body;
     const deadline = req.body.deadline
       ? new Date(req.body.deadline)
       : undefined;
@@ -61,9 +57,9 @@ export const updateOrder = async (
       .update(orders)
       .set({
         deadline,
-        destination_country,
-        student_amount,
-        school_name,
+        destination_country: schoolCountry,
+        student_amount: studentAmount,
+        school_name: school,
         motto,
       })
       .where(eq(orders.id, res.locals.id));

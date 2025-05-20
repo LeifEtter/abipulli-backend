@@ -2,11 +2,9 @@ import db from "db/db";
 import { designs, imageToDesign, InsertDesign } from "db/index";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "lib/logger";
-import {
-  CreateDesignSchemaType,
-  PlaceImageOnDesignSchemaType,
-} from "schemas/designSchema";
+
 import { getImageById } from "services/image.service";
+import { AddImageToDesign, DesignCreate, errorMessages } from "abipulli-types";
 import { getDesignById } from "services/design.service";
 import { ApiError } from "error/ApiError";
 
@@ -16,7 +14,7 @@ export const createDesign = async (
   next: NextFunction
 ) => {
   try {
-    req.body as CreateDesignSchemaType;
+    req.body as DesignCreate;
     const design: InsertDesign = {
       order_id: res.locals.params.orderId!,
       customer_id: res.locals.user.user_id,
@@ -38,7 +36,7 @@ export const placeImageOnDesign = async (
   next: NextFunction
 ) => {
   try {
-    req.body as PlaceImageOnDesignSchemaType;
+    req.body as AddImageToDesign;
     const designId: number = res.locals.params.designId!;
     const imageId: number = res.locals.params.imageId!;
     const userId: number = res.locals.user.user_id;

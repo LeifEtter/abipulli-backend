@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { orderCreateUpdateSchema } from "schemas/orderSchemas";
 import { validateBody, validateParams } from "middleware/validation.middleware";
 import { authenticate } from "middleware/authentication.middleware";
 import { minPower } from "middleware/authorization.middleware";
@@ -10,6 +9,7 @@ import {
   deleteOrder,
   updateOrder,
 } from "controllers/order.controller";
+import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
 
 const router: Router = Router();
 
@@ -20,7 +20,7 @@ router
   .post(
     authenticate,
     minPower(1),
-    validateBody(orderCreateUpdateSchema),
+    validateBody(OrderCreateSchema),
     createOrder
   );
 
@@ -29,7 +29,7 @@ router
   .patch(
     authenticate,
     minPower(1),
-    validateBody(orderCreateUpdateSchema),
+    validateBody(OrderUpdateSchema),
     validateParams({ requiredParams: ["id"] }),
     updateOrder
   );

@@ -3,13 +3,10 @@ import { minPower } from "middleware/authorization.middleware";
 import { Router } from "express";
 import { validateBody, validateParams } from "middleware/validation.middleware";
 import {
-  createDesignSchema,
-  placeImageOnDesignSchema,
-} from "schemas/designSchema";
-import {
   createDesign,
   placeImageOnDesign,
 } from "controllers/design.controller";
+import { AddImageToDesignSchema, DesignCreateSchema } from "abipulli-types";
 
 const router = Router({ mergeParams: true });
 
@@ -19,7 +16,7 @@ router
     authenticate,
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
-    validateBody(createDesignSchema),
+    validateBody(DesignCreateSchema),
     createDesign
   );
 
@@ -29,7 +26,7 @@ router
     authenticate,
     minPower(1),
     validateParams({ requiredParams: ["designId", "imageId"] }),
-    validateBody(placeImageOnDesignSchema),
+    validateBody(AddImageToDesignSchema),
     placeImageOnDesign
   );
 export default router;
