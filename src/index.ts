@@ -1,6 +1,7 @@
 import "dotenv/config.js";
 import { logger } from "./lib/logger.js";
 import app from "./app.js";
+import db from "db/db.js";
 
 const abortMessage: string = "--- Aborting Initialization Process ---";
 const isNumbersOnly = (str: string): boolean => /^\d+$/.test(str);
@@ -23,6 +24,16 @@ async function main() {
       logger.warn(abortMessage);
       return;
     }
+
+    // Check roles
+
+    const roles = await db.query.roles.findMany();
+    if (roles.length != 3) {
+      logger.error("No roles found in the database.");
+      logger.warn(abortMessage);
+      return;
+    }
+
     app.listen(parseInt(port), () => {
       logger.info(`### Listening to Port ${port} ###`);
     });
