@@ -3,6 +3,7 @@ import {
   integer,
   pgTable,
   serial,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
@@ -10,6 +11,7 @@ import { orders } from "./order.entity";
 import { users } from "./user.entity";
 import { imageToDesign } from "./imageToDesign.entity";
 import { designSuggestions } from "./chat.entity";
+import { pullovers } from "./pullover.entity";
 
 export const designs = pgTable(
   "designs",
@@ -20,6 +22,11 @@ export const designs = pgTable(
     pullover_color: varchar(),
     pullover_model: varchar(),
     design_cost: integer(),
+    preferred_pullover_id: integer(),
+    created_at: timestamp().notNull().defaultNow(),
+    updated_at: timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
   },
   (table) => [
     foreignKey({
@@ -32,6 +39,11 @@ export const designs = pgTable(
       foreignColumns: [users.id],
       name: "fk_design_customer",
     }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.preferred_pullover_id],
+      foreignColumns: [pullovers.id],
+      name: "fk_design_preferred_pullover",
+    }).onDelete("set null"),
   ]
 );
 
@@ -46,6 +58,10 @@ export const designRelations = relations(designs, ({ one, many }) => ({
   order: one(orders, {
     fields: [designs.order_id],
     references: [orders.id],
+  }),
+  preferredPullover: one(pullovers, {
+    fields: [designs.preferred_pullover_id],
+    references: [pullovers.id],
   }),
   imageLinks: many(imageToDesign),
   designSuggestions: many(designSuggestions),

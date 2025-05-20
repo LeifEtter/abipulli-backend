@@ -4,6 +4,7 @@ import {
   pgTable,
   serial,
   varchar,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { chats } from "./chat.entity";
@@ -17,9 +18,11 @@ export const users = pgTable(
   "users",
   {
     id: serial().notNull().primaryKey(),
-    name: varchar().notNull(),
+    first_name: varchar().notNull(),
+    last_name: varchar().notNull(),
+    verified: boolean().notNull().default(false),
     email: varchar().notNull().unique(),
-    password: varchar(),
+    password: varchar().notNull(),
     school: varchar(),
     role_id: integer().notNull().default(0),
   },
