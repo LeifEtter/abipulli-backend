@@ -8,3 +8,4 @@ export * from "./schemas/message.entity";
 export * from "./schemas/prompt.entity";
 export * from "./schemas/textElement.entity";
 export * from "./schemas/role.entity";
+export * from "./schemas/pullover.entity";
