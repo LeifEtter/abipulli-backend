@@ -13,7 +13,7 @@ export const extractIssues = (issues: ZodIssue[]): string[] =>
   });
 
 export const validateBody =
-  (schema: z.ZodObject<any, any>) =>
+  (schema: z.ZodType<any>) =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = schema.safeParse(req.body);
