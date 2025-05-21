@@ -1,0 +1,13 @@
+------**********------
+Routing Improvements
+------**********------
+
+Structure:
+
+- routes:
+    - image.toDesign.route.ts
+      - Notes:
+        - Used by the design router (router.use("...", image.toDesign.route.ts))
+    - image.route.ts
+    - design.route.ts
+    - user.route.ts
