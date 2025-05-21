@@ -5,6 +5,7 @@ import {
   serial,
   varchar,
   boolean,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { chats } from "./chat.entity";
@@ -25,6 +26,10 @@ export const users = pgTable(
     password: varchar().notNull(),
     school: varchar(),
     role_id: integer().notNull().default(0),
+    created_at: timestamp().notNull().defaultNow(),
+    updated_at: timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
   },
   (table) => [
     foreignKey({
@@ -36,10 +41,16 @@ export const users = pgTable(
 );
 
 export type InsertUser = typeof users.$inferInsert;
-export type SelectUser = typeof users.$inferSelect;
-
-export type SelectUserWithRole = typeof users.$inferSelect & {
+export type SelectUser = typeof users.$inferSelect & {
   role: typeof roles.$inferSelect;
+};
+
+export type SelectUserWithRelations = typeof users.$inferSelect & {
+  role: typeof roles.$inferSelect;
+  orders: (typeof orders.$inferSelect)[];
+  images: (typeof images.$inferSelect)[];
+  designs: (typeof designs.$inferSelect)[];
+  chats: (typeof chats.$inferSelect)[];
 };
 
 export const userRelations = relations(users, ({ one, many }) => ({

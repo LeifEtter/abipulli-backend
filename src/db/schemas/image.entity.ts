@@ -18,9 +18,7 @@ export const images = pgTable(
   "images",
   {
     id: serial().notNull().primaryKey(),
-    created_at: timestamp("created_at", { mode: "string" })
-      .notNull()
-      .defaultNow(),
+    created_at: timestamp().notNull().defaultNow(),
     creation_cost: smallint("creation_cost"),
     origin: varchar(),
     generated: boolean().default(false),

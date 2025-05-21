@@ -16,6 +16,7 @@ export const pullovers = pgTable(
     name: varchar().notNull(),
     description: varchar().notNull(),
     base_price: integer().notNull(),
+    color: varchar().notNull(),
     image_id: integer().notNull(),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp()

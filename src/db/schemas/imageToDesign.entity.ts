@@ -29,6 +29,10 @@ export const imageToDesign = pgTable(
 export type InsertImageToDesign = typeof imageToDesign.$inferInsert;
 export type SelectImageToDesign = typeof imageToDesign.$inferSelect;
 
+export type SelectImageToDesignWithImage = typeof imageToDesign.$inferSelect & {
+  image: typeof images.$inferSelect;
+};
+
 export const imageToDesignRelations = relations(imageToDesign, ({ one }) => ({
   image: one(images, {
     fields: [imageToDesign.image_id],

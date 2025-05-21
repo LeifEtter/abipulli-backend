@@ -9,9 +9,13 @@ import {
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
 import { users } from "./user.entity";
-import { imageToDesign } from "./imageToDesign.entity";
+import {
+  imageToDesign,
+  SelectImageToDesignWithImage,
+} from "./imageToDesign.entity";
 import { designSuggestions } from "./chat.entity";
 import { pullovers } from "./pullover.entity";
+import { textElements } from "./textElement.entity";
 
 export const designs = pgTable(
   "designs",
@@ -22,7 +26,7 @@ export const designs = pgTable(
     pullover_color: varchar(),
     pullover_model: varchar(),
     design_cost: integer(),
-    preferred_pullover_id: integer(),
+    preferred_pullover_id: integer().notNull(),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp()
       .notNull()
@@ -50,6 +54,15 @@ export const designs = pgTable(
 export type InsertDesign = typeof designs.$inferInsert;
 export type SelectDesign = typeof designs.$inferSelect;
 
+export type SelectDesignWithRelations = typeof designs.$inferSelect & {
+  customer: typeof users.$inferSelect;
+  order: typeof orders.$inferSelect;
+  preferredPullover: typeof pullovers.$inferSelect;
+  imageToDesign: SelectImageToDesignWithImage[];
+  texts: (typeof textElements.$inferSelect)[];
+  designSuggestions: (typeof designSuggestions.$inferSelect)[];
+};
+
 export const designRelations = relations(designs, ({ one, many }) => ({
   customer: one(users, {
     fields: [designs.customer_id],
@@ -63,6 +76,7 @@ export const designRelations = relations(designs, ({ one, many }) => ({
     fields: [designs.preferred_pullover_id],
     references: [pullovers.id],
   }),
-  imageLinks: many(imageToDesign),
+  imageToDesign: many(imageToDesign),
+  texts: many(textElements),
   designSuggestions: many(designSuggestions),
 }));

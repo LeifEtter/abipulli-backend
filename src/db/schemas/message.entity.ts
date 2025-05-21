@@ -7,10 +7,10 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { users } from "./user.entity";
-import { chats } from "./chat.entity";
-import { designs } from "./design.entity";
-import { images } from "./image.entity";
+import { SelectUser, users } from "./user.entity";
+import { chats, SelectChat } from "./chat.entity";
+import { designs, SelectDesign } from "./design.entity";
+import { images, SelectImage } from "./image.entity";
 
 export const messages = pgTable(
   "messages",
@@ -18,12 +18,9 @@ export const messages = pgTable(
     id: serial().notNull().primaryKey(),
     chat_id: integer().notNull(),
     sender_id: integer().notNull(),
-    content: text(),
+    content: text().notNull(),
     design_id: integer(),
-    created_at: timestamp().defaultNow(),
-    updated_at: timestamp()
-      .defaultNow()
-      .$onUpdate(() => new Date()),
+    created_at: timestamp().defaultNow().notNull(),
   },
   (table) => [
     foreignKey({
@@ -46,6 +43,12 @@ export const messages = pgTable(
 
 export type InsertMessage = typeof messages.$inferInsert;
 export type SelectMessage = typeof messages.$inferSelect;
+export type SelectMessageWithRelations = SelectMessage & {
+  chat: SelectChat;
+  sender: SelectUser;
+  design: SelectDesign;
+  images: SelectImage[];
+};
 
 export const messageRelations = relations(messages, ({ one, many }) => ({
   chat: one(chats, {

@@ -4,6 +4,7 @@ import {
   pgTable,
   real,
   serial,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
@@ -18,6 +19,10 @@ export const textElements = pgTable(
     font: varchar(),
     position_x: real(),
     position_y: real(),
+    created_at: timestamp().notNull().defaultNow(),
+    updated_at: timestamp()
+      .notNull()
+      .$onUpdate(() => new Date()),
   },
   (table) => [
     foreignKey({

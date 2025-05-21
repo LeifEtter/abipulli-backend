@@ -10,7 +10,7 @@ import { designs } from "./design.entity";
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
 import { users } from "./user.entity";
-import { messages } from "./message.entity";
+import { messages, SelectMessage } from "./message.entity";
 
 export const chats = pgTable(
   "chats",
@@ -19,10 +19,11 @@ export const chats = pgTable(
     user_id: integer().notNull(),
     assigned_admin_id: integer(),
     last_message_at: timestamp(),
-    created_at: timestamp().defaultNow(),
+    created_at: timestamp().defaultNow().notNull(),
     updated_at: timestamp()
       .defaultNow()
-      .$onUpdate(() => new Date()),
+      .$onUpdate(() => new Date())
+      .notNull(),
     order_id: integer().notNull(),
   },
   (table) => [
@@ -41,6 +42,11 @@ export const chats = pgTable(
 
 export type InsertChat = typeof chats.$inferInsert;
 export type SelectChat = typeof chats.$inferSelect;
+
+export type SelectChatWithRelations = SelectChat & {
+  messages: SelectMessage[];
+  designSuggestions: SelectDesignSuggestion[];
+};
 
 export const chatRelations = relations(chats, ({ one, many }) => ({
   user: one(users, {

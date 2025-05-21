@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const prompts = pgTable("prompts", {
   id: serial().notNull().primaryKey(),
@@ -6,6 +6,10 @@ export const prompts = pgTable("prompts", {
   description: varchar().notNull(),
   content: varchar().notNull(),
   purpose: varchar(),
+  created_at: timestamp().notNull().defaultNow(),
+  updated_at: timestamp()
+    .notNull()
+    .$onUpdate(() => new Date()),
 });
 
 export type InsertPrompt = typeof prompts.$inferInsert;
