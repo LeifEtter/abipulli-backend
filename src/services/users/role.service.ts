@@ -8,5 +8,3 @@ export const castRole = (role: SelectRole): UserRole => {
     rolePower: role.role_power,
   };
 };
-
-

@@ -3,8 +3,8 @@ import db from "db/db";
 import { designs, SelectDesign, SelectDesignWithRelations } from "db/index";
 import { eq } from "drizzle-orm";
 import { castTextElement } from "./textElement.service";
-import { castImage } from "./image.service";
-import { castPullover } from "./pullover.service";
+import { castImage } from "../images/image.service";
+import { castPullover } from "../pullovers/pullover.service";
 
 export const castDesign = (design: SelectDesign): Design => {
   return {

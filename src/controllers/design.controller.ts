@@ -3,7 +3,7 @@ import { designs, imageToDesign, InsertDesign } from "db/index";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "lib/logger";
 
-import { getImageById } from "services/image.service";
+import { getImageById } from "services/images/image.service";
 import {
   AddImageToDesign,
   ApiResponse,
@@ -11,7 +11,7 @@ import {
   DesignResponse,
   errorMessages,
 } from "abipulli-types";
-import { getDesignById } from "services/design.service";
+import { getDesignById } from "services/designs/design.service";
 import { ApiError } from "error/ApiError";
 
 export const createDesign = async (

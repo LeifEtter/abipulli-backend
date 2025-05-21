@@ -4,7 +4,7 @@ import {
   queryImageFromIdeogram,
   requestImprovedPrompt,
   uploadImageToHetzner,
-} from "../services/image.service";
+} from "../services/images/image.service";
 import db from "db/db";
 import { images } from "db/index";
 import { eq } from "drizzle-orm";

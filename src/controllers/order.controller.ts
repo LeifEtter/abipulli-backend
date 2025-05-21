@@ -3,7 +3,7 @@ import { InsertOrder, orders, SelectOrder } from "db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
 import { errorMessages, OrderCreate, OrderUpdate } from "abipulli-types";
-import { getOrderById } from "services/order.service";
+import { getOrderById } from "services/orders/order.service";
 import { ApiError } from "error/ApiError";
 
 export const createOrder = async (

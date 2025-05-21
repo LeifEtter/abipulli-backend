@@ -2,8 +2,8 @@ import { Order, OrderStatus } from "abipulli-types";
 import db from "db/db";
 import { orders, SelectOrder, SelectOrderWithRelations } from "db/index";
 import { eq } from "drizzle-orm";
-import { castDesign } from "./design.service";
-import { castChat } from "./chat.service";
+import { castDesign } from "../designs/design.service";
+import { castChat } from "services/chats/chat.service";
 
 export const castOrder = (order: SelectOrder): Order => {
   return {

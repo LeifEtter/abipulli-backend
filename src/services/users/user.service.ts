@@ -6,17 +6,20 @@ import {
   users,
   type InsertUser,
   type SelectRole,
-} from "../db/index";
+} from "../../db/index";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";
-import { castImage, deleteAllImagesInFolder } from "services/image.service";
+import {
+  castImage,
+  deleteAllImagesInFolder,
+} from "services/images/image.service";
 import db from "db/db";
 import { User } from "abipulli-types";
 import { castRole } from "./role.service";
-import { castOrder } from "./order.service";
-import { castDesign } from "./design.service";
-import { castChat } from "./chat.service";
+import { castOrder } from "../orders/order.service";
+import { castDesign } from "../designs/design.service";
+import { castChat } from "services/chats/chat.service";
 
 // TODO: Implement Service for Calculating Storage Usage
 

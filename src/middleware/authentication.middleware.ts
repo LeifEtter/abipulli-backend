@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { getUserById } from "services/user.service";
+import { getUserById } from "services/users/user.service";
 import { errorMessages } from "abipulli-types";
 import { ApiError } from "error/ApiError";
 import { SelectUser } from "db";

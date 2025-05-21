@@ -16,7 +16,7 @@ import {
   getUserWithPasswordByEmail,
   getUserById,
   passwordIsValid,
-} from "../services/user.service";
+} from "../services/users/user.service";
 import { OAuth2Client } from "google-auth-library";
 import { errorMessages, UserCreate, UserLogin } from "abipulli-types";
 import { logger } from "lib/logger";

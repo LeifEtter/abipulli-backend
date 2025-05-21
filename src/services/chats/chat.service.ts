@@ -5,9 +5,7 @@ import {
   SelectMessage,
   SelectMessageWithRelations,
 } from "db/index";
-import { castUser } from "./user.service";
-import { castDesign } from "./design.service";
-
+import { castDesign } from "services/designs/design.service";
 export const castMessageWithRelations = (
   message: SelectMessageWithRelations
 ): Message => {
