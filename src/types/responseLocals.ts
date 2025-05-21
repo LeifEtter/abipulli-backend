@@ -11,6 +11,10 @@ interface ResponseLocalsParams {
   designId?: number;
   chatId?: number;
   messageId?: number;
+  designSuggestionId?: number;
+  textElementId?: number;
+  pulloverId?: number;
+  imageToDesignId?: number;
 }
 
 type ParamKey = keyof ResponseLocalsParams;
