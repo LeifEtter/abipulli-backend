@@ -4,7 +4,13 @@ import { NextFunction, Request, Response } from "express";
 import { logger } from "lib/logger";
 
 import { getImageById } from "services/image.service";
-import { AddImageToDesign, DesignCreate, errorMessages } from "abipulli-types";
+import {
+  AddImageToDesign,
+  ApiResponse,
+  DesignCreate,
+  DesignResponse,
+  errorMessages,
+} from "abipulli-types";
 import { getDesignById } from "services/design.service";
 import { ApiError } from "error/ApiError";
 
@@ -50,7 +56,7 @@ export const placeImageOnDesign = async (
         })
       );
     }
-    if (design.customer_id != userId) {
+    if (design.customerId != userId) {
       return next(
         new ApiError({
           code: 401,
@@ -76,6 +82,29 @@ export const placeImageOnDesign = async (
     res
       .send(201)
       .send({ msg: `Connected image ${imageId} to design ${designId}` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const retrieveDesign = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const designId: number = res.locals.params.designId!;
+    const design = await getDesignById(designId);
+    if (!design) {
+      return next(
+        new ApiError({
+          code: 404,
+          info: errorMessages.resourceNotFound,
+          resource: "Design",
+        })
+      );
+    }
+    res.json(design);
   } catch (error) {
     next(error);
   }

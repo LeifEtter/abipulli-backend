@@ -13,7 +13,7 @@ import {
   deleteAllUserData,
   encryptPassword,
   getRole,
-  getUserByEmail,
+  getUserWithPasswordByEmail,
   getUserById,
   passwordIsValid,
 } from "../services/user.service";
@@ -72,7 +72,7 @@ export const registerUser = async (
 ) => {
   const body: UserCreate = req.body;
   try {
-    const existingUser = await getUserByEmail(body.email);
+    const existingUser = await getUserWithPasswordByEmail(body.email);
     if (existingUser != null) {
       return next(
         new ApiError({
@@ -106,7 +106,7 @@ export const loginWithEmail = async (
 ) => {
   try {
     const body: UserLogin = req.body;
-    const storedUser = await getUserByEmail(body.email);
+    const storedUser = await getUserWithPasswordByEmail(body.email);
     if (
       storedUser == null ||
       storedUser.password == null ||

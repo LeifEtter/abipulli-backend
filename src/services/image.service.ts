@@ -3,6 +3,7 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
+import { Image } from "abipulli-types";
 import db from "db/db";
 import { images, SelectImage } from "db/index";
 import { eq } from "drizzle-orm";
@@ -16,6 +17,16 @@ interface UploadImageParams {
   imageType: "image/jpeg" | "image/png" | "image/webp";
 }
 
+export const castImage = (image: SelectImage): Image => {
+  return {
+    id: image.id,
+    createdAt: new Date(image.created_at),
+    origin: image.origin ?? "",
+    generated: image.generated ?? false,
+    prompt: image.prompt ?? "",
+    userId: image.user_id ?? 0,
+  };
+};
 const GPT_4o_COST = 5 / 1000000;
 
 export const uploadImageToHetzner = async ({

@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { SelectUserWithRole } from "db";
 import { getUserById } from "services/user.service";
 import { errorMessages } from "abipulli-types";
 import { ApiError } from "error/ApiError";
+import { SelectUser } from "db";
 
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];
@@ -41,9 +41,7 @@ export const authenticate = async (
     if (!userData) {
       return next(new ApiError({ code: 401, info: errorMessages.faultyToken }));
     }
-    const user: SelectUserWithRole | undefined = await getUserById(
-      userData.user_id
-    );
+    const user: SelectUser | undefined = await getUserById(userData.user_id);
     if (user == undefined) {
       return next(
         new ApiError({ code: 401, info: errorMessages.tokenUserDoesNotExist })

@@ -14,6 +14,7 @@ export const createOrder = async (
   try {
     let orderData: OrderCreate = req.body;
     const order: InsertOrder = {
+      status: "pending",
       deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
       user_id: res.locals.user.user_id,
       destination_country: orderData.schoolCountry,

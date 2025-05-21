@@ -1,20 +1,64 @@
 import { eq } from "drizzle-orm";
 import {
   roles,
+  SelectUser,
+  SelectUserWithRelations,
   users,
   type InsertUser,
   type SelectRole,
-  type SelectUserWithRole,
 } from "../db/index";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "auth/auth.constants";
 import jwt from "jsonwebtoken";
-import { deleteAllImagesInFolder } from "services/image.service";
+import { castImage, deleteAllImagesInFolder } from "services/image.service";
 import db from "db/db";
+import { User } from "abipulli-types";
+import { castRole } from "./role.service";
+import { castOrder } from "./order.service";
+import { castDesign } from "./design.service";
+import { castChat } from "./chat.service";
 
-export const getUserByEmail = async (
+// TODO: Implement Service for Calculating Storage Usage
+
+// TODO: Implement Service for Calculating Total Cost of User Generated Content
+
+export const castUser = (user: SelectUser): User => {
+  return {
+    id: user.id,
+    createdAt: new Date(user.created_at),
+    updatedAt: new Date(user.updated_at),
+    email: user.email,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    school: user.school ?? "",
+    verified: user.verified,
+    role: castRole(user.role),
+    password: user.password,
+  };
+};
+
+export const castUserWithRelations = (user: SelectUserWithRelations): User => {
+  return {
+    id: user.id,
+    createdAt: new Date(user.created_at),
+    updatedAt: new Date(user.updated_at),
+    email: user.email,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    role: castRole(user.role),
+    school: user.school ?? "",
+    verified: user.verified,
+    images: user.images.map((image) => castImage(image)),
+    designs: user.designs.map((design) => castDesign(design)),
+    chats: user.chats.map((chat) => castChat(chat)),
+    orders: user.orders.map((order) => castOrder(order)),
+    password: user.password,
+  };
+};
+
+export const getUserWithPasswordByEmail = async (
   email: string
-): Promise<SelectUserWithRole | undefined> =>
+): Promise<SelectUser | undefined> =>
   await db.query.users.findFirst({
     where: eq(users.email, email),
     with: { role: true },
@@ -22,7 +66,7 @@ export const getUserByEmail = async (
 
 export const getUserById = async (
   id: number
-): Promise<SelectUserWithRole | undefined> =>
+): Promise<SelectUser | undefined> =>
   await db.query.users.findFirst({
     where: eq(users.id, id),
     with: { role: true },
