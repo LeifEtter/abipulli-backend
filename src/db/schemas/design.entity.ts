@@ -13,9 +13,9 @@ import {
   imageToDesign,
   SelectImageToDesignWithImage,
 } from "./imageToDesign.entity";
-import { designSuggestions } from "./chat.entity";
 import { pullovers } from "./pullover.entity";
 import { textElements } from "./textElement.entity";
+import { designSuggestions } from "./designSuggestion.entity";
 
 export const designs = pgTable(
   "designs",
