@@ -6,21 +6,20 @@ import type { NextFunction, Request, Response } from "express";
 //   UserRegistrationSchemaType,
 // } from "../schemas/userSchemas";
 
-import {
-  createAnonymousToken,
-  createToken,
-  createUser,
-  deleteAllUserData,
-  encryptPassword,
-  getRole,
-  getUserWithPasswordByEmail,
-  getUserById,
-  passwordIsValid,
-} from "../services/users/user.service";
 import { OAuth2Client } from "google-auth-library";
 import { errorMessages, UserCreate, UserLogin } from "abipulli-types";
 import { logger } from "lib/logger";
 import { ApiError } from "error/ApiError";
+import {
+  getUserById,
+  getUserWithPasswordByEmail,
+} from "services/users/getUser.service";
+import { encryptPassword } from "lib/auth/encryptPassword";
+import { createUser } from "services/users/createUser.service";
+import { getRole } from "services/users/getRole.service";
+import { deleteAllUserData } from "services/users/deleteUser.service";
+import { createToken } from "lib/auth/createToken";
+import { passwordIsValid } from "lib/auth/comparePasswords";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

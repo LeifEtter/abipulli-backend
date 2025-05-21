@@ -1,10 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getFileFromImageUrl,
-  queryImageFromIdeogram,
-  requestImprovedPrompt,
-  uploadImageToHetzner,
-} from "../services/images/image.service";
 import db from "db/db";
 import { images } from "db/index";
 import { eq } from "drizzle-orm";
@@ -15,6 +9,12 @@ import {
   ImproveImageQuery,
 } from "abipulli-types";
 import { ApiError } from "error/ApiError";
+import { uploadImageToHetzner } from "services/images/uploadImage.service";
+import { requestImprovedPrompt } from "services/images/improvePrompt.service";
+import {
+  getFileFromImageUrl,
+  queryImageFromIdeogram,
+} from "services/images/generateImage.service";
 
 const insertImageIntoDb = async (userId: number): Promise<number> => {
   const result = await db
