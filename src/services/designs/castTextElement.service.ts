@@ -1,5 +1,5 @@
 import { TextElement } from "abipulli-types";
-import { SelectTextElement } from "db/index";
+import { SelectTextElement } from "db";
 
 //TODO: Fix ! in positions
 export const castTextElement = (
