@@ -24,7 +24,7 @@ export const designs = pgTable(
     order_id: integer().notNull(),
     customer_id: integer().notNull(),
     design_cost: integer(),
-    preferred_pullover_id: integer().notNull(),
+    preferred_pullover_id: integer().notNull().default(1),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp()
       .notNull()
