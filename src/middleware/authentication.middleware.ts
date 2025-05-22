@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { errorMessages } from "abipulli-types";
+import { errorMessages, User } from "abipulli-types";
 import { ApiError } from "error/ApiError";
 import { SelectUser } from "db";
 import { getUserById } from "services/users/getUser.service";
@@ -41,13 +41,13 @@ export const authenticate = async (
     if (!userData) {
       return next(new ApiError({ code: 401, info: errorMessages.faultyToken }));
     }
-    const user: SelectUser | undefined = await getUserById(userData.user_id);
+    const user: User | undefined = await getUserById(userData.user_id);
     if (user == undefined) {
       return next(
         new ApiError({ code: 401, info: errorMessages.tokenUserDoesNotExist })
       );
     }
-    res.locals.user = { user_id: user.id, role_power: user.role.role_power };
+    res.locals.user = { user_id: user.id, role_power: user.role!.rolePower };
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
