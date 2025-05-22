@@ -21,6 +21,7 @@ export const images = pgTable(
     id: serial().notNull().primaryKey(),
     created_at: timestamp().notNull().defaultNow(),
     creation_cost: real().default(0),
+    file_size: integer().default(0).notNull(), // in kb
     generated: boolean().default(false),
     prompt: text(),
     user_id: integer(),
