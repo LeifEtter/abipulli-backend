@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import {
   errorMessages,
   GenerateImage,
+  ImageUploadResultResponse,
   ImproveImageQuery,
 } from "abipulli-types";
 import { ApiError } from "error/ApiError";
@@ -44,9 +45,14 @@ export const saveImage = async (
         new ApiError({ code: 400, info: errorMessages.imageUploadFailed })
       );
     }
-    res.status(200).send({
-      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}`,
-    });
+    const response: ImageUploadResultResponse = {
+      success: true,
+      data: {
+        link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}`,
+        imageId: insertedImageId,
+      },
+    };
+    res.status(200).send(response);
   } catch (error) {
     next(error);
   }
