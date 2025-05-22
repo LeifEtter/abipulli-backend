@@ -31,8 +31,9 @@ export const saveImage = async (
         new ApiError({ code: 400, info: errorMessages.missingImage })
       );
     }
+    const fileSize: number = Math.round(file.size / 1024);
     const userId: number = res.locals.user!.user_id;
-    const insertedImageId = await insertImageIntoDb(userId);
+    const insertedImageId = await insertImageIntoDb(userId, fileSize);
     const uploadResult = await uploadImageToHetzner({
       file: file.buffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
@@ -116,7 +117,8 @@ export const generateImage = async (
     const userId: number = res.locals.user.user_id;
     const imageUrl: string = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
-    const insertedImageId: number = await insertImageIntoDb(userId);
+    const fileSize: number = Math.round(imageBuffer.length / 1024);
+    const insertedImageId: number = await insertImageIntoDb(userId, fileSize);
     const uploadResult = await uploadImageToHetzner({
       file: imageBuffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,

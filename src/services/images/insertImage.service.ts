@@ -2,10 +2,13 @@ import { images } from "db";
 import db from "db/db";
 import { ApiError } from "error/ApiError";
 
-export const insertImageIntoDb = async (userId: number): Promise<number> => {
+export const insertImageIntoDb = async (
+  userId: number,
+  fileSize: number
+): Promise<number> => {
   const result = await db
     .insert(images)
-    .values({ user_id: userId })
+    .values({ user_id: userId, file_size: fileSize })
     .returning({ id: images.id });
   if (result[0] == null) {
     throw ApiError.internal({
