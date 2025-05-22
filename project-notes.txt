@@ -11,3 +11,13 @@ Structure:
     - image.route.ts
     - design.route.ts
     - user.route.ts
+
+
+
+Improvements:
+* Add multiple env files: .env.example (for example), and .env.prod .env.dev ...
+* More tests
+* Security Improvements:
+  * Rate limiting etc.
+* Logging:
+  * Structured Logging
