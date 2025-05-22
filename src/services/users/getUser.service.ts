@@ -1,6 +1,9 @@
-import { SelectUser, users } from "db";
+import { images, SelectUser, users } from "db";
 import db from "db/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { castUser } from "./castUser.service";
+import { User } from "abipulli-types";
+import { omitKey } from "lib/misc/omitKey";
 
 export const getUserWithPasswordByEmail = async (
   email: string
@@ -10,13 +13,33 @@ export const getUserWithPasswordByEmail = async (
     with: { role: true },
   });
 
-export const getUserById = async (
-  id: number
-): Promise<SelectUser | undefined> =>
-  await db.query.users.findFirst({
+export const getUserById = async (id: number): Promise<User | undefined> => {
+  const dbUser = await db.query.users.findFirst({
     where: eq(users.id, id),
+    columns: { password: false },
     with: { role: true },
   });
+
+  if (!dbUser) {
+    return undefined;
+  }
+  const user = castUser(omitKey(dbUser, "password"));
+  return user;
+};
+
+export const getAllUsers = async (): Promise<User[]> => {
+  const dbUsers: SelectUser[] = await db.query.users.findMany({
+    with: { role: true },
+  });
+  const users: User[] = [];
+  for (let dbUser of dbUsers) {
+    const user: User = castUser(omitKey(dbUser, "password"));
+    const userCost: number = await getUserCost(dbUser.id);
+    user.totalCost = userCost;
+    users.push(user);
+  }
+  return users;
+};
 
 // TODO: Implement Service for Calculating Storage Usage
 export const getUserCost = async (userId: number): Promise<number> => {
