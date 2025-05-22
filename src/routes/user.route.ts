@@ -3,6 +3,8 @@ import {
   checkToken,
   deleteUser,
   deleteUserSelf,
+  getAllUsersController,
+  getUserDataHandler,
   loginWithEmail,
   registerUser,
 } from "../controllers/user.controller";
@@ -84,5 +86,9 @@ router
   );
 
 router.route("/").delete(authenticate, minPower(1), deleteUserSelf);
+
+router.route("/me").get(authenticate, minPower(1), getUserDataHandler);
+
+router.route("/").get(authenticate, minPower(10), getAllUsersController);
 
 export default router;
