@@ -4,6 +4,7 @@ import {
   index,
   integer,
   pgTable,
+  real,
   serial,
   smallint,
   text,
@@ -19,7 +20,7 @@ export const images = pgTable(
   {
     id: serial().notNull().primaryKey(),
     created_at: timestamp().notNull().defaultNow(),
-    creation_cost: smallint("creation_cost"),
+    creation_cost: real().default(0),
     generated: boolean().default(false),
     prompt: text(),
     user_id: integer(),
