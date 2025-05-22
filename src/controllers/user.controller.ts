@@ -185,3 +185,27 @@ export const checkToken = async (
     next(ApiError.internal({ errorInfo: null }));
   }
 };
+
+export const getUserDataHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.user_id;
+    const userData = await getUserById(userId);
+    if (!userData) {
+      return next(
+        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
+      );
+    }
+    const userResponse: UserResponse = {
+      success: true,
+      data: userData,
+    };
+    res.status(200).json(userResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
