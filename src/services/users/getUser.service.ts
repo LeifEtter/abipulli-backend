@@ -19,5 +19,19 @@ export const getUserById = async (
   });
 
 // TODO: Implement Service for Calculating Storage Usage
+export const getUserCost = async (userId: number): Promise<number> => {
+  const imagesGeneratedByUser: { creation_cost: number | null }[] =
+    await db.query.images.findMany({
+      where: and(eq(images.user_id, userId), eq(images.generated, true)),
+      columns: {
+        creation_cost: true,
+      },
+    });
+  const totalTotalCost: number = imagesGeneratedByUser.reduce(
+    (prev, e) => prev + (e.creation_cost ?? 0),
+    0
+  );
+  return totalTotalCost;
+};
 
 // TODO: Implement Service for Calculating Total Cost of User Generated Content
