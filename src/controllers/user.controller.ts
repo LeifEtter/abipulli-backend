@@ -7,10 +7,18 @@ import type { NextFunction, Request, Response } from "express";
 // } from "../schemas/userSchemas";
 
 import { OAuth2Client } from "google-auth-library";
-import { errorMessages, UserCreate, UserLogin } from "abipulli-types";
+import {
+  errorMessages,
+  User,
+  UserCreate,
+  UserLogin,
+  UserResponse,
+  UsersResponse,
+} from "abipulli-types";
 import { logger } from "lib/logger";
 import { ApiError } from "error/ApiError";
 import {
+  getAllUsers,
   getUserById,
   getUserWithPasswordByEmail,
 } from "services/users/getUser.service";
@@ -154,13 +162,13 @@ export const deleteUser = async (
         new ApiError({ code: 400, info: errorMessages.cantDeleteSelf })
       );
     }
-    const userToDelete = await getUserById(userToDeleteId);
+    const userToDelete: User | undefined = await getUserById(userToDeleteId);
     if (!userToDelete) {
       return next(
         new ApiError({ code: 404, info: errorMessages.resourceNotFound })
       );
     }
-    if (userToDelete.role.role_power >= 10) {
+    if (userToDelete.role!.rolePower >= 10) {
       return next(
         new ApiError({ code: 401, info: errorMessages.rolePowerTooLow })
       );
@@ -209,3 +217,25 @@ export const getUserDataHandler = async (
   }
 };
 
+export const getAllUsersController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const users = await getAllUsers();
+    const userResponse: UsersResponse = {
+      success: true,
+      data: {
+        items: users,
+        total: users.length,
+        page: 1,
+        pageSize: users.length,
+      },
+    };
+
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
