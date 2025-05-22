@@ -1,0 +1,1 @@
+ALTER TABLE "images" ALTER COLUMN "file_size" SET NOT NULL;
