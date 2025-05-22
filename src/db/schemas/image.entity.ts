@@ -20,7 +20,6 @@ export const images = pgTable(
     id: serial().notNull().primaryKey(),
     created_at: timestamp().notNull().defaultNow(),
     creation_cost: smallint("creation_cost"),
-    origin: varchar(),
     generated: boolean().default(false),
     prompt: text(),
     user_id: integer(),
