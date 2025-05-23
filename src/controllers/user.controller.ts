@@ -239,3 +239,30 @@ export const getAllUsersController = async (
     next(error);
   }
 };
+
+export const changeUserPasswordController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.user_id;
+    const { oldPassword, newPassword } = req.body;
+    const user = await getUserById(userId);
+    if (!user) {
+      return next(
+        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
+      );
+    }
+    if (!passwordIsValid(user.password, oldPassword)) {
+      return next(
+        new ApiError({ code: 400, info: errorMessages.faultyLoginCredentials })
+      );
+    }
+    const newPasswordHash = await encryptPassword(newPassword);
+    await updateUserPassword(userId, newPasswordHash);
+    res.status(200).send({ message: "Password changed successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
