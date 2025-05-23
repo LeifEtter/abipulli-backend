@@ -5,9 +5,9 @@ import { minPower } from "middleware/authorization.middleware";
 import designRouter from "./design.route";
 import multer from "multer";
 import {
-  createOrder,
-  deleteOrder,
-  updateOrder,
+  createOrderController,
+  deleteOrderController,
+  updateOrderController,
 } from "controllers/order.controller";
 import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
 
@@ -21,7 +21,7 @@ router
     authenticate,
     minPower(1),
     validateBody(OrderCreateSchema),
-    createOrder
+    createOrderController
   );
 
 router
@@ -31,7 +31,7 @@ router
     minPower(1),
     validateBody(OrderUpdateSchema),
     validateParams({ requiredParams: ["id"] }),
-    updateOrder
+    updateOrderController
   );
 
 router
@@ -40,7 +40,7 @@ router
     authenticate,
     minPower(1),
     validateParams({ requiredParams: ["id"] }),
-    deleteOrder
+    deleteOrderController
   );
 
 router.use("/:orderId/design", designRouter);

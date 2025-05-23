@@ -28,6 +28,7 @@ import { getRole } from "services/users/getRole.service";
 import { deleteAllUserData } from "services/users/deleteUser.service";
 import { createToken } from "lib/auth/createToken";
 import { passwordIsValid } from "lib/auth/comparePasswords";
+import { updateUserPassword } from "services/users/updateUser.service";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -72,7 +73,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 //   }
 // };
 
-export const registerUser = async (
+export const registerUserController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -106,7 +107,7 @@ export const registerUser = async (
   }
 };
 
-export const loginWithEmail = async (
+export const loginWithEmailController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -136,7 +137,7 @@ export const loginWithEmail = async (
   }
 };
 
-export const deleteUserSelf = async (
+export const deleteUserSelfController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -150,7 +151,7 @@ export const deleteUserSelf = async (
   }
 };
 
-export const deleteUser = async (
+export const deleteUserController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -180,7 +181,7 @@ export const deleteUser = async (
   }
 };
 
-export const checkToken = async (
+export const checkTokenController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -194,7 +195,7 @@ export const checkToken = async (
   }
 };
 
-export const getUserDataHandler = async (
+export const getUserDataController = async (
   req: Request,
   res: Response,
   next: NextFunction

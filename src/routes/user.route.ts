@@ -1,13 +1,13 @@
 import { Router } from "express";
 import {
   changeUserPasswordController,
-  checkToken,
-  deleteUser,
-  deleteUserSelf,
+  checkTokenController,
+  deleteUserController,
+  deleteUserSelfController,
   getAllUsersController,
-  getUserDataHandler,
-  loginWithEmail,
-  registerUser,
+  getUserDataController,
+  loginWithEmailController,
+  registerUserController,
 } from "../controllers/user.controller";
 import {
   validateBody,
@@ -33,7 +33,7 @@ const router: Router = Router();
  *         description: Invalid or missing authentication token
  *
  */
-router.route("/authenticate").get(authenticate, checkToken);
+router.route("/authenticate").get(authenticate, checkTokenController);
 
 /**
  * @openapi
@@ -65,9 +65,13 @@ router.route("/authenticate").get(authenticate, checkToken);
  *       '409':
  *         description: User already exists
  */
-router.route("/register").post(validateBody(UserCreateSchema), registerUser);
+router
+  .route("/register")
+  .post(validateBody(UserCreateSchema), registerUserController);
 
-router.route("/login").post(validateBody(UserLoginSchema), loginWithEmail);
+router
+  .route("/login")
+  .post(validateBody(UserLoginSchema), loginWithEmailController);
 
 // router
 //   .route("/anonymous")
@@ -83,12 +87,12 @@ router
     authenticate,
     minPower(10),
     validateParams({ requiredParams: ["userId"] }),
-    deleteUser
+    deleteUserController
   );
 
-router.route("/").delete(authenticate, minPower(1), deleteUserSelf);
+router.route("/").delete(authenticate, minPower(1), deleteUserSelfController);
 
-router.route("/me").get(authenticate, minPower(1), getUserDataHandler);
+router.route("/me").get(authenticate, minPower(1), getUserDataController);
 
 router.route("/").get(authenticate, minPower(10), getAllUsersController);
 

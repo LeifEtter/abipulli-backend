@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {
-  generateImage,
-  improvePrompt,
-  saveImage,
+  generateImageController,
+  improvePromptController,
+  saveImageController,
 } from "../controllers/image.controller";
 import { minPower } from "middleware/authorization.middleware";
 import { authenticate } from "middleware/authentication.middleware";
@@ -14,7 +14,12 @@ const router = Router({ mergeParams: true });
 
 router
   .route("/")
-  .post(authenticate, minPower(1), uploadSingleImage("image"), saveImage);
+  .post(
+    authenticate,
+    minPower(1),
+    uploadSingleImage("image"),
+    saveImageController
+  );
 
 router
   .route("/prompt")
@@ -22,7 +27,7 @@ router
     authenticate,
     minPower(1),
     validateBody(ImproveImageQuerySchema),
-    improvePrompt
+    improvePromptController
   );
 
 router
@@ -31,7 +36,7 @@ router
     authenticate,
     minPower(1),
     validateBody(GenerateImageSchema),
-    generateImage
+    generateImageController
   );
 
 export default router;

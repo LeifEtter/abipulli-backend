@@ -2,7 +2,7 @@ import { authenticate } from "middleware/authentication.middleware";
 import { minPower } from "middleware/authorization.middleware";
 import { Router } from "express";
 import { validateBody, validateParams } from "middleware/validation.middleware";
-import { createDesign } from "controllers/design.controller";
+import { createDesignController } from "controllers/design.controller";
 import { AddImageToDesignSchema, DesignCreateSchema } from "abipulli-types";
 import { placeImageOnDesignController } from "controllers/image.toDesignController";
 
@@ -15,7 +15,7 @@ router
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
     validateBody(DesignCreateSchema),
-    createDesign
+    createDesignController
   );
 
 router

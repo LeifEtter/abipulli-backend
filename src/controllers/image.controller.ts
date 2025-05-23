@@ -18,7 +18,7 @@ import {
 } from "services/images/generateImage.service";
 import { insertImageIntoDb } from "services/images/insertImage.service";
 
-export const saveImage = async (
+export const saveImageController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -85,7 +85,7 @@ const buildBasicPrompt = ({
   return prompt;
 };
 
-export const improvePrompt = async (
+export const improvePromptController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -107,7 +107,7 @@ export const improvePrompt = async (
   }
 };
 
-export const generateImage = async (
+export const generateImageController = async (
   req: Request,
   res: Response,
   next: NextFunction

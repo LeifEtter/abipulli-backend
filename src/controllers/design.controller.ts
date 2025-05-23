@@ -13,7 +13,7 @@ import { getDesignById } from "services/designs/getDesignById.service";
 import { ApiError } from "error/ApiError";
 import { getImageById } from "services/images/getImageById.service";
 
-export const createDesign = async (
+export const createDesignController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -35,7 +35,7 @@ export const createDesign = async (
   }
 };
 
-const retrieveDesign = async (
+export const retrieveDesignController = async (
   req: Request,
   res: Response,
   next: NextFunction

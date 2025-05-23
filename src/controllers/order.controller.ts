@@ -6,7 +6,7 @@ import { errorMessages, OrderCreate, OrderUpdate } from "abipulli-types";
 import { getOrderById } from "services/orders/getOrderById.service";
 import { ApiError } from "error/ApiError";
 
-export const createOrder = async (
+export const createOrderController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -33,7 +33,7 @@ export const createOrder = async (
 };
 
 // Allow partial order creation
-export const updateOrder = async (
+export const updateOrderController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -70,7 +70,7 @@ export const updateOrder = async (
   }
 };
 
-export const deleteOrder = async (
+export const deleteOrderController = async (
   req: Request,
   res: Response,
   next: NextFunction
