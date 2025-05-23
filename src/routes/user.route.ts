@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changeUserPasswordController,
   checkToken,
   deleteUser,
   deleteUserSelf,
@@ -90,5 +91,9 @@ router.route("/").delete(authenticate, minPower(1), deleteUserSelf);
 router.route("/me").get(authenticate, minPower(1), getUserDataHandler);
 
 router.route("/").get(authenticate, minPower(10), getAllUsersController);
+
+router
+  .route("/me/password")
+  .patch(authenticate, minPower(1), changeUserPasswordController);
 
 export default router;
