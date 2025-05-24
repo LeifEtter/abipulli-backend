@@ -137,3 +137,42 @@ export const generateImageController = async (
     next(error);
   }
 };
+
+const retrieveImagesFromDbByUserId = async (
+  userId: number
+): Promise<Image[]> => {
+  const dbImages: SelectImage[] = await db
+    .select()
+    .from(images)
+    .where(eq(images.user_id, userId));
+  return dbImages.map((image) => castImage(image));
+};
+
+const generateImageLink = (image: Image): string => {
+  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${image.userId}/${image.id}`;
+};
+
+export const getMyImagesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // Dummy Retrieve images from db
+    const images: Image[] = await retrieveImagesFromDbByUserId(
+      res.locals.user.user_id
+    );
+
+    // Generate image files for each image
+    const imageLinks: string[] = images.map((image) =>
+      generateImageLink(image)
+    );
+    const response = {
+      success: true,
+      data: imageLinks,
+    };
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
