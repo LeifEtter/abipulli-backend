@@ -1,5 +1,5 @@
-import { imageToDesign } from "db";
-import db from "db/db";
+import { imageToDesign } from "src/db";
+import db from "src/db/db";
 
 export const placeImageOnDesign = async (
   imageId: number,

@@ -1,6 +1,6 @@
-import { images } from "db";
-import db from "db/db";
-import { ApiError } from "error/ApiError";
+import { images } from "src/db";
+import db from "src/db/db";
+import { ApiError } from "src/error/ApiError";
 
 export const insertImageIntoDb = async (
   userId: number,

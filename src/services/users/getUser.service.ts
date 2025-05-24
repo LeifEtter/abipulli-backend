@@ -1,9 +1,9 @@
-import { images, SelectUser, users } from "db";
-import db from "db/db";
+import { images, SelectUser, users } from "src/db";
+import db from "src/db/db";
 import { and, eq } from "drizzle-orm";
 import { castUser } from "./castUser.service";
 import { User } from "abipulli-types";
-import { omitKey } from "lib/misc/omitKey";
+import { omitKey } from "src/lib/misc/omitKey";
 
 export const getUserWithPasswordByEmail = async (
   email: string

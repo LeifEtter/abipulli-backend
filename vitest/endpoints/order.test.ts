@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import jwt from "jsonwebtoken";
-import app from "app";
 import request from "supertest";
 import { mockUtils, testUtils } from "./utils";
+import app from "../../src/app";
 
 // Globals used in Tests
 let exampleAuthToken: string;

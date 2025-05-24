@@ -1,5 +1,5 @@
-import { ApiError } from "error/ApiError";
-import { logger } from "lib/logger";
+import { ApiError } from "src/error/ApiError";
+import { logger } from "src/lib/logger";
 
 export const queryImageFromIdeogram = async (
   prompt: string

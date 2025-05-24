@@ -1,22 +1,26 @@
 import { NextFunction, Request, Response } from "express";
-import db from "db/db";
-import { images } from "db/index";
+import db from "src/db/db";
+import { images, SelectImage } from "src/db/index";
 import { eq } from "drizzle-orm";
 
 import {
   errorMessages,
   GenerateImage,
+  Image,
+  ImageResponse,
+  ImagesResponse,
   ImageUploadResultResponse,
   ImproveImageQuery,
 } from "abipulli-types";
-import { ApiError } from "error/ApiError";
-import { uploadImageToHetzner } from "services/images/uploadImage.service";
-import { requestImprovedPrompt } from "services/images/improvePrompt.service";
+import { ApiError } from "src/error/ApiError";
+import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
+import { requestImprovedPrompt } from "src/services/images/improvePrompt.service";
 import {
   getFileFromImageUrl,
   queryImageFromIdeogram,
-} from "services/images/generateImage.service";
-import { insertImageIntoDb } from "services/images/insertImage.service";
+} from "src/services/images/generateImage.service";
+import { insertImageIntoDb } from "src/services/images/insertImage.service";
+import { castImage } from "src/services/images/castImage.service";
 
 export const saveImageController = async (
   req: Request,

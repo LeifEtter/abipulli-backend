@@ -1,6 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { logger } from "lib/logger";
-import s3 from "lib/storage/s3Client";
+import { logger } from "src/lib/logger";
+import s3 from "src/lib/storage/s3Client";
 
 interface UploadImageParams {
   file: Buffer;

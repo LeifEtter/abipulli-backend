@@ -1,10 +1,10 @@
-import db from "db/db";
-import { InsertOrder, orders, SelectOrder } from "db/index";
+import db from "src/db/db";
+import { InsertOrder, orders, SelectOrder } from "src/db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
 import { errorMessages, OrderCreate, OrderUpdate } from "abipulli-types";
-import { getOrderById } from "services/orders/getOrderById.service";
-import { ApiError } from "error/ApiError";
+import { getOrderById } from "src/services/orders/getOrderById.service";
+import { ApiError } from "src/error/ApiError";
 
 export const createOrderController = async (
   req: Request,

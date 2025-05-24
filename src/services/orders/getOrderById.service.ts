@@ -1,6 +1,6 @@
 import { Order, OrderStatus } from "abipulli-types";
-import db from "db/db";
-import { orders, SelectOrder, SelectOrderWithRelations } from "db/index";
+import db from "src/db/db";
+import { orders, SelectOrder, SelectOrderWithRelations } from "src/db/index";
 import { eq } from "drizzle-orm";
 
 export const getOrderById = async (

@@ -1,5 +1,5 @@
 import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
-import s3 from "lib/storage/s3Client";
+import s3 from "src/lib/storage/s3Client";
 
 const getKeysOfImagesInFolder = async (path: string) => {
   const listImagesInFolderCommand = new ListObjectsV2Command({

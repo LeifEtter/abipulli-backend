@@ -1,7 +1,7 @@
-import { SelectDesign, SelectDesignWithRelations } from "db";
-import { castPullover } from "services/pullovers/castPullover.service";
+import { SelectDesign, SelectDesignWithRelations } from "src/db";
+import { castPullover } from "src/services/pullovers/castPullover.service";
 import { castTextElement } from "./castTextElement.service";
-import { castImage } from "services/images/castImage.service";
+import { castImage } from "src/services/images/castImage.service";
 import { Design } from "abipulli-types";
 
 export const castDesign = (design: SelectDesign): Design => {

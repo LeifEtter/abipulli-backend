@@ -1,7 +1,7 @@
 import "dotenv/config.js";
 import { logger } from "./lib/logger.js";
 import app from "./app.js";
-import db from "db/db.js";
+import db from "src/db/db.js";
 
 const abortMessage: string = "--- Aborting Initialization Process ---";
 const isNumbersOnly = (str: string): boolean => /^\d+$/.test(str);

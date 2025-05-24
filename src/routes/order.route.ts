@@ -1,14 +1,17 @@
 import { Router } from "express";
-import { validateBody, validateParams } from "middleware/validation.middleware";
-import { authenticate } from "middleware/authentication.middleware";
-import { minPower } from "middleware/authorization.middleware";
+import {
+  validateBody,
+  validateParams,
+} from "src/middleware/validation.middleware";
+import { authenticate } from "src/middleware/authentication.middleware";
+import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
 import multer from "multer";
 import {
   createOrderController,
   deleteOrderController,
   updateOrderController,
-} from "controllers/order.controller";
+} from "src/controllers/order.controller";
 import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
 
 const router: Router = Router();

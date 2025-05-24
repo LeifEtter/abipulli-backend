@@ -1,8 +1,9 @@
 import request from "supertest";
 import { afterAll, expect, it } from "vitest";
 import { describe } from "node:test";
-import app from "app";
+
 import { tDeleteUser } from "./utils";
+import app from "../../src/app";
 const mockUser = {
   name: "Super Tester",
   email: "supertesting@Test.com",

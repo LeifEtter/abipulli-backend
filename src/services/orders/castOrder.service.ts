@@ -1,7 +1,7 @@
 import { Order, OrderStatus } from "abipulli-types";
-import { SelectOrder, SelectOrderWithRelations } from "db";
-import { castChat } from "services/chats/castChat.service";
-import { castDesign } from "services/designs/castDesign.service";
+import { SelectOrder, SelectOrderWithRelations } from "src/db";
+import { castChat } from "src/services/chats/castChat.service";
+import { castDesign } from "src/services/designs/castDesign.service";
 
 export const castOrder = (order: SelectOrder): Order => {
   return {

@@ -8,6 +8,7 @@ import type { NextFunction, Request, Response } from "express";
 
 import { OAuth2Client } from "google-auth-library";
 import {
+  MessageResponse,
   errorMessages,
   User,
   UserCreate,
@@ -15,20 +16,23 @@ import {
   UserResponse,
   UsersResponse,
 } from "abipulli-types";
-import { logger } from "lib/logger";
-import { ApiError } from "error/ApiError";
+import { logger } from "src/lib/logger";
+import { ApiError } from "src/error/ApiError";
 import {
   getAllUsers,
   getUserById,
   getUserWithPasswordByEmail,
-} from "services/users/getUser.service";
-import { encryptPassword } from "lib/auth/encryptPassword";
-import { createUser } from "services/users/createUser.service";
-import { getRole } from "services/users/getRole.service";
-import { deleteAllUserData } from "services/users/deleteUser.service";
-import { createToken } from "lib/auth/createToken";
-import { passwordIsValid } from "lib/auth/comparePasswords";
-import { updateUserPassword } from "services/users/updateUser.service";
+} from "src/services/users/getUser.service";
+import { encryptPassword } from "src/lib/auth/encryptPassword";
+import { createUser } from "src/services/users/createUser.service";
+import { getRole } from "src/services/users/getRole.service";
+import { deleteAllUserData } from "src/services/users/deleteUser.service";
+import { createToken } from "src/lib/auth/createToken";
+import { passwordIsValid } from "src/lib/auth/comparePasswords";
+import { updateUserPassword } from "src/services/users/updateUser.service";
+import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
+import { sendEmail } from "src/lib/webmail/sendEmail";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

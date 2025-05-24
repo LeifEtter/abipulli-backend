@@ -1,10 +1,10 @@
-import { SelectUser, SelectUserWithRelations } from "db";
+import { SelectUser, SelectUserWithRelations } from "src/db";
 import { castRole } from "./castRole.service";
 import { User } from "abipulli-types";
-import { castImage } from "services/images/castImage.service";
-import { castDesign } from "services/designs/castDesign.service";
-import { castChat } from "services/chats/castChat.service";
-import { castOrder } from "services/orders/castOrder.service";
+import { castImage } from "src/services/images/castImage.service";
+import { castDesign } from "src/services/designs/castDesign.service";
+import { castChat } from "src/services/chats/castChat.service";
+import { castOrder } from "src/services/orders/castOrder.service";
 
 export const castUser = (user: SelectUser): User => {
   return {

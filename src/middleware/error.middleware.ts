@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { logger } from "../lib/logger";
-import { ApiError } from "error/ApiError";
+import { ApiError } from "src/error/ApiError";
 import { ApiResponse, ErrorResponse } from "abipulli-types";
 
 // ! NOTE TO SELF: NEVER REMOVE ANY PARAMS OTHERWISE ERROR HANDLER WILL BE CALLED TOO LATE

@@ -1,5 +1,5 @@
 import { UserRole } from "abipulli-types";
-import { SelectRole } from "db";
+import { SelectRole } from "src/db";
 
 export const castRole = (role: SelectRole): UserRole => {
   return {

@@ -1,5 +1,5 @@
-import { images, SelectImage } from "db";
-import db from "db/db";
+import { images, SelectImage } from "src/db";
+import db from "src/db/db";
 import { eq } from "drizzle-orm";
 
 export const getImageById = async (

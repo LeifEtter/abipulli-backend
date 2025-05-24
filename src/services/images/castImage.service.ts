@@ -1,5 +1,5 @@
 import { Image } from "abipulli-types";
-import { SelectImage } from "db";
+import { SelectImage } from "src/db";
 
 export const castImage = (image: SelectImage): Image => {
   return {

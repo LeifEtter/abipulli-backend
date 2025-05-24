@@ -13,8 +13,8 @@ import {
   validateBody,
   validateParams,
 } from "../middleware/validation.middleware";
-import { authenticate } from "middleware/authentication.middleware";
-import { minPower } from "middleware/authorization.middleware";
+import { authenticate } from "src/middleware/authentication.middleware";
+import { minPower } from "src/middleware/authorization.middleware";
 import { UserCreateSchema, UserLoginSchema } from "abipulli-types";
 const router: Router = Router();
 

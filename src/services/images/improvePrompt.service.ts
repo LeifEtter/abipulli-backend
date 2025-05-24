@@ -1,6 +1,6 @@
-import { GPT_4o_COST } from "../../constants";
-import { ApiError } from "error/ApiError";
-import { logger } from "lib/logger";
+import { GPT_4o_COST } from "src/constants";
+import { ApiError } from "src/error/ApiError";
+import { logger } from "src/lib/logger";
 
 export const requestImprovedPrompt = async (
   oldPrompt: string

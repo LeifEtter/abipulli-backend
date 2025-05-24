@@ -1,5 +1,5 @@
-import { users } from "db";
-import db from "db/db";
+import { users } from "src/db";
+import db from "src/db/db";
 import { eq } from "drizzle-orm";
 
 export const updateUserPassword = async (

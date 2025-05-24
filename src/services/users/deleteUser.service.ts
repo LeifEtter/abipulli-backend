@@ -1,7 +1,7 @@
-import { users } from "db";
-import db from "db/db";
+import { users } from "src/db";
+import db from "src/db/db";
 import { eq } from "drizzle-orm";
-import { deleteAllImagesInFolder } from "services/images/deleteImages.service";
+import { deleteAllImagesInFolder } from "src/services/images/deleteImages.service";
 
 export const deleteAllUserData = async (id: number) => {
   await deleteAllImagesInFolder(`${process.env.NODE_ENV}/users/${id}/`);

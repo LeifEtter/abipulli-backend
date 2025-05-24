@@ -1,10 +1,13 @@
-import { authenticate } from "middleware/authentication.middleware";
-import { minPower } from "middleware/authorization.middleware";
+import { authenticate } from "src/middleware/authentication.middleware";
+import { minPower } from "src/middleware/authorization.middleware";
 import { Router } from "express";
-import { validateBody, validateParams } from "middleware/validation.middleware";
-import { createDesignController } from "controllers/design.controller";
+import {
+  validateBody,
+  validateParams,
+} from "src/middleware/validation.middleware";
+import { createDesignController } from "src/controllers/design.controller";
 import { AddImageToDesignSchema, DesignCreateSchema } from "abipulli-types";
-import { placeImageOnDesignController } from "controllers/image.toDesignController";
+import { placeImageOnDesignController } from "src/controllers/image.toDesignController";
 
 const router = Router({ mergeParams: true });
 

@@ -1,10 +1,10 @@
-import { Message } from "abipulli-types";
-import { SelectMessage, SelectMessageWithRelations } from "db";
-import { castDesign } from "services/designs/castDesign.service";
+import { ChatMessage } from "abipulli-types";
+import { SelectMessage, SelectMessageWithRelations } from "src/db";
+import { castDesign } from "src/services/designs/castDesign.service";
 
 export const castMessageWithRelations = (
   message: SelectMessageWithRelations
-): Message => {
+): ChatMessage => {
   return {
     id: message.id,
     createdAt: new Date(message.created_at),
@@ -16,7 +16,7 @@ export const castMessageWithRelations = (
   };
 };
 
-export const castMessage = (message: SelectMessage): Message => {
+export const castMessage = (message: SelectMessage): ChatMessage => {
   return {
     id: message.id,
     createdAt: new Date(message.created_at),

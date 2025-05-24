@@ -1,7 +1,6 @@
-import db from "db/db";
-import { designs, imageToDesign, InsertDesign } from "db/index";
+import { designs, imageToDesign, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
-import { logger } from "lib/logger";
+import { logger } from "src/lib/logger";
 import {
   AddImageToDesign,
   ApiResponse,
@@ -9,9 +8,10 @@ import {
   DesignResponse,
   errorMessages,
 } from "abipulli-types";
-import { getDesignById } from "services/designs/getDesignById.service";
-import { ApiError } from "error/ApiError";
-import { getImageById } from "services/images/getImageById.service";
+import { getDesignById } from "src/services/designs/getDesignById.service";
+import { ApiError } from "src/error/ApiError";
+import { getImageById } from "src/services/images/getImageById.service";
+import db from "src/db/db";
 
 export const createDesignController = async (
   req: Request,

@@ -1,5 +1,5 @@
 import { Chat } from "abipulli-types";
-import { SelectChat, SelectChatWithRelations } from "db";
+import { SelectChat, SelectChatWithRelations } from "src/db";
 import { castMessage } from "./castMessage.service";
 
 export const castChat = (chat: SelectChat): Chat => {

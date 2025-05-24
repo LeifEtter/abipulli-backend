@@ -1,5 +1,5 @@
-import { roles, SelectRole } from "db";
-import db from "db/db";
+import { roles, SelectRole } from "src/db";
+import db from "src/db/db";
 import { eq } from "drizzle-orm";
 
 export const getRole = async (

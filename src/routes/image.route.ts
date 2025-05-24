@@ -1,14 +1,15 @@
 import { Router } from "express";
 import {
   generateImageController,
+  getMyImagesController,
   improvePromptController,
   saveImageController,
 } from "../controllers/image.controller";
-import { minPower } from "middleware/authorization.middleware";
-import { authenticate } from "middleware/authentication.middleware";
-import { validateBody } from "middleware/validation.middleware";
+import { minPower } from "src/middleware/authorization.middleware";
+import { authenticate } from "src/middleware/authentication.middleware";
+import { validateBody } from "src/middleware/validation.middleware";
 import { GenerateImageSchema, ImproveImageQuerySchema } from "abipulli-types";
-import { uploadSingleImage } from "middleware/file.middleware";
+import { uploadSingleImage } from "src/middleware/file.middleware";
 
 const router = Router({ mergeParams: true });
 
@@ -38,5 +39,7 @@ router
     validateBody(GenerateImageSchema),
     generateImageController
   );
+
+router.route("/me").get(authenticate, minPower(1), getMyImagesController);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Pullover } from "abipulli-types";
-import { SelectPullover } from "db";
+import { SelectPullover } from "src/db";
 
 export const castPullover = (pullover: SelectPullover): Pullover => {
   return {
