@@ -3,13 +3,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "dist",
     "baseUrl": "src",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
