@@ -14,6 +14,6 @@
     "noImplicitOverride": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src/**/*", "vitest/endpoints/*"],
+  "include": ["src/**/*", "vitest/**/*"],
   "exclude": ["dist", "node_modules"]
 }
