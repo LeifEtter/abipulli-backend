@@ -8,6 +8,7 @@
     "dev": "NODE_ENV=development tsx --watch src/index.ts",
     "start": "npm run check && tsx src/index.ts",
     "start-prod": "NODE_ENV=production tsc && node dist/index.js",
+    "delete-dist": "rm -rf dist",
     "check": "tsc --noEmit",
     "seed": "tsx src/db/seed/seed.ts"
   },
