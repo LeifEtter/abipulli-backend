@@ -5,8 +5,6 @@ import type { NextFunction, Request, Response } from "express";
 //   UserLoginSchemaType,
 //   UserRegistrationSchemaType,
 // } from "../schemas/userSchemas";
-
-import { OAuth2Client } from "google-auth-library";
 import {
   MessageResponse,
   errorMessages,
@@ -32,9 +30,8 @@ import { passwordIsValid } from "src/lib/auth/comparePasswords";
 import { updateUserPassword } from "src/services/users/updateUser.service";
 import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
 import { sendEmail } from "src/lib/webmail/sendEmail";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // export const signInAnonymous = async (
 //   req: Request,

@@ -7,8 +7,6 @@ import {
   errorMessages,
   GenerateImage,
   Image,
-  ImageResponse,
-  ImagesResponse,
   ImageUploadResultResponse,
   ImproveImageQuery,
 } from "abipulli-types";

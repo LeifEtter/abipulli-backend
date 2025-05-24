@@ -6,10 +6,8 @@ import {
   pgTable,
   real,
   serial,
-  smallint,
   text,
   timestamp,
-  varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./user.entity";

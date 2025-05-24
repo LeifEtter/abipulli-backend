@@ -1,16 +1,8 @@
-import { designs, imageToDesign, InsertDesign } from "src/db/index";
+import { designs, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
-import { logger } from "src/lib/logger";
-import {
-  AddImageToDesign,
-  ApiResponse,
-  DesignCreate,
-  DesignResponse,
-  errorMessages,
-} from "abipulli-types";
+import { DesignCreate, DesignResponse, errorMessages } from "abipulli-types";
 import { getDesignById } from "src/services/designs/getDesignById.service";
 import { ApiError } from "src/error/ApiError";
-import { getImageById } from "src/services/images/getImageById.service";
 import db from "src/db/db";
 
 export const createDesignController = async (

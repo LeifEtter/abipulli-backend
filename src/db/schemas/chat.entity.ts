@@ -1,12 +1,10 @@
 import {
-  boolean,
   foreignKey,
   integer,
   pgTable,
   serial,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { designs } from "./design.entity";
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
 import { users } from "./user.entity";

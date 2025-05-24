@@ -4,7 +4,6 @@ import {
   pgTable,
   serial,
   timestamp,
-  varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
@@ -15,10 +14,6 @@ import {
 } from "./imageToDesign.entity";
 import { pullovers } from "./pullover.entity";
 import { textElements } from "./textElement.entity";
-import {
-  designSuggestions,
-  SelectDesignSuggestion,
-} from "./designSuggestion.entity";
 
 export const designs = pgTable(
   "designs",

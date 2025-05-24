@@ -6,7 +6,6 @@ import {
 import { authenticate } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
-import multer from "multer";
 import {
   createOrderController,
   deleteOrderController,
@@ -15,8 +14,6 @@ import {
 import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
 
 const router: Router = Router();
-
-const multerClient = multer();
 
 router
   .route("/")

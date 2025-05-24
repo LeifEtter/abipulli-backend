@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { errorMessages, User } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
-import { SelectUser } from "src/db";
 import { getUserById } from "src/services/users/getUser.service";
 
 const extractToken = (req: Request): string | undefined =>
