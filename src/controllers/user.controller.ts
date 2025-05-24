@@ -89,18 +89,33 @@ export const registerUserController = async (
         })
       );
     }
+    if (process.env.NODE_ENV === "production") {
+      const verificationCode = generateVerificationCode();
+      await sendEmail(
+        body.email,
+        "Abipulli.com Verification Code",
+        `Your verification code is ${verificationCode}`
+      );
+    }
     const password = await encryptPassword(body.password);
-    const createdUser = await createUser({
+    await createUser({
       first_name: body.firstName,
       last_name: body.lastName,
       email: body.email,
       password: password,
       role_id: (await getRole(1))?.id,
+      verified: process.env.NODE_ENV === "production" ? false : true,
     });
-    res.status(201).json({
-      msg: "Account created successfully",
-      user_id: createdUser[0]!.id,
-    });
+    const registerResponse: MessageResponse = {
+      success: true,
+      data: {
+        message:
+          process.env.NODE_ENV === "production"
+            ? "Verification email sent"
+            : "User created",
+      },
+    };
+    res.status(201).json(registerResponse);
   } catch (error) {
     logger.error(error);
     next(error);
