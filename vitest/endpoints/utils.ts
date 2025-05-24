@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import db from "db/db";
-import { InsertOrder, InsertUser, orders, users } from "db/index";
 import { eq } from "drizzle-orm";
+import db from "../../src/db/db";
+import { InsertOrder, InsertUser, orders, users } from "../../src/db";
 
 export const testUtils = {
   insertUser: async (user: InsertUser): Promise<number> =>
@@ -14,7 +14,8 @@ export const testUtils = {
 
 export const mockUtils = {
   user: ({ roleId }: { roleId: number }): InsertUser => ({
-    name: faker.person.fullName(),
+    first_name: faker.person.fullName(),
+    last_name: faker.person.lastName(),
     email: faker.internet.email(),
     password: faker.internet.password({ length: 20 }),
     role_id: roleId,
@@ -26,6 +27,7 @@ export const mockUtils = {
     student_amount: faker.number.int({ min: 50, max: 150 }),
     motto: faker.word.words(2),
     school_name: faker.location.street() + "Gymnasium",
+    status: "pending",
   }),
 };
 
