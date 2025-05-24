@@ -15,7 +15,10 @@ import {
 } from "./imageToDesign.entity";
 import { pullovers } from "./pullover.entity";
 import { textElements } from "./textElement.entity";
-import { designSuggestions } from "./designSuggestion.entity";
+import {
+  designSuggestions,
+  SelectDesignSuggestion,
+} from "./designSuggestion.entity";
 
 export const designs = pgTable(
   "designs",
@@ -58,7 +61,6 @@ export type SelectDesignWithRelations = typeof designs.$inferSelect & {
   preferredPullover: typeof pullovers.$inferSelect;
   imageToDesign: SelectImageToDesignWithImage[];
   texts: (typeof textElements.$inferSelect)[];
-  designSuggestions: (typeof designSuggestions.$inferSelect)[];
 };
 
 export const designRelations = relations(designs, ({ one, many }) => ({
@@ -76,5 +78,4 @@ export const designRelations = relations(designs, ({ one, many }) => ({
   }),
   imageToDesign: many(imageToDesign),
   texts: many(textElements),
-  designSuggestions: many(designSuggestions),
 }));
