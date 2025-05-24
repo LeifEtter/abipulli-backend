@@ -30,6 +30,7 @@
     "abipulli-types": "1.0.13",
     "nodemon": "^3.1.9",
     "supertest": "^7.1.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
