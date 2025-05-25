@@ -49,3 +49,26 @@ export const retrieveDesignController = async (
     next(error);
   }
 };
+
+export const getDesignsForOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orderId: number = res.locals.params.orderId!;
+    const designs = await getDesignsForOrder(orderId);
+    const designResponse: DesignsResponse = {
+      success: true,
+      data: {
+        items: designs,
+        total: designs.length,
+        page: 1,
+        pageSize: designs.length,
+      },
+    };
+    res.json(designResponse);
+  } catch (error) {
+    next(error);
+  }
+};
