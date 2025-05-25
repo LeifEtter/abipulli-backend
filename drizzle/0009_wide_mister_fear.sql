@@ -1,0 +1,1 @@
+ALTER TABLE "pullovers" ADD COLUMN "hoodie" boolean DEFAULT false NOT NULL;
