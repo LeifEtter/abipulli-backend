@@ -8,6 +8,7 @@ import {
   serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./user.entity";
@@ -24,6 +25,7 @@ export const images = pgTable(
     prompt: text(),
     user_id: integer(),
     message_id: integer(),
+    file_uuid: uuid().notNull().defaultRandom(),
   },
   (table) => [
     index("image_index_1").using(

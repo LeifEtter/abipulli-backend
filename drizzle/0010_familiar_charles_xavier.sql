@@ -1,0 +1,1 @@
+ALTER TABLE "images" ADD COLUMN "file_uuid" uuid DEFAULT gen_random_uuid() NOT NULL;
