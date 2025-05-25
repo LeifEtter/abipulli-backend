@@ -31,3 +31,24 @@ export const getDesignById = async (
   }
   return castDesignWithRelations(dbDesign);
 };
+
+export const getDesignsForOrder = async (
+  orderNumber: number
+): Promise<Design[]> => {
+  const dbDesigns: SelectDesignWithRelations[] =
+    await db.query.designs.findMany({
+      where: eq(designs.id, orderNumber),
+      with: {
+        customer: true,
+        order: true,
+        preferredPullover: true,
+        imageToDesign: {
+          with: {
+            image: true,
+          },
+        },
+        texts: true,
+      },
+    });
+  return dbDesigns.map((design) => castDesignWithRelations(design));
+};
