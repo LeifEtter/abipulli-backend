@@ -1,4 +1,4 @@
-import { SelectDesign, SelectDesignWithRelations } from "src/db";
+import { InsertDesign, SelectDesign, SelectDesignWithRelations } from "src/db";
 import { castPullover } from "src/services/pullovers/castPullover.service";
 import { castTextElement } from "./castTextElement.service";
 import { castImage } from "src/services/images/castImage.service";
@@ -30,5 +30,14 @@ export const castDesignWithRelations = (
       : undefined,
     textElements: design.texts.map((text) => castTextElement(text)),
     images: design.imageToDesign.map((e) => castImage(e.image)),
+  };
+};
+
+export const castDesignToDb = (design: Design): InsertDesign => {
+  return {
+    order_id: design.orderId,
+    customer_id: design.customerId,
+    design_cost: design.designCost ?? 0,
+    preferred_pullover_id: design.preferredPullover?.id,
   };
 };

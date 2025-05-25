@@ -1,4 +1,4 @@
-import { SelectUser, SelectUserWithRelations } from "src/db";
+import { InsertUser, SelectUser, SelectUserWithRelations } from "src/db";
 import { castRole } from "./castRole.service";
 import { User } from "abipulli-types";
 import { castImage } from "src/services/images/castImage.service";
@@ -37,5 +37,16 @@ export const castUserWithRelations = (user: SelectUserWithRelations): User => {
     chats: user.chats.map((chat) => castChat(chat)),
     orders: user.orders.map((order) => castOrder(order)),
     password: user.password,
+  };
+};
+
+export const castUserToDb = (user: User): InsertUser => {
+  return {
+    first_name: user.firstName,
+    last_name: user.lastName,
+    email: user.email,
+    password: user.password,
+    verified: user.verified,
+    school: user.school,
   };
 };

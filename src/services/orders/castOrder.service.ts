@@ -1,5 +1,5 @@
 import { Order, OrderStatus } from "abipulli-types";
-import { SelectOrder, SelectOrderWithRelations } from "src/db";
+import { InsertOrder, SelectOrder, SelectOrderWithRelations } from "src/db";
 import { castChat } from "src/services/chats/castChat.service";
 import { castDesign } from "src/services/designs/castDesign.service";
 
@@ -40,3 +40,15 @@ export const castOrderWithRelations = (
     chats: order.chats.map((chat) => castChat(chat)),
   };
 };
+
+export const castOrderToDb = (order: Order): InsertOrder => ({
+  user_id: order.customerId,
+  status: order.status,
+  deadline: order.deadline,
+  school_name: order.school,
+  motto: order.motto,
+  destination_country: order.schoolCountry,
+  student_amount: order.studentAmount,
+  delivery_address: order.deliveryAddress,
+  billing_address: order.billingAddress,
+});

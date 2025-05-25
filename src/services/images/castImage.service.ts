@@ -1,5 +1,5 @@
 import { Image } from "abipulli-types";
-import { SelectImage } from "src/db";
+import { InsertImage, SelectImage } from "src/db";
 
 export const castImage = (image: SelectImage): Image => {
   return {
@@ -8,5 +8,13 @@ export const castImage = (image: SelectImage): Image => {
     generated: image.generated ?? false,
     prompt: image.prompt ?? "",
     userId: image.user_id ?? 0,
+  };
+};
+
+export const castImageToDb = (image: Image): InsertImage => {
+  return {
+    user_id: image.userId,
+    prompt: image.prompt,
+    generated: image.generated,
   };
 };

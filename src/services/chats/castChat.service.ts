@@ -1,5 +1,5 @@
 import { Chat } from "abipulli-types";
-import { SelectChat, SelectChatWithRelations } from "src/db";
+import { InsertChat, SelectChat, SelectChatWithRelations } from "src/db";
 import { castMessage } from "./castMessage.service";
 
 export const castChat = (chat: SelectChat): Chat => {
@@ -25,3 +25,8 @@ export const castChatWithRelations = (chat: SelectChatWithRelations): Chat => {
     lastMessageAt: new Date(chat.last_message_at ?? new Date()),
   };
 };
+
+export const castChatToDb = (chat: Chat): InsertChat => ({
+  user_id: chat.userId,
+  order_id: chat.orderId,
+});

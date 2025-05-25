@@ -1,5 +1,9 @@
 import { ChatMessage } from "abipulli-types";
-import { SelectMessage, SelectMessageWithRelations } from "src/db";
+import {
+  InsertMessage,
+  SelectMessage,
+  SelectMessageWithRelations,
+} from "src/db";
 import { castDesign } from "src/services/designs/castDesign.service";
 
 export const castMessageWithRelations = (
@@ -26,3 +30,10 @@ export const castMessage = (message: SelectMessage): ChatMessage => {
     designId: message.design_id ?? undefined,
   };
 };
+
+export const castMessageToDb = (message: ChatMessage): InsertMessage => ({
+  chat_id: message.chatId,
+  sender_id: message.senderId,
+  content: message.content,
+  design_id: message.designId,
+});
