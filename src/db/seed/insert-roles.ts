@@ -2,6 +2,11 @@ import db from "../db";
 import { roles, type InsertRole } from "../index";
 
 async function insertRoles(): Promise<object[]> {
+  const currentRoles = await db.select().from(roles);
+  if (currentRoles.length > 0) {
+    return currentRoles;
+  }
+
   await db.delete(roles);
 
   const newRoles: InsertRole[] = [
