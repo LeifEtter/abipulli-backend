@@ -38,8 +38,9 @@ router
   .post(
     authenticate,
     minPower(1),
-    validateParams({ requiredParams: ["designId", "imageId"] }),
+    validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
     validateBody(AddImageToDesignSchema),
     placeImageOnDesignController
   );
+
 export default router;
