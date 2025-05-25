@@ -5,7 +5,10 @@ import {
   validateBody,
   validateParams,
 } from "src/middleware/validation.middleware";
-import { createDesignController } from "src/controllers/design.controller";
+import {
+  createDesignController,
+  getDesignsForOrderController,
+} from "src/controllers/design.controller";
 import { AddImageToDesignSchema, DesignCreateSchema } from "abipulli-types";
 import { placeImageOnDesignController } from "src/controllers/image.toDesignController";
 
@@ -19,6 +22,15 @@ router
     validateParams({ requiredParams: ["orderId"] }),
     validateBody(DesignCreateSchema),
     createDesignController
+  );
+
+router
+  .route("/")
+  .get(
+    authenticate,
+    minPower(1),
+    validateParams({ requiredParams: ["orderId"] }),
+    getDesignsForOrderController
   );
 
 router
