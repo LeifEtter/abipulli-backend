@@ -1,4 +1,5 @@
 import {
+  boolean,
   foreignKey,
   integer,
   pgTable,
@@ -22,6 +23,7 @@ export const pullovers = pgTable(
     updated_at: timestamp()
       .notNull()
       .$onUpdate(() => new Date()),
+    hoodie: boolean().notNull().default(false),
   },
   (table) => [
     foreignKey({
