@@ -2,9 +2,9 @@ import { AddImageToDesign, errorMessages } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "src/lib/logger";
-import { getDesignById } from "src/services/designs/getDesignById.service";
 import { getImageById } from "src/services/images/getImageById.service";
 import { placeImageOnDesign } from "src/services/images/placeImage.service";
+import { getDesignById } from "src/services/designs/getDesigns.service";
 
 export const placeImageOnDesignController = async (
   req: Request,

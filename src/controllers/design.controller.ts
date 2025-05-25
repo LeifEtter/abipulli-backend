@@ -1,9 +1,17 @@
 import { designs, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
-import { DesignCreate, DesignResponse, errorMessages } from "abipulli-types";
-import { getDesignById } from "src/services/designs/getDesignById.service";
+import {
+  DesignCreate,
+  DesignResponse,
+  DesignsResponse,
+  errorMessages,
+} from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import db from "src/db/db";
+import {
+  getDesignById,
+  getDesignsForOrder,
+} from "src/services/designs/getDesigns.service";
 
 export const createDesignController = async (
   req: Request,
