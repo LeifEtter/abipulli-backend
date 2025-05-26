@@ -81,9 +81,11 @@ export const authenticateHttp = (
   });
 };
 
-export const authenticateSocket = (socket: Socket, next: NextFunction) => {
-  const token: string | undefined = socket.handshake.auth.token;
-  authenticate({
+export const authenticateSocket = async (socket: Socket, next: any) => {
+  const token: string | undefined =
+    socket.handshake.auth.token ?? socket.handshake.query["jwt_token"];
+  console.log("Authenticating");
+  await authenticate({
     token: token,
     setUser: (user: TokenContent) => {
       socket.data.user = user;
@@ -92,4 +94,5 @@ export const authenticateSocket = (socket: Socket, next: NextFunction) => {
       next(error);
     },
   });
+  next();
 };
