@@ -8,6 +8,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { swaggerOptions } from "./configs/swagger.config";
 import router from "./routes";
+import { Server } from "socket.io";
 
 const app = express();
 const server = http.createServer(app);
@@ -46,6 +47,18 @@ app.use(apiErrorHandler);
 
 app.route("/test").get((req: express.Request, res: express.Response): void => {
   res.status(200).send({ message: "Working" });
+});
+
+io.on("connection", (socket) => {
+  console.log("User Connected to Socket:", socket.id);
+
+  socket.on("send_message", (message: string) => {
+    io.emit("receive_message", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected from Socket:", socket.id);
+  });
 });
 
 export default server;
