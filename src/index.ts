@@ -1,6 +1,6 @@
 import "dotenv/config.js";
 import { logger } from "./lib/logger.js";
-import app from "./app.js";
+import server from "./app.js";
 import db from "src/db/db.js";
 
 const abortMessage: string = "--- Aborting Initialization Process ---";
@@ -34,7 +34,7 @@ async function main() {
       return;
     }
 
-    app.listen(parseInt(port), () => {
+    server.listen(parseInt(port), () => {
       logger.info(`### Listening to Port ${port} ###`);
     });
   } catch (error) {

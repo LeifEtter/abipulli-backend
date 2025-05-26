@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import { httpLogger } from "./lib/logger";
 import { apiErrorHandler } from "./middleware/error.middleware";
 import cookieParser from "cookie-parser";
@@ -9,6 +10,13 @@ import { swaggerOptions } from "./configs/swagger.config";
 import router from "./routes";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    credentials: true,
+  },
+});
 
 app.use(express.json());
 
@@ -40,4 +48,4 @@ app.route("/test").get((req: express.Request, res: express.Response): void => {
   res.status(200).send({ message: "Working" });
 });
 
-export default app;
+export default server;
