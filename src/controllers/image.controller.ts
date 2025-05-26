@@ -158,7 +158,9 @@ const retrieveImagesFromDbByUserId = async (
 };
 
 const generateImageLink = (image: Image): string => {
-  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${image.userId}/${image.uuid}`;
+  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${
+    process.env.NODE_ENV
+  }/users/${image.userId}/${image.uuid!}`;
 };
 
 export const getMyImagesController = async (
