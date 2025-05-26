@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { errorMessages, User } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { getUserById } from "src/services/users/getUser.service";
+import { Socket } from "socket.io";
 
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];
@@ -80,3 +81,15 @@ export const authenticateHttp = (
   });
 };
 
+export const authenticateSocket = (socket: Socket, next: NextFunction) => {
+  const token: string | undefined = socket.handshake.auth.token;
+  authenticate({
+    token: token,
+    setUser: (user: TokenContent) => {
+      socket.data.user = user;
+    },
+    throwError: (error) => {
+      next(error);
+    },
+  });
+};
