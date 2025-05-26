@@ -19,6 +19,7 @@ import {
 } from "src/services/images/generateImage.service";
 import { insertImageIntoDb } from "src/services/images/insertImage.service";
 import { castImage } from "src/services/images/castImage.service";
+import { randomUUID } from "crypto";
 
 export const saveImageController = async (
   req: Request,
@@ -35,11 +36,12 @@ export const saveImageController = async (
     }
     const fileSize: number = Math.round(file.size / 1024);
     const userId: number = res.locals.user!.user_id;
-    const insertedImageId = await insertImageIntoDb(userId, fileSize);
+    const fileUuid = randomUUID();
+    const insertedImageId = await insertImageIntoDb(userId, fileSize, fileUuid);
     const uploadResult = await uploadImageToHetzner({
       file: file.buffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
-      filename: `${insertedImageId}`,
+      filename: `${fileUuid}`,
       imageType: "image/png",
     });
     if (!uploadResult) {
@@ -51,7 +53,7 @@ export const saveImageController = async (
     const response: ImageUploadResultResponse = {
       success: true,
       data: {
-        link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}`,
+        link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}`,
         imageId: insertedImageId,
       },
     };
@@ -120,11 +122,16 @@ export const generateImageController = async (
     const imageUrl: string = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
     const fileSize: number = Math.round(imageBuffer.length / 1024);
-    const insertedImageId: number = await insertImageIntoDb(userId, fileSize);
+    const fileUuid = randomUUID();
+    const insertedImageId: number = await insertImageIntoDb(
+      userId,
+      fileSize,
+      fileUuid
+    );
     const uploadResult = await uploadImageToHetzner({
       file: imageBuffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
-      filename: `${insertedImageId}-generated`,
+      filename: `${fileUuid}-generated`,
       imageType: "image/png",
     });
     if (!uploadResult) {
@@ -133,7 +140,7 @@ export const generateImageController = async (
       );
     }
     res.status(200).send({
-      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${insertedImageId}-generated`,
+      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}-generated`,
     });
   } catch (error) {
     next(error);
@@ -151,7 +158,7 @@ const retrieveImagesFromDbByUserId = async (
 };
 
 const generateImageLink = (image: Image): string => {
-  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${image.userId}/${image.id}`;
+  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${image.userId}/${image.uuid}`;
 };
 
 export const getMyImagesController = async (

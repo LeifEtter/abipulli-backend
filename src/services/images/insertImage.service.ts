@@ -4,11 +4,12 @@ import { ApiError } from "src/error/ApiError";
 
 export const insertImageIntoDb = async (
   userId: number,
-  fileSize: number
+  fileSize: number,
+  fileUuid: string
 ): Promise<number> => {
   const result = await db
     .insert(images)
-    .values({ user_id: userId, file_size: fileSize })
+    .values({ user_id: userId, file_size: fileSize, file_uuid: fileUuid })
     .returning({ id: images.id });
   if (result[0] == null) {
     throw ApiError.internal({

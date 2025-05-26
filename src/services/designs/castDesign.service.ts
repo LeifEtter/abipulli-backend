@@ -29,7 +29,11 @@ export const castDesignWithRelations = (
       ? castPullover(design.preferredPullover)
       : undefined,
     textElements: design.texts.map((text) => castTextElement(text)),
-    images: design.imageToDesign.map((e) => castImage(e.image)),
+    images: design.imageToDesign.map((e) => ({
+      ...castImage(e.image),
+      positionX: e.x_position ?? 0,
+      positionY: e.y_position ?? 0,
+    })),
   };
 };
 
