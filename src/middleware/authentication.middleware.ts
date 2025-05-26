@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { errorMessages, User } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { getUserById } from "src/services/users/getUser.service";
+import { Socket } from "socket.io";
 
 const extractToken = (req: Request): string | undefined =>
   req.cookies["jwt_token"] ?? req.headers.authorization?.split(" ")[1];
@@ -19,15 +20,22 @@ const extractUserDataFromToken = (
         role_power: parseInt(payload["role_power"]),
       };
 
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+// const token: string | undefined = extractToken(req);
+
+interface AuthenticateParams {
+  token: string | undefined;
+  setUser: (user: TokenContent) => void;
+  throwError: (error: Error | ApiError | unknown) => void;
+}
+
+const authenticate = async ({
+  token,
+  setUser,
+  throwError,
+}: AuthenticateParams) => {
   try {
-    const token: string | undefined = extractToken(req);
     if (!token) {
-      return next(
+      return throwError(
         new ApiError({ code: 401, info: errorMessages.missingToken })
       );
     }
@@ -38,20 +46,53 @@ export const authenticate = async (
     const userData: TokenContent | undefined =
       extractUserDataFromToken(payload);
     if (!userData) {
-      return next(new ApiError({ code: 401, info: errorMessages.faultyToken }));
+      return throwError(
+        new ApiError({ code: 401, info: errorMessages.faultyToken })
+      );
     }
     const user: User | undefined = await getUserById(userData.user_id);
     if (user == undefined) {
-      return next(
+      return throwError(
         new ApiError({ code: 401, info: errorMessages.tokenUserDoesNotExist })
       );
     }
-    res.locals.user = { user_id: user.id, role_power: user.role!.rolePower };
-    next();
+    setUser({ user_id: user.id, role_power: user.role!.rolePower });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      return next(new ApiError({ code: 401, info: errorMessages.faultyToken }));
+      throwError(new ApiError({ code: 401, info: errorMessages.faultyToken }));
     }
-    return next(error);
+    throwError(error);
   }
+};
+
+export const authenticateHttp = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token: string | undefined = extractToken(req);
+  authenticate({
+    token: token,
+    setUser: (user: TokenContent) => {
+      res.locals.user = user;
+      next();
+    },
+    throwError: () => {},
+  });
+};
+
+export const authenticateSocket = async (socket: Socket, next: any) => {
+  const token: string | undefined =
+    socket.handshake.auth.token ?? socket.handshake.query["jwt_token"];
+  console.log("Authenticating");
+  await authenticate({
+    token: token,
+    setUser: (user: TokenContent) => {
+      socket.data.user = user;
+    },
+    throwError: (error) => {
+      next(error);
+    },
+  });
+  next();
 };
