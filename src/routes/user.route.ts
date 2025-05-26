@@ -13,27 +13,27 @@ import {
   validateBody,
   validateParams,
 } from "../middleware/validation.middleware";
-import { authenticate } from "src/middleware/authentication.middleware";
+import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import { UserCreateSchema, UserLoginSchema } from "abipulli-types";
 const router: Router = Router();
 
 /**
  * @openapi
- * /user/authenticate:
+ * /user/authenticateHttp:
  *   get:
- *     summary: Check if the user is authenticated
- *     description: Check if the user is authenticated by validating the jwt_token in httpOnly cookies
+ *     summary: Check if the user is authenticateHttpd
+ *     description: Check if the user is authenticateHttpd by validating the jwt_token in httpOnly cookies
  *     security:
  *       - cookieAuth: []
  *     responses:
  *       '200':
- *         description: User is authenticated
+ *         description: User is authenticateHttpd
  *       '401':
  *         description: Invalid or missing authentication token
  *
  */
-router.route("/authenticate").get(authenticate, checkTokenController);
+router.route("/authenticate").get(authenticateHttp, checkTokenController);
 
 /**
  * @openapi
@@ -84,20 +84,22 @@ router
 router
   .route("/:userId")
   .delete(
-    authenticate,
+    authenticateHttp,
     minPower(10),
     validateParams({ requiredParams: ["userId"] }),
     deleteUserController
   );
 
-router.route("/").delete(authenticate, minPower(1), deleteUserSelfController);
+router
+  .route("/")
+  .delete(authenticateHttp, minPower(1), deleteUserSelfController);
 
-router.route("/me").get(authenticate, minPower(1), getUserDataController);
+router.route("/me").get(authenticateHttp, minPower(1), getUserDataController);
 
-router.route("/").get(authenticate, minPower(10), getAllUsersController);
+router.route("/").get(authenticateHttp, minPower(10), getAllUsersController);
 
 router
   .route("/me/password")
-  .patch(authenticate, minPower(1), changeUserPasswordController);
+  .patch(authenticateHttp, minPower(1), changeUserPasswordController);
 
 export default router;

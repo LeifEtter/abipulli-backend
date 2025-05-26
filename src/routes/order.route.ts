@@ -3,7 +3,7 @@ import {
   validateBody,
   validateParams,
 } from "src/middleware/validation.middleware";
-import { authenticate } from "src/middleware/authentication.middleware";
+import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
 import {
@@ -18,7 +18,7 @@ const router: Router = Router();
 router
   .route("/")
   .post(
-    authenticate,
+    authenticateHttp,
     minPower(1),
     validateBody(OrderCreateSchema),
     createOrderController
@@ -27,7 +27,7 @@ router
 router
   .route("/:id")
   .patch(
-    authenticate,
+    authenticateHttp,
     minPower(1),
     validateBody(OrderUpdateSchema),
     validateParams({ requiredParams: ["id"] }),
@@ -37,7 +37,7 @@ router
 router
   .route("/:id")
   .delete(
-    authenticate,
+    authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["id"] }),
     deleteOrderController
