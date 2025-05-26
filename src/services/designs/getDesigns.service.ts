@@ -33,11 +33,11 @@ export const getDesignById = async (
 };
 
 export const getDesignsForOrder = async (
-  orderNumber: number
+  orderId: number
 ): Promise<Design[]> => {
   const dbDesigns: SelectDesignWithRelations[] =
     await db.query.designs.findMany({
-      where: eq(designs.id, orderNumber),
+      where: eq(designs.order_id, orderId),
       with: {
         customer: true,
         order: true,
