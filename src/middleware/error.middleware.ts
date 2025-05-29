@@ -37,3 +37,7 @@ export const apiErrorHandler = (
   res.status(errorResponse.error!.code).send(errorResponse);
 };
 
+export const socketErrorHandler = async (socket: Socket, err: any) => {
+  const errorResponse: ErrorResponse = errorHandler(err);
+  socket.send("error", errorResponse);
+};
