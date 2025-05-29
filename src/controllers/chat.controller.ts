@@ -1,8 +1,15 @@
-import { Chat, ChatResponse, errorMessages } from "abipulli-types";
+import {
+  Chat,
+  ChatCreate,
+  ChatResponse,
+  errorMessages,
+  Order,
+} from "abipulli-types";
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "src/error/ApiError";
 import { createChat } from "src/services/chats/createChat.service";
 import { getChatWithMessagesFromDb } from "src/services/chats/getChat.service";
+import { getOrderById } from "src/services/orders/getOrderById.service";
 
 export const createChatController = async (
   req: Request,
@@ -10,8 +17,29 @@ export const createChatController = async (
   next: NextFunction
 ) => {
   try {
-    const orderId = res.locals.params.orderId!;
     const userId = res.locals.user.user_id!;
+    const orderId: number | undefined = res.locals.params.orderId!;
+    const order: Order | undefined = await getOrderById(orderId);
+    const { assignedAdminId, initialMessage } = req.body as ChatCreate;
+    //TODO: Do these things in middleware combined with the requiredParams
+    if (!order) {
+      return next(
+        new ApiError({
+          code: 404,
+          info: errorMessages.resourceNotFound,
+          resource: "Chat",
+        })
+      );
+    }
+    if (order.customerId != userId) {
+      return next(
+        new ApiError({
+          code: 401,
+          info: errorMessages.resourceNotOwned,
+          resource: "Chat",
+        })
+      );
+    }
     const createdChat = await createChat({
       orderId,
       userId,
@@ -43,7 +71,7 @@ export const getChatController = async (
         })
       );
     }
-    if (chat?.userId != userId) {
+    if (chat.userId != userId) {
       return next(
         new ApiError({
           code: 401,
