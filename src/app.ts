@@ -70,4 +70,8 @@ io.on("connection", (socket) => {
   });
 });
 
+io.on("connect_error", (err) => {
+  logger.error(err);
+});
+
 export default server;
