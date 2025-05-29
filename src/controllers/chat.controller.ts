@@ -41,9 +41,9 @@ export const createChatController = async (
       );
     }
     const createdChat = await createChat({
-      orderId,
-      userId,
-      assignedAdminId: undefined,
+      order_id: orderId,
+      user_id: userId,
+      assigned_admin_id: undefined,
     });
     const chatResponse: ChatResponse = { success: true, data: createdChat };
     res.status(201).send(chatResponse);
