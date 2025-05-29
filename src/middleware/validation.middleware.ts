@@ -13,6 +13,7 @@ export const extractIssues = (issues: ZodIssue[]): string[] =>
     return `Field '${path}': ${message}`;
   });
 
+//TODO: Correct error responses to comply with ErrorResponse Type
 export const validateBody =
   (schema: z.ZodType<any>) =>
   (req: Request, res: Response, next: NextFunction) => {
