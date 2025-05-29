@@ -12,7 +12,12 @@ import {
   deleteOrderController,
   updateOrderController,
 } from "src/controllers/order.controller";
-import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
+import {
+  ChatCreateSchema,
+  OrderCreateSchema,
+  OrderUpdateSchema,
+} from "abipulli-types";
+import { createChatController } from "src/controllers/chat.controller";
 
 const router: Router = Router();
 
@@ -46,6 +51,13 @@ router
 
 router.use("/:orderId/design", designRouter);
 
-router.use("/:orderId/chat", chatRouter);
+router.use(
+  "/:orderId/chat",
+  authenticateHttp,
+  minPower(1),
+  validateParams({ requiredParams: ["orderId"] }),
+  validateBody(ChatCreateSchema),
+  createChatController
+);
 
 export default router;
