@@ -29,12 +29,9 @@ export const castMessage = (message: SelectMessage): ChatMessage => {
     senderId: message.sender_id,
     designId: message.design_id ?? undefined,
   };
-  
 };
 
-export const castMessageToDb = (
-  message: ChatMessage | MessageCreate
-): InsertMessage => ({
+export const castMessageToDb = (message: ChatMessage): InsertMessage => ({
   chat_id: message.chatId,
   sender_id: message.senderId,
   content: message.content,
