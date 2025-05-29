@@ -9,9 +9,6 @@ export const getChatFromDb = async (
 ): Promise<Chat | undefined> => {
   const dbChat = await db.query.chats.findFirst({
     where: eq(chats.id, chatId),
-    with: {
-      messages: true,
-    },
   });
   if (!dbChat) {
     return undefined;
