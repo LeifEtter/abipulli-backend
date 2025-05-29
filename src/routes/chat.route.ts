@@ -9,7 +9,7 @@ router
   .route("/")
   .post(
     authenticateHttp,
-    minPower(2),
+    minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
     createChatController
   );
