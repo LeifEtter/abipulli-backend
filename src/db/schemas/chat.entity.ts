@@ -9,10 +9,7 @@ import { relations } from "drizzle-orm";
 import { orders } from "./order.entity";
 import { users } from "./user.entity";
 import { messages, SelectMessage } from "./message.entity";
-import {
-  designSuggestions,
-  SelectDesignSuggestion,
-} from "./designSuggestion.entity";
+import { designSuggestions } from "./designSuggestion.entity";
 
 export const chats = pgTable(
   "chats",
@@ -47,7 +44,8 @@ export type SelectChat = typeof chats.$inferSelect;
 
 export type SelectChatWithRelations = SelectChat & {
   messages: SelectMessage[];
-  designSuggestions: SelectDesignSuggestion[];
+  //! Temporarily remove design suggestions
+  // designSuggestions: DesignSuggestion[]
 };
 
 export const chatRelations = relations(chats, ({ one, many }) => ({
