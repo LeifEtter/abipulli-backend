@@ -6,6 +6,7 @@ import {
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
+import chatRouter from "./chat.route";
 import {
   createOrderController,
   deleteOrderController,
@@ -44,5 +45,7 @@ router
   );
 
 router.use("/:orderId/design", designRouter);
+
+router.use("/:orderId/chat", chatRouter);
 
 export default router;
