@@ -2,7 +2,7 @@ import db from "src/db/db";
 import { InsertOrder, orders, SelectOrder } from "src/db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
-import { errorMessages, OrderCreate, OrderUpdate } from "abipulli-types";
+import { errorMessages, Order, OrderCreate, OrderUpdate } from "abipulli-types";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 import { ApiError } from "src/error/ApiError";
 
@@ -44,12 +44,12 @@ export const updateOrderController = async (
     const deadline = req.body.deadline
       ? new Date(req.body.deadline)
       : undefined;
-    const order: SelectOrder | undefined = await getOrderById(res.locals.id);
+    const order: Order | undefined = await getOrderById(res.locals.id);
     if (order == undefined)
       return next(
         new ApiError({ code: 404, info: errorMessages.resourceNotFound })
       );
-    if (order!.user_id != res.locals.user.user_id)
+    if (order.customerId != res.locals.user.user_id)
       return next(
         new ApiError({ code: 401, info: errorMessages.resourceNotOwned })
       );
