@@ -1,24 +1,22 @@
-import { messages } from "src/db";
+import { InsertMessage, messages, SelectMessage } from "src/db";
 import db from "src/db/db";
-import { logger } from "src/lib/logger";
-import { castMessage, castMessageToDb } from "./castMessage.service";
-import { ChatMessage, MessageCreate } from "abipulli-types";
+import { ApiError } from "src/error/ApiError";
 
 export const createMessage = async (
-  msg: MessageCreate
-): Promise<ChatMessage | undefined> => {
+  msg: InsertMessage
+): Promise<SelectMessage> => {
   try {
-    const dbMessage = castMessageToDb(msg);
-    const messageInsert = await db
-      .insert(messages)
-      .values(dbMessage)
-      .returning();
-    if (!messageInsert || messageInsert.length == 0) {
-      return undefined;
+    const insert = await db.insert(messages).values(msg).returning();
+    if (!insert || insert.length == 0 || insert[0] == undefined) {
+      throw new ApiError({
+        code: 500,
+        info: "Message couldn't be created",
+        resource: "Message",
+      });
     }
-    const insertedMessage: ChatMessage = castMessage(messageInsert[0]!);
+    const insertedMessage: SelectMessage = insert[0];
     return insertedMessage;
   } catch (error: any) {
-    logger.error(error);
+    throw error;
   }
 };
