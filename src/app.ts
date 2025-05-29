@@ -61,9 +61,7 @@ io.on("connection", (socket) => {
     "with chat id",
     socket.data.chat.id;
 
-  socket.on("send_message", (message: string) => {
-    io.emit("receive_message", message);
-  });
+  handleMessage(socket);
 
   socket.on("disconnect", () => {
     console.log("User Disconnected from Socket:", socket.id);
