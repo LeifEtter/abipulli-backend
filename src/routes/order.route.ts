@@ -6,12 +6,18 @@ import {
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
+import chatRouter from "./chat.route";
 import {
   createOrderController,
   deleteOrderController,
   updateOrderController,
 } from "src/controllers/order.controller";
-import { OrderCreateSchema, OrderUpdateSchema } from "abipulli-types";
+import {
+  ChatCreateSchema,
+  OrderCreateSchema,
+  OrderUpdateSchema,
+} from "abipulli-types";
+import { createChatController } from "src/controllers/chat.controller";
 
 const router: Router = Router();
 
@@ -44,5 +50,14 @@ router
   );
 
 router.use("/:orderId/design", designRouter);
+
+router.use(
+  "/:orderId/chat",
+  authenticateHttp,
+  minPower(1),
+  validateParams({ requiredParams: ["orderId"] }),
+  validateBody(ChatCreateSchema),
+  createChatController
+);
 
 export default router;

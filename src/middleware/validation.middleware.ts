@@ -3,6 +3,7 @@ import { z, ZodError, ZodIssue } from "zod";
 import { logger } from "../lib/logger";
 import { errorMessages } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
+import { sanitizeElement } from "src/lib/security/sanitizeObject";
 
 export const extractIssues = (issues: ZodIssue[]): string[] =>
   issues.map((issue: ZodIssue) => {
@@ -12,6 +13,7 @@ export const extractIssues = (issues: ZodIssue[]): string[] =>
     return `Field '${path}': ${message}`;
   });
 
+//TODO: Correct error responses to comply with ErrorResponse Type
 export const validateBody =
   (schema: z.ZodType<any>) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +27,9 @@ export const validateBody =
           details: issues,
         });
       } else {
-        req.body = result.data;
+        const sanitizedData = sanitizeElement(result.data);
+        console.log(sanitizedData);
+        req.body = sanitizedData;
         next();
       }
     } catch (err) {
