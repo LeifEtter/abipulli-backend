@@ -1,4 +1,4 @@
-import { ChatMessage } from "abipulli-types";
+import { ChatMessage, MessageCreate } from "abipulli-types";
 import {
   InsertMessage,
   SelectMessage,
@@ -29,9 +29,12 @@ export const castMessage = (message: SelectMessage): ChatMessage => {
     senderId: message.sender_id,
     designId: message.design_id ?? undefined,
   };
+  
 };
 
-export const castMessageToDb = (message: ChatMessage): InsertMessage => ({
+export const castMessageToDb = (
+  message: ChatMessage | MessageCreate
+): InsertMessage => ({
   chat_id: message.chatId,
   sender_id: message.senderId,
   content: message.content,
