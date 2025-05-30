@@ -12,13 +12,13 @@ import {
 } from "src/middleware/validation.middleware";
 
 const router = Router({ mergeParams: true });
-
+// Allow initial message
 router
   .route("/")
   .post(
     authenticateHttp,
     minPower(1),
-    validateParams({ requiredParams: ["orderId"] }),
+    validateBody(ChatCreateSchema),
     createChatController
   );
 
@@ -28,7 +28,6 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["chatId"] }),
-    validateBody(ChatCreateSchema),
     getChatController
   );
 
