@@ -23,7 +23,7 @@ export const chats = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
-    order_id: integer().notNull(),
+    order_id: integer(),
   },
   (table) => [
     foreignKey({
