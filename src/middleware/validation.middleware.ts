@@ -57,13 +57,21 @@ export const validateParams =
     for (let param of requiredParams) {
       if (!req.params[param]) {
         return next(
-          new ApiError({ code: 400, info: errorMessages.paramIdMissing })
+          new ApiError({
+            code: 400,
+            info: errorMessages.paramIdMissing,
+            resource: param,
+          })
         );
       }
       const paramId: number = parseInt(req.params[param]);
       if (!paramId || Number.isNaN(paramId)) {
         return next(
-          new ApiError({ code: 400, info: errorMessages.paramIdMalformed })
+          new ApiError({
+            code: 400,
+            info: errorMessages.paramIdMalformed,
+            resource: param,
+          })
         );
       }
       res.locals.params[param] = paramId;
