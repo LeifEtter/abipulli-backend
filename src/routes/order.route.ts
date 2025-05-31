@@ -12,12 +12,12 @@ import {
   deleteOrderController,
   updateOrderController,
 } from "src/controllers/order.controller";
-import {
-  ChatCreateSchema,
-  OrderCreateSchema,
-  OrderUpdateSchema,
-} from "abipulli-types";
 import { createChatController } from "src/controllers/chat.controller";
+import {
+  ChatCreateParamsSchema,
+  OrderCreateParamsSchema,
+  OrderUpdateParamsSchema,
+} from "abipulli-types";
 
 const router: Router = Router();
 
@@ -26,7 +26,7 @@ router
   .post(
     authenticateHttp,
     minPower(1),
-    validateBody(OrderCreateSchema),
+    validateBody(OrderCreateParamsSchema),
     createOrderController
   );
 
@@ -35,7 +35,7 @@ router
   .patch(
     authenticateHttp,
     minPower(1),
-    validateBody(OrderUpdateSchema),
+    validateBody(OrderUpdateParamsSchema),
     validateParams({ requiredParams: ["id"] }),
     updateOrderController
   );
@@ -56,7 +56,7 @@ router.use(
   authenticateHttp,
   minPower(1),
   validateParams({ requiredParams: ["orderId"] }),
-  validateBody(ChatCreateSchema),
+  validateBody(ChatCreateParamsSchema),
   createChatController
 );
 

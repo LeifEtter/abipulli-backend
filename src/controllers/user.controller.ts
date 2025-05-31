@@ -9,10 +9,10 @@ import {
   MessageResponse,
   errorMessages,
   User,
-  UserCreate,
-  UserLogin,
   UserResponse,
   UsersResponse,
+  UserCreateParams,
+  UserLoginParams,
 } from "abipulli-types";
 import { logger } from "src/lib/logger";
 import { ApiError } from "src/error/ApiError";
@@ -79,7 +79,7 @@ export const registerUserController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const body: UserCreate = req.body;
+  const body: UserCreateParams = req.body;
   try {
     const existingUser = await getUserWithPasswordByEmail(body.email);
     if (existingUser != null) {
@@ -129,7 +129,7 @@ export const loginWithEmailController = async (
   next: NextFunction
 ) => {
   try {
-    const body: UserLogin = req.body;
+    const body: UserLoginParams = req.body;
     const storedUser = await getUserWithPasswordByEmail(body.email);
     if (
       storedUser == null ||

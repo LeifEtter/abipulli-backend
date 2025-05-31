@@ -1,6 +1,6 @@
 import {
   Chat,
-  ChatCreate,
+  ChatCreateParams,
   ChatResponse,
   errorMessages,
   Order,
@@ -20,7 +20,7 @@ export const createChatController = async (
     const userId = res.locals.user.user_id!;
     const orderId: number | undefined = res.locals.params.orderId!;
     const order: Order | undefined = await getOrderById(orderId);
-    const { assignedAdminId, initialMessage } = req.body as ChatCreate;
+    const { assignedAdminId, initialMessage } = req.body as ChatCreateParams;
     //TODO: Do these things in middleware combined with the requiredParams
     if (!order) {
       return next(

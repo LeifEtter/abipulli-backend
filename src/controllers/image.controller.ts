@@ -5,10 +5,10 @@ import { eq } from "drizzle-orm";
 
 import {
   errorMessages,
-  GenerateImage,
+  GenerateImageParams,
   Image,
   ImageUploadResultResponse,
-  ImproveImageQuery,
+  ImproveImageQueryParams,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
@@ -67,7 +67,7 @@ const buildBasicPrompt = ({
   motto,
   description,
   styleTags,
-}: ImproveImageQuery): string => {
+}: ImproveImageQueryParams): string => {
   const prompt = `
     You are generating a visual design prompt for Ideogram.ai. The design is for graduation pullovers (Abitur), to be printed on fabric. 
     This means: 
@@ -95,7 +95,7 @@ export const improvePromptController = async (
   next: NextFunction
 ) => {
   try {
-    const { motto, description, styleTags }: ImproveImageQuery = req.body;
+    const { motto, description, styleTags }: ImproveImageQueryParams = req.body;
     const prompt = buildBasicPrompt({
       motto,
       description,
@@ -117,7 +117,7 @@ export const generateImageController = async (
   next: NextFunction
 ) => {
   try {
-    const { prompt, styleTags }: GenerateImage = req.body;
+    const { prompt, styleTags }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
     const imageUrl: string = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);

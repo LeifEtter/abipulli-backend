@@ -8,8 +8,11 @@ import {
 import { minPower } from "src/middleware/authorization.middleware";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { validateBody } from "src/middleware/validation.middleware";
-import { GenerateImageSchema, ImproveImageQuerySchema } from "abipulli-types";
 import { uploadSingleImage } from "src/middleware/file.middleware";
+import {
+  GenerateImageParamsSchema,
+  ImproveImageQueryParamsSchema,
+} from "abipulli-types";
 
 const router = Router({ mergeParams: true });
 
@@ -27,7 +30,7 @@ router
   .post(
     authenticateHttp,
     minPower(1),
-    validateBody(ImproveImageQuerySchema),
+    validateBody(ImproveImageQueryParamsSchema),
     improvePromptController
   );
 
@@ -36,7 +39,7 @@ router
   .post(
     authenticateHttp,
     minPower(1),
-    validateBody(GenerateImageSchema),
+    validateBody(GenerateImageParamsSchema),
     generateImageController
   );
 

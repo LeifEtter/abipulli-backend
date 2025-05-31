@@ -1,4 +1,4 @@
-import { AddImageToDesign, errorMessages } from "abipulli-types";
+import { AddImageToDesignParams, errorMessages } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "src/lib/logger";
@@ -12,7 +12,7 @@ export const placeImageOnDesignController = async (
   next: NextFunction
 ) => {
   try {
-    req.body as AddImageToDesign;
+    req.body as AddImageToDesignParams;
     const designId: number = res.locals.params.designId!;
     const imageId: number = res.locals.params.imageId!;
     const userId: number = res.locals.user.user_id;

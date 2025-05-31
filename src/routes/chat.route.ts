@@ -1,4 +1,4 @@
-import { ChatCreateSchema } from "abipulli-types";
+import { ChatCreateParamsSchema } from "abipulli-types";
 import { Router } from "express";
 import {
   createChatController,
@@ -18,7 +18,7 @@ router
   .post(
     authenticateHttp,
     minPower(1),
-    validateBody(ChatCreateSchema),
+    validateBody(ChatCreateParamsSchema),
     createChatController
   );
 

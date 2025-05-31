@@ -15,7 +15,7 @@ import {
 } from "../middleware/validation.middleware";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
-import { UserCreateSchema, UserLoginSchema } from "abipulli-types";
+import { UserCreateParamsSchema, UserLoginParamsSchema } from "abipulli-types";
 const router: Router = Router();
 
 /**
@@ -67,11 +67,11 @@ router.route("/authenticate").get(authenticateHttp, checkTokenController);
  */
 router
   .route("/register")
-  .post(validateBody(UserCreateSchema), registerUserController);
+  .post(validateBody(UserCreateParamsSchema), registerUserController);
 
 router
   .route("/login")
-  .post(validateBody(UserLoginSchema), loginWithEmailController);
+  .post(validateBody(UserLoginParamsSchema), loginWithEmailController);
 
 // router
 //   .route("/anonymous")

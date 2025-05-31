@@ -1,8 +1,7 @@
 import { designs, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
 import {
-  DesignCreate,
-  DesignResponse,
+  DesignCreateParams,
   DesignsResponse,
   errorMessages,
 } from "abipulli-types";
@@ -19,7 +18,7 @@ export const createDesignController = async (
   next: NextFunction
 ) => {
   try {
-    req.body as DesignCreate;
+    req.body as DesignCreateParams;
     const design: InsertDesign = {
       order_id: res.locals.params.orderId!,
       customer_id: res.locals.user.user_id,

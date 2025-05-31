@@ -8,9 +8,12 @@ import {
   createDesignController,
   getDesignsForOrderController,
 } from "src/controllers/design.controller";
-import { AddImageToDesignSchema, DesignCreateSchema } from "abipulli-types";
 import { placeImageOnDesignController } from "src/controllers/image.toDesignController";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
+import {
+  AddImageToDesignParamsSchema,
+  DesignCreateParamsSchema,
+} from "abipulli-types";
 
 const router = Router({ mergeParams: true });
 
@@ -20,7 +23,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
-    validateBody(DesignCreateSchema),
+    validateBody(DesignCreateParamsSchema),
     createDesignController
   );
 
@@ -39,7 +42,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
-    validateBody(AddImageToDesignSchema),
+    validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController
   );
 

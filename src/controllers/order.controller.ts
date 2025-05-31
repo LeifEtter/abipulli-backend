@@ -2,7 +2,12 @@ import db from "src/db/db";
 import { InsertOrder, orders, SelectOrder } from "src/db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
-import { errorMessages, Order, OrderCreate, OrderUpdate } from "abipulli-types";
+import {
+  errorMessages,
+  Order,
+  OrderCreateParams,
+  OrderUpdateParams,
+} from "abipulli-types";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 import { ApiError } from "src/error/ApiError";
 
@@ -12,7 +17,7 @@ export const createOrderController = async (
   next: NextFunction
 ) => {
   try {
-    let orderData: OrderCreate = req.body;
+    let orderData: OrderCreateParams = req.body;
     const order: InsertOrder = {
       status: "pending",
       deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
@@ -39,7 +44,7 @@ export const updateOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { school, motto, schoolCountry, studentAmount }: OrderUpdate =
+    const { school, motto, schoolCountry, studentAmount }: OrderUpdateParams =
       req.body;
     const deadline = req.body.deadline
       ? new Date(req.body.deadline)

@@ -1,4 +1,4 @@
-import { ChatMessage, MessageCreate } from "abipulli-types";
+import { ChatMessage } from "abipulli-types";
 import {
   InsertMessage,
   SelectMessage,

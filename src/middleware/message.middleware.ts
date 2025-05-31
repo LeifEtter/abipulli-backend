@@ -1,4 +1,4 @@
-import { Chat, ChatMessageSchema, MessageCreate } from "abipulli-types";
+import { Chat } from "abipulli-types";
 import { Socket } from "socket.io";
 import { InsertMessage } from "src/db";
 import { ApiError } from "src/error/ApiError";
