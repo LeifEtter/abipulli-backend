@@ -8,7 +8,7 @@ export const castChat = (chat: SelectChat): Chat => {
     createdAt: new Date(chat.created_at),
     updatedAt: new Date(chat.updated_at),
     userId: chat.user_id,
-    orderId: chat.order_id,
+    orderId: chat.order_id ?? undefined,
     lastMessageAt: new Date(chat.last_message_at ?? new Date()),
     messages: [],
   };
@@ -20,7 +20,7 @@ export const castChatWithRelations = (chat: SelectChatWithRelations): Chat => {
     createdAt: new Date(chat.created_at),
     updatedAt: new Date(chat.updated_at),
     userId: chat.user_id,
-    orderId: chat.order_id,
+    orderId: chat.order_id ?? undefined,
     messages: chat.messages.map((message) => castMessage(message)),
     lastMessageAt: new Date(chat.last_message_at ?? new Date()),
   };
