@@ -3,14 +3,12 @@ import { Socket } from "socket.io";
 import { InsertMessage } from "src/db";
 import { ApiError } from "src/error/ApiError";
 import { createMessage } from "src/services/chats/createMessage";
-import { z } from "zod";
 
 export const handleMessage = async (socket: Socket) => {
   socket.on("send_message", async (msg: string) => {
     try {
       const chat: Chat = socket.data.chat;
       const userData: TokenContent = socket.data.user;
-      {}
       const message: InsertMessage = {
         content: msg,
         sender_id: userData.user_id,
