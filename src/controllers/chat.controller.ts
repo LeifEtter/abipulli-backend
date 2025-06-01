@@ -8,6 +8,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "src/error/ApiError";
 import { createChat } from "src/services/chats/createChat.service";
+import { createMessage } from "src/services/chats/createMessage";
 import { getChatWithMessagesFromDb } from "src/services/chats/getChat.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 
@@ -43,10 +44,35 @@ export const createChatController = async (
     const createdChat = await createChat({
       order_id: orderId,
       user_id: userId,
-      assigned_admin_id: undefined,
+      assigned_admin_id: assignedAdminId,
     });
     const chatResponse: ChatResponse = { success: true, data: createdChat };
     res.status(201).send(chatResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createChatForNot = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.user_id!;
+    const { assignedAdminId, initialMessage } = req.body as ChatCreateParams;
+    const createdChat = await createChat({
+      user_id: userId,
+      assigned_admin_id: assignedAdminId,
+    });
+    if (initialMessage) {
+      const createdMessage = await createMessage({
+        sender_id: userId,
+        content: initialMessage,
+        chat_id: createdChat.id,
+      });
+    }
+    // const response: Response =
   } catch (error) {
     next(error);
   }
