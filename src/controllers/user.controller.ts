@@ -1,4 +1,9 @@
-import type { NextFunction, Request, Response } from "express";
+import {
+  response,
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 // import type {
 //   AnonymousLoginSchema,
 //   GoogleSignOnSchema,
@@ -13,6 +18,9 @@ import {
   UsersResponse,
   UserCreateParams,
   UserLoginParams,
+  UserLoginResult,
+  UserLoginResponse,
+  UserCheckAuthResponse,
 } from "abipulli-types";
 import { logger } from "src/lib/logger";
 import { ApiError } from "src/error/ApiError";
@@ -145,9 +153,14 @@ export const loginWithEmailController = async (
       );
     }
     const token = createToken(storedUser.id, storedUser.role.role_power);
-    res.status(200).send({
-      token,
-    });
+    const responseData: UserLoginResponse = {
+      success: true,
+      data: {
+        token,
+        id: storedUser.id,
+      },
+    };
+    res.status(200).send(responseData);
   } catch (err) {
     next(err);
   }
@@ -204,7 +217,11 @@ export const checkTokenController = async (
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    res.status(200).send({ userId });
+    const responseData: UserCheckAuthResponse = {
+      data: { id: userId },
+      success: true,
+    };
+    res.status(200).send(responseData);
   } catch (error) {
     logger.error(error);
     next(ApiError.internal({ errorInfo: null }));
