@@ -38,6 +38,7 @@ import { passwordIsValid } from "src/lib/auth/comparePasswords";
 import { updateUserPassword } from "src/services/users/updateUser.service";
 import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
 import { sendEmail } from "src/lib/webmail/sendEmail";
+import bcrypt from "bcrypt";
 
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -139,10 +140,19 @@ export const loginWithEmailController = async (
   try {
     const body: UserLoginParams = req.body;
     const storedUser = await getUserWithPasswordByEmail(body.email);
+    console.log(storedUser?.password);
+    const compareResult: boolean = await bcrypt.compare(
+      storedUser?.password!,
+      body.password!
+    );
+    console.log(compareResult);
     if (
       storedUser == null ||
       storedUser.password == null ||
-      !passwordIsValid(storedUser.password, body.password)
+      !(await passwordIsValid({
+        plainPassword: body.password,
+        encryptedPassword: storedUser.password,
+      }))
     ) {
       logger.error("User supplied invalid credentials");
       return next(
@@ -282,13 +292,18 @@ export const changeUserPasswordController = async (
   try {
     const userId = res.locals.user.user_id;
     const { oldPassword, newPassword } = req.body;
-    const user = await getUserById(userId);
+    const user: User | undefined = await getUserById(userId);
     if (!user) {
       return next(
         new ApiError({ code: 404, info: errorMessages.resourceNotFound })
       );
     }
-    if (!passwordIsValid(user.password, oldPassword)) {
+    if (
+      !(await passwordIsValid({
+        plainPassword: oldPassword,
+        encryptedPassword: user.password,
+      }))
+    ) {
       return next(
         new ApiError({ code: 400, info: errorMessages.faultyLoginCredentials })
       );
