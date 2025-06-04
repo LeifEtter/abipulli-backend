@@ -170,6 +170,7 @@ export const loginWithEmailController = async (
         id: storedUser.id,
       },
     };
+    res.cookie("jwt_token", token);
     res.status(200).send(responseData);
   } catch (err) {
     next(err);
