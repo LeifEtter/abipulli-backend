@@ -1,7 +1,12 @@
 import { Pullover } from "abipulli-types";
-import { InsertPullover, SelectPullover } from "src/db";
+import {
+  InsertPullover,
+  SelectPullover,
+  SelectPulloverWithImage,
+} from "src/db";
+import { castImage } from "../images/castImage.service";
 
-export const castPullover = (pullover: SelectPullover): Pullover => {
+export const castPullover = (pullover: SelectPulloverWithImage): Pullover => {
   return {
     id: pullover.id,
     createdAt: new Date(pullover.created_at),
@@ -11,6 +16,7 @@ export const castPullover = (pullover: SelectPullover): Pullover => {
     color: pullover.color,
     basePrice: pullover.base_price,
     imageId: pullover.image_id,
+    image: castImage(pullover.image),
   };
 };
 

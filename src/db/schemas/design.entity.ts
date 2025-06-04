@@ -12,7 +12,7 @@ import {
   imageToDesign,
   SelectImageToDesignWithImage,
 } from "./imageToDesign.entity";
-import { pullovers } from "./pullover.entity";
+import { pullovers, SelectPulloverWithImage } from "./pullover.entity";
 import { textElements } from "./textElement.entity";
 
 export const designs = pgTable(
@@ -53,7 +53,7 @@ export type SelectDesign = typeof designs.$inferSelect;
 export type SelectDesignWithRelations = typeof designs.$inferSelect & {
   customer: typeof users.$inferSelect;
   order: typeof orders.$inferSelect;
-  preferredPullover: typeof pullovers.$inferSelect;
+  preferredPullover: SelectPulloverWithImage;
   imageToDesign: SelectImageToDesignWithImage[];
   texts: (typeof textElements.$inferSelect)[];
 };

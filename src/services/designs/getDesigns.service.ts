@@ -41,7 +41,11 @@ export const getDesignsForOrder = async (
       with: {
         customer: true,
         order: true,
-        preferredPullover: true,
+        preferredPullover: {
+          with: {
+            image: true,
+          },
+        },
         imageToDesign: {
           with: {
             image: true,

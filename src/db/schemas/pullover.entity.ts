@@ -7,7 +7,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { images } from "./image.entity";
+import { images, SelectImage } from "./image.entity";
 import { relations } from "drizzle-orm";
 
 export const pullovers = pgTable(
@@ -36,6 +36,10 @@ export const pullovers = pgTable(
 
 export type InsertPullover = typeof pullovers.$inferInsert;
 export type SelectPullover = typeof pullovers.$inferSelect;
+
+export type SelectPulloverWithImage = SelectPullover & {
+  image: SelectImage;
+};
 
 export const pulloverRelations = relations(pullovers, ({ one }) => ({
   image: one(images, {
