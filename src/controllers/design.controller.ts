@@ -63,7 +63,9 @@ export const getDesignsForOrderController = async (
   next: NextFunction
 ) => {
   try {
+    // check for correct user id in order
     const orderId: number = res.locals.params.orderId!;
+    console.log(orderId);
     const designs = await getDesignsForOrder(orderId);
     const designResponse: DesignsResponse = {
       success: true,
@@ -74,7 +76,7 @@ export const getDesignsForOrderController = async (
         pageSize: designs.length,
       },
     };
-    res.json(designResponse);
+    res.status(200).json(designResponse);
   } catch (error) {
     next(error);
   }
