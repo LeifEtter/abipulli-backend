@@ -77,7 +77,9 @@ export const authenticateHttp = (
       res.locals.user = user;
       next();
     },
-    throwError: () => {},
+    throwError: (error) => {
+      next(error);
+    },
   });
 };
 
