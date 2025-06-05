@@ -1,4 +1,11 @@
-import { foreignKey, integer, pgTable, serial } from "drizzle-orm/pg-core";
+import {
+  foreignKey,
+  integer,
+  numeric,
+  pgTable,
+  real,
+  serial,
+} from "drizzle-orm/pg-core";
 import { images } from "./image.entity";
 import { designs } from "./design.entity";
 import { relations } from "drizzle-orm";
@@ -11,6 +18,8 @@ export const imageToDesign = pgTable(
     design_id: integer().notNull(),
     x_position: integer(),
     y_position: integer(),
+    x_scale: numeric(),
+    y_scale: numeric(),
   },
   (table) => [
     foreignKey({
