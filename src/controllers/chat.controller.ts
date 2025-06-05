@@ -46,6 +46,14 @@ export const createChatForOrderController = async (
       user_id: userId,
       assigned_admin_id: assignedAdminId,
     });
+    if (initialMessage) {
+      await createMessage({
+        chat_id: createdChat.id!,
+        content: initialMessage,
+        sender_id: userId,
+      });
+    }
+
     const chatResponse: ChatResponse = { success: true, data: createdChat };
     res.status(201).send(chatResponse);
   } catch (error) {
