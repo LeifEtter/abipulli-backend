@@ -74,7 +74,7 @@ export const createChatController = async (
       assigned_admin_id: assignedAdminId,
     });
     if (initialMessage) {
-      const createdMessage = await createMessage({
+      await createMessage({
         sender_id: userId,
         content: initialMessage,
         chat_id: createdChat.id,
