@@ -12,7 +12,7 @@ import { createMessage } from "src/services/chats/createMessage";
 import { getChatWithMessagesFromDb } from "src/services/chats/getChat.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 
-export const createChatController = async (
+export const createChatForOrderController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -53,7 +53,7 @@ export const createChatController = async (
   }
 };
 
-export const createChatForNot = async (
+export const createChatController = async (
   req: Request,
   res: Response,
   next: NextFunction

@@ -6,13 +6,12 @@ import {
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import designRouter from "./design.route";
-import chatRouter from "./chat.route";
 import {
   createOrderController,
   deleteOrderController,
   updateOrderController,
 } from "src/controllers/order.controller";
-import { createChatController } from "src/controllers/chat.controller";
+import { createChatForOrderController } from "src/controllers/chat.controller";
 import {
   ChatCreateParamsSchema,
   OrderCreateParamsSchema,
@@ -57,7 +56,7 @@ router.use(
   minPower(1),
   validateParams({ requiredParams: ["orderId"] }),
   validateBody(ChatCreateParamsSchema),
-  createChatController
+  createChatForOrderController
 );
 
 export default router;
