@@ -80,6 +80,11 @@ export const createChatController = async (
         chat_id: createdChat.id,
       });
     }
+    const response: ChatResponse = {
+      success: true,
+      data: createdChat,
+    };
+    res.status(201).send(response);
     // const response: Response =
   } catch (error) {
     next(error);
