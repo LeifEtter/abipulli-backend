@@ -4,6 +4,7 @@ import {
   DesignCreateParams,
   DesignsResponse,
   errorMessages,
+  Order,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import db from "src/db/db";
@@ -11,6 +12,7 @@ import {
   getDesignById,
   getDesignsForOrder,
 } from "src/services/designs/getDesigns.service";
+import { getOrderById } from "src/services/orders/getOrderById.service";
 
 export const createDesignController = async (
   req: Request,
@@ -65,7 +67,27 @@ export const getDesignsForOrderController = async (
   try {
     // check for correct user id in order
     const orderId: number = res.locals.params.orderId!;
-    console.log(orderId);
+    const userId: number = res.locals.params.userId!;
+
+    const order: Order | undefined = await getOrderById(orderId);
+    if (!order) {
+      return next(
+        new ApiError({
+          code: 404,
+          info: errorMessages.resourceNotFound,
+          resource: "Order",
+        })
+      );
+    }
+    if (order.customerId != userId) {
+      return next(
+        new ApiError({
+          code: 401,
+          info: errorMessages.resourceNotOwned,
+          resource: "Order",
+        })
+      );
+    }
     const designs = await getDesignsForOrder(orderId);
     const designResponse: DesignsResponse = {
       success: true,
