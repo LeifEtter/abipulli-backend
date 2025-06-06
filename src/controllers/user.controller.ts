@@ -202,11 +202,7 @@ export const deleteUserController = async (
       );
     }
     const userToDelete: User | undefined = await getUserById(userToDeleteId);
-    if (!userToDelete) {
-      return next(
-        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
-      );
-    }
+    if (!userToDelete) return next(ApiError.notFound({ resource: "User" }));
     if (userToDelete.role!.rolePower >= 10) {
       return next(
         new ApiError({ code: 401, info: errorMessages.rolePowerTooLow })
@@ -245,11 +241,7 @@ export const getUserDataController = async (
   try {
     const userId = res.locals.user.user_id;
     const userData = await getUserById(userId);
-    if (!userData) {
-      return next(
-        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
-      );
-    }
+    if (!userData) return next(ApiError.notFound({ resource: "User" }));
     const userResponse: UserResponse = {
       success: true,
       data: userData,
@@ -291,11 +283,7 @@ export const changeUserPasswordController = async (
     const userId = res.locals.user.user_id;
     const { oldPassword, newPassword } = req.body;
     const user: User | undefined = await getUserById(userId);
-    if (!user) {
-      return next(
-        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
-      );
-    }
+    if (!user) return next(ApiError.notFound({ resource: "User" }));
     if (
       !(await passwordIsValid({
         plainPassword: oldPassword,
