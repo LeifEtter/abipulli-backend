@@ -50,14 +50,9 @@ export const updateOrderController = async (
       ? new Date(req.body.deadline)
       : undefined;
     const order: Order | undefined = await getOrderById(res.locals.id);
-    if (order == undefined)
-      return next(
-        new ApiError({ code: 404, info: errorMessages.resourceNotFound })
-      );
+    if (!order) return next(ApiError.notFound({ resource: "Order" }));
     if (order.customerId != res.locals.user.user_id)
-      return next(
-        new ApiError({ code: 401, info: errorMessages.resourceNotOwned })
-      );
+      return next(ApiError.notOwned({ resource: "Order" }));
 
     await db
       .update(orders)
