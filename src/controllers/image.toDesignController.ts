@@ -1,6 +1,7 @@
 import {
   AddImageToDesignParams,
   ApiResponse,
+  Design,
   errorMessages,
   ManipulateImageInDesignParams,
 } from "abipulli-types";
@@ -23,34 +24,11 @@ export const placeImageOnDesignController = async (
     const imageId: number = res.locals.params.imageId!;
     const userId: number = res.locals.user.user_id;
     const design = await getDesignById(designId);
-    if (!design) {
-      return next(
-        new ApiError({
-          code: 404,
-          info: errorMessages.resourceNotFound,
-          resource: "Design",
-        })
-      );
-    }
-    if (design.customerId != userId) {
-      return next(
-        new ApiError({
-          code: 401,
-          info: errorMessages.resourceNotOwned,
-          resource: "Design",
-        })
-      );
-    }
+    if (!design) return next(ApiError.notFound({ resource: "Design" }));
+    if (design.customerId != userId)
+      return next(ApiError.notFound({ resource: "Design" }));
     const image = await getImageById(imageId);
-    if (!image) {
-      return next(
-        new ApiError({
-          code: 404,
-          info: errorMessages.resourceNotFound,
-          resource: "Image",
-        })
-      );
-    }
+    if (!image) return next(ApiError.notFound({ resource: "Image" }));
     const result = await placeImageOnDesign(
       imageId,
       designId,
