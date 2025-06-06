@@ -1,7 +1,6 @@
 import {
   foreignKey,
   integer,
-  numeric,
   pgTable,
   real,
   serial,
@@ -16,10 +15,10 @@ export const imageToDesign = pgTable(
     id: serial().notNull().primaryKey(),
     image_id: integer().notNull(),
     design_id: integer().notNull(),
-    x_position: integer(),
-    y_position: integer(),
-    x_scale: numeric(),
-    y_scale: numeric(),
+    x_position: integer().notNull().default(0),
+    y_position: integer().notNull().default(0),
+    x_scale: real().notNull().default(1),
+    y_scale: real().notNull().default(1),
   },
   (table) => [
     foreignKey({
