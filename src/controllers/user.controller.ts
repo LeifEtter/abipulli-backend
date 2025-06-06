@@ -140,12 +140,10 @@ export const loginWithEmailController = async (
   try {
     const body: UserLoginParams = req.body;
     const storedUser = await getUserWithPasswordByEmail(body.email);
-    console.log(storedUser?.password);
     const compareResult: boolean = await bcrypt.compare(
       storedUser?.password!,
       body.password!
     );
-    console.log(compareResult);
     if (
       storedUser == null ||
       storedUser.password == null ||
