@@ -7,12 +7,18 @@ import {
 } from "../controllers/image.controller";
 import { minPower } from "src/middleware/authorization.middleware";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
-import { validateBody } from "src/middleware/validation.middleware";
+import {
+  validateBody,
+  validateParams,
+} from "src/middleware/validation.middleware";
 import { uploadSingleImage } from "src/middleware/file.middleware";
 import {
   GenerateImageParamsSchema,
   ImproveImageQueryParamsSchema,
+  ManipulateImageInDesignParamsSchema,
 } from "abipulli-types";
+import { auth } from "google-auth-library";
+import { manipulateImageController } from "src/controllers/image.toDesignController";
 
 const router = Router({ mergeParams: true });
 
@@ -44,5 +50,15 @@ router
   );
 
 router.route("/me").get(authenticateHttp, minPower(1), getMyImagesController);
+
+router
+  .route("/:id")
+  .patch(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["designId", "imageId"] }),
+    validateBody(ManipulateImageInDesignParamsSchema),
+    manipulateImageController
+  );
 
 export default router;
