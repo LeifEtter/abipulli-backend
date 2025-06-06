@@ -44,15 +44,7 @@ export const retrieveDesignController = async (
   try {
     const designId: number = res.locals.params.designId!;
     const design = await getDesignById(designId);
-    if (!design) {
-      return next(
-        new ApiError({
-          code: 404,
-          info: errorMessages.resourceNotFound,
-          resource: "Design",
-        })
-      );
-    }
+    if (!design) return next(ApiError.notFound({ resource: "Design" }));
     res.json(design);
   } catch (error) {
     next(error);
@@ -70,24 +62,9 @@ export const getDesignsForOrderController = async (
     const userId: number = res.locals.params.userId!;
 
     const order: Order | undefined = await getOrderById(orderId);
-    if (!order) {
-      return next(
-        new ApiError({
-          code: 404,
-          info: errorMessages.resourceNotFound,
-          resource: "Order",
-        })
-      );
-    }
-    if (order.customerId != userId) {
-      return next(
-        new ApiError({
-          code: 401,
-          info: errorMessages.resourceNotOwned,
-          resource: "Order",
-        })
-      );
-    }
+    if (!order) return next(ApiError.notFound({ resource: "Order" }));
+    if (order.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Order" }));
     const designs = await getDesignsForOrder(orderId);
     const designResponse: DesignsResponse = {
       success: true,
