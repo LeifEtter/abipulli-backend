@@ -278,8 +278,7 @@ export const getAllUsersController = async (
         pageSize: users.length,
       },
     };
-
-    res.status(200).json(users);
+    res.status(200).json(userResponse);
   } catch (error) {
     next(error);
   }
