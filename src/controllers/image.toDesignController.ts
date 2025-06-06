@@ -72,8 +72,13 @@ export const manipulateImageController = async (
   next: NextFunction
 ) => {
   try {
+    const userId: number = res.locals.user.user_id;
     const imageId: number = res.locals.params.imageId!;
     const designId: number = res.locals.params.orderId!;
+    const design: Design | undefined = await getDesignById(designId);
+    if (!design) return next(ApiError.notFound({ resource: "Design" }));
+    if (design.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Design" }));
     const manipulation = req.params as ManipulateImageInDesignParams;
     const newImage = await manipulateImageOnDesign({
       imageId,
