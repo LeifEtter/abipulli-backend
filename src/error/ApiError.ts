@@ -1,4 +1,4 @@
-import { ErrorInfo } from "abipulli-types";
+import { ErrorInfo, errorMessages } from "abipulli-types";
 
 export interface InternalErrorInfo {
   code: number;
@@ -31,7 +31,11 @@ export class ApiError extends Error {
   static notFound({ resource }: { resource: string }): ApiError {
     return new ApiError({
       code: 404,
-      info: `Resource ${resource} not found`,
+      info: errorMessages.resourceNotFound,
+      resource: resource,
+    });
+  }
+
     });
   }
 }
