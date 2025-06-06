@@ -1,10 +1,16 @@
-import { AddImageToDesignParams, errorMessages } from "abipulli-types";
+import {
+  AddImageToDesignParams,
+  ApiResponse,
+  errorMessages,
+  ManipulateImageInDesignParams,
+} from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "src/lib/logger";
 import { getImageById } from "src/services/images/getImageById.service";
 import { placeImageOnDesign } from "src/services/images/placeImage.service";
 import { getDesignById } from "src/services/designs/getDesigns.service";
+import { manipulateImageOnDesign } from "src/services/images/manipulateImage.service";
 
 export const placeImageOnDesignController = async (
   req: Request,
@@ -55,6 +61,30 @@ export const placeImageOnDesignController = async (
     res
       .send(201)
       .send({ msg: `Placed image ${imageId} to design ${designId}` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const manipulateImageController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const imageId: number = res.locals.params.imageId!;
+    const designId: number = res.locals.params.orderId!;
+    const manipulation = req.params as ManipulateImageInDesignParams;
+    const newImage = await manipulateImageOnDesign({
+      imageId,
+      designId,
+      manipulation,
+    });
+    const response: ApiResponse<any> = {
+      success: true,
+      data: newImage,
+    };
+    res.status(200).send(response);
   } catch (error) {
     next(error);
   }
