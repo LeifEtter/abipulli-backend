@@ -36,6 +36,11 @@ export class ApiError extends Error {
     });
   }
 
+  static notOwned({ resource }: { resource: string }): ApiError {
+    return new ApiError({
+      code: 401,
+      info: errorMessages.resourceNotOwned,
+      resource: resource,
     });
   }
 }
