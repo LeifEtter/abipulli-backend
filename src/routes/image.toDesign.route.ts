@@ -15,4 +15,16 @@ router
     placeImageOnDesignController
   );
 
+router
+  .route("/:imageId")
+  .patch(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["designId", "imageId"] }),
+    validateBody(ManipulateImageInDesignParamsSchema),
+    manipulateImageController
+  );
+
+router.route("/");
+
 export default router;

@@ -51,14 +51,4 @@ router
 
 router.route("/me").get(authenticateHttp, minPower(1), getMyImagesController);
 
-router
-  .route("/:id")
-  .patch(
-    authenticateHttp,
-    minPower(1),
-    validateParams({ requiredParams: ["designId", "imageId"] }),
-    validateBody(ManipulateImageInDesignParamsSchema),
-    manipulateImageController
-  );
-
 export default router;
