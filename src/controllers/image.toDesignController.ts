@@ -57,7 +57,7 @@ export const manipulateImageController = async (
     if (!design) return next(ApiError.notFound({ resource: "Design" }));
     if (design.customerId != userId)
       return next(ApiError.notOwned({ resource: "Design" }));
-    const manipulation = req.params as ManipulateImageInDesignParams;
+    const manipulation = req.body as ManipulateImageInDesignParams;
     const newImage = await manipulateImageOnDesign({
       imageId,
       designId,
