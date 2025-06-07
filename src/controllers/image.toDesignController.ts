@@ -52,7 +52,7 @@ export const manipulateImageController = async (
   try {
     const userId: number = res.locals.user.user_id;
     const imageId: number = res.locals.params.imageId!;
-    const designId: number = res.locals.params.orderId!;
+    const designId: number = res.locals.params.designId!;
     const design: Design | undefined = await getDesignById(designId);
     if (!design) return next(ApiError.notFound({ resource: "Design" }));
     if (design.customerId != userId)
