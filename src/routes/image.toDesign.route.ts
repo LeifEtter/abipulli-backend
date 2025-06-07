@@ -10,7 +10,7 @@ router
   .route("/")
   .post(
     authenticateHttp,
-    minPower(2),
+    minPower(1),
     validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController
   );
