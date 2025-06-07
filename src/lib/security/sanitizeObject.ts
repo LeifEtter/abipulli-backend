@@ -13,7 +13,6 @@ export const sanitizeElement = (e: any): any => {
   } else if (typeof e == "object") {
     let sanitizedObject = {};
     for (let currentKey of Object.keys(e as object)) {
-      console.log(currentKey);
       const newValue = sanitizeElement(e[currentKey]);
       sanitizedObject = { ...sanitizedObject, [currentKey]: newValue };
     }
