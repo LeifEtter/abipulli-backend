@@ -57,6 +57,12 @@ const generateSingleUser = async ({
         fakerDE.helpers.arrayElement(imageIds),
         designId
       );
+      if (fakerDE.number.int({ min: 1, max: 2 }) == 1) {
+        await imageFactory.placeImageOnDesign(
+          fakerDE.helpers.arrayElement(imageIds),
+          designId
+        );
+      }
 
       for (let i = 0; i < (textAmount ?? 3); i++) {
         const textId: number = await textElementFactory.insertSingleText(
