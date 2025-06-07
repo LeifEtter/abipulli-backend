@@ -28,7 +28,6 @@ export const validateBody =
         });
       } else {
         const sanitizedData = sanitizeElement(result.data);
-        console.log(sanitizedData);
         req.body = sanitizedData;
         next();
       }
