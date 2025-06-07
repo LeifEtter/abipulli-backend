@@ -14,8 +14,11 @@ import {
   AddImageToDesignParamsSchema,
   DesignCreateParamsSchema,
 } from "abipulli-types";
+import imageToDesignRouter from "./image.toDesign.route";
 
 const router = Router({ mergeParams: true });
+
+router.use("/:designId/image", imageToDesignRouter);
 
 router
   .route("/")
