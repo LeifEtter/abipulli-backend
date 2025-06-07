@@ -9,6 +9,7 @@ import {
   text,
   timestamp,
   uuid,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./user.entity";
@@ -26,6 +27,7 @@ export const images = pgTable(
     user_id: integer(),
     message_id: integer(),
     file_uuid: uuid().notNull().defaultRandom(),
+    file_env: varchar().notNull().default("production"), // environment (equivalent to folder in Hetzner bucket)
   },
   (table) => [
     index("image_index_1").using(
