@@ -63,8 +63,8 @@ export const getDesignsForOrderController = async (
 
     const order: Order | undefined = await getOrderById(orderId);
     if (!order) return next(ApiError.notFound({ resource: "Order" }));
-    if (order.customerId != userId)
-      return next(ApiError.notOwned({ resource: "Order" }));
+    // if (order.customerId != userId)
+    //   return next(ApiError.notOwned({ resource: "Order" }));
     const designs = await getDesignsForOrder(orderId);
     const designResponse: DesignsResponse = {
       success: true,
