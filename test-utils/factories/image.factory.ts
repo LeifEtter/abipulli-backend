@@ -2,6 +2,7 @@ import { fakerDE } from "@faker-js/faker";
 import { images, imageToDesign } from "src/db";
 import db from "src/db/db";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
+import imageSize from "image-size";
 
 interface uploadSingleImageInterface {
   userId: number;
@@ -27,9 +28,12 @@ const createSingleImageInsert = async (
   image: Buffer,
   uuid: string
 ): Promise<number> => {
+  const dimensions = imageSize(image);
   const insertedImageId = await db
     .insert(images)
     .values({
+      image_height: dimensions.height,
+      image_width: dimensions.width,
       file_size: Math.floor(image.length / 1024),
       prompt: "random prompt",
       user_id: userId,
