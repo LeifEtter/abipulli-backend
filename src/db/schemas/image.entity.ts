@@ -28,6 +28,8 @@ export const images = pgTable(
     message_id: integer(),
     file_uuid: uuid().notNull().defaultRandom(),
     file_env: varchar().notNull().default("production"), // environment (equivalent to folder in Hetzner bucket)
+    image_width: integer().notNull(),
+    image_height: integer().notNull(),
   },
   (table) => [
     index("image_index_1").using(
