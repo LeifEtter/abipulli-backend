@@ -5,6 +5,9 @@ import { userFactory } from "./factories/user.factory";
 import { designFactory } from "./factories/design.factory";
 import { orderFactory } from "./factories/order.factory";
 import { textElementFactory } from "./factories/texts.factory";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const selectRandomDummyImages = (amount: number): Buffer[] =>
   fakerDE.helpers.arrayElements(dummyImages, amount);
@@ -16,6 +19,9 @@ interface GenerateSingleUserInterface {
   textAmount?: number;
 }
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const generateSingleUser = async ({
   imageAmount,
   orderAmount,
@@ -24,8 +30,12 @@ const generateSingleUser = async ({
 }: GenerateSingleUserInterface): Promise<void> => {
   try {
     // Create User
-    const userId: number = await userFactory.insertSingleUser();
-
+    const { email, password, userId } = await userFactory.insertSingleUser();
+    console.log(email, password, userId);
+    fs.appendFileSync(
+      path.join(__dirname, "dummyLoginDetails.txt"),
+      `"email":"${email}","password":"${password}";`
+    );
     // Upload 3 Images
     const randomImages: Buffer[] = selectRandomDummyImages(imageAmount ?? 3);
     const imageIds: number[] = [];
@@ -87,4 +97,5 @@ Process:
     - Create and connect 1-3 text elements
 */
 
+generateSingleUser({});
 generateSingleUser({});
