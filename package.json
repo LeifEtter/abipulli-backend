@@ -11,7 +11,8 @@
     "delete-dist": "rm -rf dist",
     "start-prod": "NODE_ENV=production npm run delete-dist && npm run build && node dist/index.js",
     "check": "tsc --noEmit",
-    "seed": "tsx src/db/seed/seed.ts"
+    "seed-dev": "NODE_ENV=development tsx src/db/seed/seed.ts",
+    "seed-prod": "NODE_ENV=production tsx src/db/seed/seed.ts"
   },
   "keywords": [],
   "author": "",
