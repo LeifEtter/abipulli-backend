@@ -20,6 +20,8 @@ import {
 import { insertImageIntoDb } from "src/services/images/insertImage.service";
 import { castImage } from "src/services/images/castImage.service";
 import { randomUUID } from "crypto";
+import imageSize from "image-size";
+import { ISize, ISizeCalculationResult } from "image-size/dist/types/interface";
 
 export const saveImageController = async (
   req: Request,
@@ -28,16 +30,25 @@ export const saveImageController = async (
 ) => {
   try {
     const file: Express.Multer.File | undefined = req.file;
-
+    
     if (file == undefined) {
       return next(
         new ApiError({ code: 400, info: errorMessages.missingImage })
       );
     }
-    const fileSize: number = Math.round(file.size / 1024);
+
+    //TODO:
+    const fileStorageSize: number = Math.round(file.size / 1024);
+    const imageDimensions: ISizeCalculationResult = imageSize(file.buffer);
     const userId: number = res.locals.user!.user_id;
     const fileUuid = randomUUID();
-    const insertedImageId = await insertImageIntoDb(userId, fileSize, fileUuid);
+    const insertedImageId = await insertImageIntoDb({
+      userId,
+      fileSize: fileStorageSize,
+      fileUuid: fileUuid,
+      width: imageDimensions.width,
+      height: imageDimensions.height,
+    });
     const uploadResult = await uploadImageToHetzner({
       file: file.buffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
@@ -122,12 +133,15 @@ export const generateImageController = async (
     const imageUrl: string = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
     const fileSize: number = Math.round(imageBuffer.length / 1024);
+    const dimensions: ISizeCalculationResult = imageSize(imageBuffer);
     const fileUuid = randomUUID();
-    const insertedImageId: number = await insertImageIntoDb(
+    const insertedImageId: number = await insertImageIntoDb({
       userId,
+      width: dimensions.width,
+      height: dimensions.height,
       fileSize,
-      fileUuid
-    );
+      fileUuid,
+    });
     const uploadResult = await uploadImageToHetzner({
       file: imageBuffer,
       path: `${process.env.NODE_ENV}/users/${userId}`,
