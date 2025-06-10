@@ -20,6 +20,9 @@ export const castImage = (image: SelectImage): Image => {
     prompt: image.prompt ?? "",
     userId: image.user_id ?? 0,
     uuid: image.file_uuid,
+    width: image.image_width,
+    height: image.image_height,
+    url: buildImageUrl(image),
   };
 };
 
@@ -29,6 +32,8 @@ export const castImageToDb = (image: Image): InsertImage => {
     prompt: image.prompt,
     generated: image.generated,
     file_uuid: image.uuid,
+    image_height: image.height,
+    image_width: image.width,
   };
 };
 
@@ -47,5 +52,8 @@ export const castImageWithPositionAndScale = (
     scaleX: imageToDesign.x_scale,
     scaleY: imageToDesign.y_scale,
     uuid: imageToDesign.image.file_uuid,
+    url: buildImageUrl(imageToDesign.image),
+    width: imageToDesign.image.image_width,
+    height: imageToDesign.image.image_height,
   };
 };
