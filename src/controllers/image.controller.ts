@@ -7,6 +7,7 @@ import {
   errorMessages,
   GenerateImageParams,
   Image,
+  ImagesResponse,
   ImageUploadResultResponse,
   ImproveImageQueryParams,
 } from "abipulli-types";
@@ -30,7 +31,7 @@ export const saveImageController = async (
 ) => {
   try {
     const file: Express.Multer.File | undefined = req.file;
-    
+
     if (file == undefined) {
       return next(
         new ApiError({ code: 400, info: errorMessages.missingImage })
@@ -188,13 +189,14 @@ export const getMyImagesController = async (
       res.locals.user.user_id
     );
 
-    // Generate image files for each image
-    const imageLinks: string[] = images.map((image) =>
-      generateImageLink(image)
-    );
-    const response = {
+    const response: ImagesResponse = {
       success: true,
-      data: imageLinks,
+      data: {
+        page: 1,
+        pageSize: images.length,
+        total: images.length,
+        items: images,
+      },
     };
     res.status(200).json(response);
   } catch (error) {
