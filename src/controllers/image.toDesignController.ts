@@ -23,7 +23,7 @@ export const placeImageOnDesignController = async (
   next: NextFunction
 ) => {
   try {
-    req.body as AddImageToDesignParams;
+    const body = req.body as AddImageToDesignParams;
     const designId: number = res.locals.params.designId!;
     const imageId: number = res.locals.params.imageId!;
     const userId: number = res.locals.user.user_id;
