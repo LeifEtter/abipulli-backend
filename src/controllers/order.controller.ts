@@ -6,10 +6,38 @@ import {
   errorMessages,
   Order,
   OrderCreateParams,
+  OrdersResponse,
   OrderUpdateParams,
 } from "abipulli-types";
-import { getOrderById } from "src/services/orders/getOrderById.service";
+import {
+  getOrderById,
+  getOrdersByUserID,
+} from "src/services/orders/getOrderById.service";
 import { ApiError } from "src/error/ApiError";
+
+export const getAllOrdersController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId: number = res.locals.user.user_id;
+    const orders: Order[] | null = await getOrdersByUserID(userId);
+    if (!orders) return next(ApiError.notFound({ resource: "Orders" }));
+    const ordersResponse: OrdersResponse = {
+      success: true,
+      data: {
+        page: 1,
+        pageSize: orders.length,
+        items: orders,
+        total: orders.length,
+      },
+    };
+    res.status(200).send(ordersResponse);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const createOrderController = async (
   req: Request,
