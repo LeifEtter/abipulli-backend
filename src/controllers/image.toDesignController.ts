@@ -33,12 +33,14 @@ export const placeImageOnDesignController = async (
       return next(ApiError.notFound({ resource: "Design" }));
     const image = await getImageById(imageId);
     if (!image) return next(ApiError.notFound({ resource: "Image" }));
-    const result = await placeImageOnDesign(
+    const result = await placeImageOnDesign({
       imageId,
       designId,
-      req.body.xPosition,
-      req.body.yPosition
-    );
+      xPosition: body.positionX,
+      yPosition: body.positionY,
+      xScale: body.scaleX,
+      yScale: body.scaleY,
+    });
     logger.info(result);
     res
       .send(201)
