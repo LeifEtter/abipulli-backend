@@ -2,6 +2,16 @@ import { ImageWithPositionAndScale } from "abipulli-types";
 import { Image } from "abipulli-types";
 import { InsertImage, SelectImage, SelectImageToDesignWithImage } from "src/db";
 
+const buildImageUrl = (image: SelectImage): string => {
+  let url: string;
+  if (image.user_id != null) {
+    url = `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${image.file_env}/users/${image.user_id}/${image.file_uuid}`;
+  } else {
+    url = `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${image.file_env}/general/${image.file_uuid}`;
+  }
+  return url;
+};
+
 export const castImage = (image: SelectImage): Image => {
   return {
     id: image.id,
