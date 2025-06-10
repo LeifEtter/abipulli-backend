@@ -43,7 +43,7 @@ export const placeImageOnDesignController = async (
     });
     logger.info(result);
     res
-      .send(201)
+      .status(201)
       .send({ msg: `Placed image ${imageId} to design ${designId}` });
   } catch (error) {
     next(error);
