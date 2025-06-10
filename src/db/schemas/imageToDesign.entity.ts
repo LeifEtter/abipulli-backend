@@ -25,12 +25,12 @@ export const imageToDesign = pgTable(
       columns: [table.image_id],
       foreignColumns: [images.id],
       name: "fk_image_to_design_image",
-    }),
+    }).onDelete("cascade"),
     foreignKey({
       columns: [table.design_id],
       foreignColumns: [designs.id],
       name: "fk_image_to_design_design",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 

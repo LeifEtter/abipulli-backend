@@ -30,7 +30,7 @@ export const pullovers = pgTable(
       columns: [table.image_id],
       foreignColumns: [images.id],
       name: "fk_pullover_image",
-    }).onDelete("set null"),
+    }).onDelete("cascade"),
   ]
 );
 

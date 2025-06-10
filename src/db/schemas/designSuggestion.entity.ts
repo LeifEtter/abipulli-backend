@@ -28,7 +28,7 @@ export const designSuggestions = pgTable(
       columns: [table.chat_id],
       foreignColumns: [chats.id],
       name: "fk_design_suggestion_chat",
-    }),
+    }).onDelete("cascade"),
   ]
 );
 
