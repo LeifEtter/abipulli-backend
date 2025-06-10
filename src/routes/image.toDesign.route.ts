@@ -26,10 +26,11 @@ router
   );
 
 router
-  .route("/")
+  .route("/:imageId")
   .post(
     authenticateHttp,
     minPower(1),
+    validateParams({ requiredParams: ["designId", "imageId"] }),
     validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController
   );
