@@ -9,6 +9,7 @@ import designRouter from "./design.route";
 import {
   createOrderController,
   deleteOrderController,
+  getAllOrdersController,
   updateOrderController,
 } from "src/controllers/order.controller";
 import { createChatForOrderController } from "src/controllers/chat.controller";
@@ -28,6 +29,8 @@ router
     validateBody(OrderCreateParamsSchema),
     createOrderController
   );
+
+router.route("/").get(authenticateHttp, minPower(1), getAllOrdersController);
 
 router
   .route("/:id")
