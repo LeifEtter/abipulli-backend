@@ -38,6 +38,7 @@ const createSingleImageInsert = async (
       prompt: "random prompt",
       user_id: userId,
       file_uuid: uuid,
+      file_env: process.env.NODE_ENV,
     })
     .returning({ id: images.id });
 

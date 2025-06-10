@@ -23,6 +23,7 @@ export const insertImageIntoDb = async ({
       user_id: userId,
       file_size: fileSize,
       file_uuid: fileUuid,
+      file_env: process.env.NODE_ENV,
       image_width: width,
       image_height: height,
     })
