@@ -2,6 +2,7 @@ import {
   getAllImagesForDesignController,
   manipulateImageController,
   placeImageOnDesignController,
+  removeImageFromDesignController,
 } from "src/controllers/image.toDesignController";
 import { Router } from "express";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
@@ -43,6 +44,15 @@ router
     validateParams({ requiredParams: ["designId", "imageId"] }),
     validateBody(ManipulateImageInDesignParamsSchema),
     manipulateImageController
+  );
+
+router
+  .route("/:imageToDesignId")
+  .delete(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["designId", "imageToDesignId"] }),
+    removeImageFromDesignController
   );
 
 router.route("/");
