@@ -96,6 +96,36 @@ export const manipulateImageController = async (
   }
 };
 
+export const removeImageFromDesignController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId: number = res.locals.user.user_id!;
+    const designId: number = res.locals.params.designId!;
+    const imageToDesignId: number = res.locals.params.imageToDesignId!;
+    const design: Design | undefined = await getDesignById(designId);
+    if (!design) return next(ApiError.notFound({ resource: "Design" }));
+    if (design?.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Design" }));
+    const imageToDesign = await getImageToDesign(imageToDesignId);
+    if (!imageToDesign)
+      return next(ApiError.notFound({ resource: "ImageToDesign" }));
+    if (imageToDesign.design_id != designId)
+      return next(
+        new ApiError({
+          info: "The ImageToDesign element is not associated with the passed design id",
+          code: 400,
+        })
+      );
+    await removeImageFromDesign(imageToDesignId);
+    res.status(200).send("Success");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAllImagesForDesignController = async (
   req: Request,
   res: Response,
