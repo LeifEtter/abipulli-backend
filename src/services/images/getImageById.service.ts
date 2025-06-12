@@ -3,11 +3,25 @@ import db from "src/db/db";
 import { eq } from "drizzle-orm";
 import { ImageWithPositionAndScale } from "abipulli-types";
 import { castImage, castImageWithPositionAndScale } from "./castImage.service";
+import { ApiError } from "src/error/ApiError";
 
 export const getImageById = async (
   imageId: number
 ): Promise<SelectImage | undefined> =>
   await db.query.images.findFirst({ where: eq(images.id, imageId) });
+
+export const getImageWithPositionAndScale = async (
+  imageToDesignId: number
+): Promise<ImageWithPositionAndScale> => {
+  const dbImage = await db.query.imageToDesign.findFirst({
+    where: eq(imageToDesign.id, imageToDesignId),
+    with: { image: true },
+  });
+  if (!dbImage) throw ApiError.notFound({ resource: "Image To Design" });
+  const image: ImageWithPositionAndScale =
+    castImageWithPositionAndScale(dbImage);
+  return image;
+};
 
 export const getImagesByDesignId = async (
   designId: number
