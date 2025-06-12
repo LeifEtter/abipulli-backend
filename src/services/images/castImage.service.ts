@@ -43,6 +43,7 @@ export const castImageWithPositionAndScale = (
 ): ImageWithPositionAndScale => {
   return {
     id: imageToDesign.image.id,
+    imageToDesignId: imageToDesign.id,
     userId: imageToDesign.image.user_id ?? undefined,
     createdAt: imageToDesign.image.created_at,
     generated: imageToDesign.image.generated ?? undefined,
