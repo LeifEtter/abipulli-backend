@@ -1,5 +1,6 @@
 import {
   AddImageToDesignParams,
+  AddImageToDesignResponse,
   ApiResponse,
   Design,
   ImagesForDesignResponse,
@@ -12,10 +13,14 @@ import { logger } from "src/lib/logger";
 import {
   getImageById,
   getImagesByDesignId,
+  getImageWithPositionAndScale,
 } from "src/services/images/getImageById.service";
 import { placeImageOnDesign } from "src/services/images/placeImage.service";
 import { getDesignById } from "src/services/designs/getDesigns.service";
 import { manipulateImageOnDesign } from "src/services/images/manipulateImage.service";
+import { removeImageFromDesign } from "src/services/images/deleteImages.service";
+import { getImageToDesign } from "src/services/images/getImageToDesign";
+import { SelectImageToDesign, SelectImageToDesignWithImage } from "src/db";
 
 export const placeImageOnDesignController = async (
   req: Request,
@@ -33,7 +38,7 @@ export const placeImageOnDesignController = async (
       return next(ApiError.notFound({ resource: "Design" }));
     const image = await getImageById(imageId);
     if (!image) return next(ApiError.notFound({ resource: "Image" }));
-    const result = await placeImageOnDesign({
+    const result: number | undefined = await placeImageOnDesign({
       imageId,
       designId,
       xPosition: body.positionX,
@@ -41,10 +46,22 @@ export const placeImageOnDesignController = async (
       xScale: body.scaleX,
       yScale: body.scaleY,
     });
+    if (!result)
+      throw next(
+        new ApiError({
+          code: 500,
+          info: "Something went wrong adding image to design",
+          resource: "Image To Design",
+        })
+      );
+    const addedImage: ImageWithPositionAndScale =
+      await getImageWithPositionAndScale(result);
     logger.info(result);
-    res
-      .status(201)
-      .send({ msg: `Placed image ${imageId} to design ${designId}` });
+    const addImageToDesignResponse: AddImageToDesignResponse = {
+      success: true,
+      data: addedImage,
+    };
+    res.status(201).send(addImageToDesignResponse);
   } catch (error) {
     next(error);
   }
