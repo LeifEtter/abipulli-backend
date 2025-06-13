@@ -92,6 +92,13 @@
       "when": 1749495243141,
       "tag": "0012_loose_weapon_omega",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1749851381185,
+      "tag": "0013_closed_mentallo",
+      "breakpoints": true
     }
   ]
 }
