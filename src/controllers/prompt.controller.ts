@@ -1,0 +1,36 @@
+import { PromptsResponse } from "abipulli-types";
+import {
+  Prompt,
+  PromptCreateParams,
+} from "abipulli-types/dist/types/models/prompt";
+import { Request, Response, NextFunction } from "express";
+import { InsertPrompt } from "src/db";
+import { ApiError } from "src/error/ApiError";
+import {
+  fetchPromptsForUser,
+  insertPrompt,
+} from "src/services/prompts/getPrompts";
+
+export const getAllPromptsByUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals.user.user_id;
+    const userPrompts: Prompt[] = await fetchPromptsForUser(userId);
+    if (!userPrompts) return ApiError.notFound({ resource: "Prompts" });
+    const promptsResponse: PromptsResponse = {
+      success: true,
+      data: {
+        total: userPrompts.length,
+        page: 1,
+        pageSize: userPrompts.length,
+        items: userPrompts,
+      },
+    };
+    res.status(200).send(promptsResponse);
+  } catch (error) {
+    next(error);
+  }
+};
