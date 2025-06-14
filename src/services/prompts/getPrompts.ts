@@ -13,3 +13,13 @@ export const fetchPromptsForUser = async (
   return dbPrompts.map((prompt) => castPrompt(prompt));
 };
 
+export const insertPrompt = async (
+  prompt: InsertPrompt
+): Promise<number | undefined> => {
+  const insertedPrompts: { id: number }[] | undefined = await db
+    .insert(prompts)
+    .values(prompt)
+    .returning({ id: prompts.id });
+  if (!insertedPrompts[0]) return undefined;
+  return insertedPrompts[0].id;
+};
