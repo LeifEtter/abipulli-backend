@@ -34,3 +34,25 @@ export const getAllPromptsByUserController = async (
     next(error);
   }
 };
+
+export const insertPromptController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const promptParams = req.body as PromptCreateParams;
+    const userId = res.locals.user.user_id;
+    const prompt: InsertPrompt = {
+      user_id: userId,
+      title: promptParams.title ?? "",
+      purpose: promptParams.purpose,
+      content: promptParams.content,
+      description: "Placeholder Description",
+    };
+    const insertedPromptId = await insertPrompt(prompt);
+    res.status(201).send({ promptId: insertedPromptId });
+  } catch (error) {
+    next(error);
+  }
+};
