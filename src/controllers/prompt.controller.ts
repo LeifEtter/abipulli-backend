@@ -19,7 +19,7 @@ export const getAllPromptsByUserController = async (
   try {
     const userId = res.locals.user.user_id;
     const userPrompts: Prompt[] = await fetchPromptsForUser(userId);
-    if (!userPrompts) return ApiError.notFound({ resource: "Prompts" });
+    if (!userPrompts) return next(ApiError.notFound({ resource: "Prompts" }));
     const promptsResponse: PromptsResponse = {
       success: true,
       data: {
