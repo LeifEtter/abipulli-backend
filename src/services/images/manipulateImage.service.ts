@@ -4,12 +4,10 @@ import { imageToDesign, SelectImageToDesign } from "src/db";
 import db from "src/db/db";
 
 export const manipulateImageOnDesign = async ({
-  imageId,
-  designId,
+  imageToDesignId,
   manipulation,
 }: {
-  imageId: number;
-  designId: number;
+  imageToDesignId: number;
   manipulation: ManipulateImageInDesignParams;
 }): Promise<SelectImageToDesign | undefined> => {
   const result = await db
@@ -20,12 +18,7 @@ export const manipulateImageOnDesign = async ({
       x_scale: manipulation.scaleX,
       y_scale: manipulation.scaleY,
     })
-    .where(
-      and(
-        eq(imageToDesign.image_id, imageId),
-        eq(imageToDesign.design_id, designId)
-      )
-    )
+    .where(and(eq(imageToDesign.id, imageToDesignId)))
     .returning();
   return result[0];
 };
