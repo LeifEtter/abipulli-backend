@@ -37,11 +37,11 @@ router
   );
 
 router
-  .route("/:imageId")
+  .route("/:imageToDesignId")
   .patch(
     authenticateHttp,
     minPower(1),
-    validateParams({ requiredParams: ["designId", "imageId"] }),
+    validateParams({ requiredParams: ["designId", "imageToDesignId"] }),
     validateBody(ManipulateImageInDesignParamsSchema),
     manipulateImageController
   );
