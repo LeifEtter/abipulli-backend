@@ -161,3 +161,12 @@ export const getMyImagesController = async (
     next(error);
   }
 };
+
+export const getFreeMotivesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  } catch (error) {}
+};
