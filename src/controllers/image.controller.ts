@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import db from "src/db/db";
-import { images, SelectImage } from "src/db/index";
+import { images } from "src/db/index";
 import { eq } from "drizzle-orm";
-
 import {
   errorMessages,
   GenerateImageParams,
@@ -10,6 +9,7 @@ import {
   ImagesResponse,
   ImageUploadResultResponse,
   ImproveImageQueryParams,
+  ImproveImageQueryResponse,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
@@ -19,10 +19,10 @@ import {
   queryImageFromIdeogram,
 } from "src/services/images/generateImage.service";
 import { insertImageIntoDb } from "src/services/images/insertImage.service";
-import { castImage } from "src/services/images/castImage.service";
 import { randomUUID } from "crypto";
 import imageSize from "image-size";
-import { ISize, ISizeCalculationResult } from "image-size/dist/types/interface";
+import { ISizeCalculationResult } from "image-size/dist/types/interface";
+import { buildBasicPrompt } from "src/services/prompts/buildPrompt";
 import { getImagesByUserId } from "src/services/images/getImageById.service";
 
 export const saveImageController = async (
@@ -32,8 +32,7 @@ export const saveImageController = async (
 ) => {
   try {
     const file: Express.Multer.File | undefined = req.file;
-
-    if (file == undefined) {
+    if (file == undefined)
       return next(
         new ApiError({ code: 400, info: errorMessages.missingImage })
       );
@@ -127,6 +126,7 @@ export const generateImageController = async (
         new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
       );
     }
+
     res.status(200).send({
       link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}-generated`,
     });
