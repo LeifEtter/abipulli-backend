@@ -31,6 +31,10 @@ router
     saveImageController
   );
 
+// router
+//   .route("/free")
+//   .get(authenticateHttp, minPower(1), getFreeMotivesController);
+
 router
   .route("/prompt")
   .post(
