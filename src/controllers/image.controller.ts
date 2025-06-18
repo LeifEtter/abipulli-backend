@@ -23,6 +23,7 @@ import { castImage } from "src/services/images/castImage.service";
 import { randomUUID } from "crypto";
 import imageSize from "image-size";
 import { ISize, ISizeCalculationResult } from "image-size/dist/types/interface";
+import { getImagesByUserId } from "src/services/images/getImageById.service";
 
 export const saveImageController = async (
   req: Request,
@@ -144,9 +145,7 @@ export const getMyImagesController = async (
 ) => {
   try {
     // Dummy Retrieve images from db
-    const images: Image[] = await retrieveImagesFromDbByUserId(
-      res.locals.user.user_id
-    );
+    const images: Image[] = await getImagesByUserId(res.locals.user.user_id);
 
     const response: ImagesResponse = {
       success: true,
