@@ -37,9 +37,6 @@ export const saveImageController = async (
       return next(
         new ApiError({ code: 400, info: errorMessages.missingImage })
       );
-    }
-
-    //TODO:
     const fileStorageSize: number = Math.round(file.size / 1024);
     const imageDimensions: ISizeCalculationResult = imageSize(file.buffer);
     const userId: number = res.locals.user!.user_id;
