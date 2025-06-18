@@ -125,7 +125,7 @@ export const generateImageController = async (
       imageType: "image/png",
     });
     if (!uploadResult) {
-      next(
+      return next(
         new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
       );
     }
