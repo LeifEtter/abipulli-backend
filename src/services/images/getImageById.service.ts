@@ -1,7 +1,7 @@
 import { images, imageToDesign, SelectImage } from "src/db";
 import db from "src/db/db";
 import { eq } from "drizzle-orm";
-import { ImageWithPositionAndScale } from "abipulli-types";
+import { Image, ImageWithPositionAndScale } from "abipulli-types";
 import { castImage, castImageWithPositionAndScale } from "./castImage.service";
 import { ApiError } from "src/error/ApiError";
 
@@ -34,4 +34,12 @@ export const getImagesByDesignId = async (
     castImageWithPositionAndScale(e)
   );
   return images;
+};
+
+export const getImagesByUserId = async (userId: number): Promise<Image[]> => {
+  const dbImages: SelectImage[] = await db
+    .select()
+    .from(images)
+    .where(eq(images.user_id, userId));
+  return dbImages.map((image) => castImage(image));
 };

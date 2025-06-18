@@ -136,22 +136,6 @@ export const generateImageController = async (
   }
 };
 
-const retrieveImagesFromDbByUserId = async (
-  userId: number
-): Promise<Image[]> => {
-  const dbImages: SelectImage[] = await db
-    .select()
-    .from(images)
-    .where(eq(images.user_id, userId));
-  return dbImages.map((image) => castImage(image));
-};
-
-const generateImageLink = (image: Image): string => {
-  return `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${
-    process.env.NODE_ENV
-  }/users/${image.userId}/${image.uuid!}`;
-};
-
 export const getMyImagesController = async (
   req: Request,
   res: Response,
