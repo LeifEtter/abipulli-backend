@@ -88,10 +88,11 @@ export const improvePromptController = async (
       styleTags,
     });
     const improveResult = await requestImprovedPrompt(prompt);
-    res.status(200).send({
-      improved_prompt: improveResult.prompt,
-      cost: improveResult.cost,
-    });
+    const improveResponse: ImproveImageQueryResponse = {
+      success: true,
+      data: { description: improveResult.prompt },
+    };
+    res.status(200).send(improveResponse);
   } catch (error) {
     next(error);
   }
