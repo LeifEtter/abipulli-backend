@@ -11,12 +11,10 @@ export const queryImageFromIdeogram = async (
       "Api-Key": process.env.IDEOGRAM_KEY!,
     },
     body: JSON.stringify({
-      image_request: {
-        prompt: prompt,
-        aspect_ratio: "ASPECT_1_1",
-        model: process.env.IDEOGRAM_MODEL,
-        magic_prompt_option: "AUTO",
-      },
+      prompt: prompt,
+      aspect_ratio: "1x1",
+      rendering_speed: "TURBO",
+      magic_prompt: process.env.IDEOGRAM_MAGIC_PROMPT,
     }),
   });
   if (!res.ok) {
