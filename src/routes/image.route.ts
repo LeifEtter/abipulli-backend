@@ -14,6 +14,7 @@ import {
 import { uploadSingleImage } from "src/middleware/file.middleware";
 import {
   GenerateImageParamsSchema,
+  ImproveImageParamsSchema,
   ImproveImageQueryParamsSchema,
   ManipulateImageInDesignParamsSchema,
 } from "abipulli-types";
@@ -54,5 +55,9 @@ router
   );
 
 router.route("/me").get(authenticateHttp, minPower(1), getMyImagesController);
+
+router
+  .route("/improve")
+  .post(authenticateHttp, minPower(1), validateBody(ImproveImageParamsSchema));
 
 export default router;
