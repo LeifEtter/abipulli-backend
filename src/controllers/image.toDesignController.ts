@@ -19,7 +19,7 @@ import { placeImageOnDesign } from "src/services/images/placeImage.service";
 import { getDesignById } from "src/services/designs/getDesigns.service";
 import { manipulateImageOnDesign } from "src/services/images/manipulateImage.service";
 import { removeImageFromDesign } from "src/services/images/deleteImages.service";
-import { getImageToDesign } from "src/services/images/getImageToDesign";
+import { getImageToDesign } from "src/services/images/getImageToDesign.service";
 import { SelectImageToDesign, SelectImageToDesignWithImage } from "src/db";
 
 export const placeImageOnDesignController = async (
