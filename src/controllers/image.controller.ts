@@ -8,6 +8,7 @@ import {
   Image,
   ImagesResponse,
   ImageUploadResultResponse,
+  ImageWithPositionAndScale,
   ImproveImageQueryParams,
   ImproveImageQueryResponse,
 } from "abipulli-types";
@@ -23,7 +24,10 @@ import { randomUUID } from "crypto";
 import imageSize from "image-size";
 import { ISizeCalculationResult } from "image-size/dist/types/interface";
 import { buildBasicPrompt } from "src/services/prompts/buildPrompt";
-import { getImagesByUserId } from "src/services/images/getImageById.service";
+import {
+  getImageById,
+  getImagesByUserId,
+} from "src/services/images/getImageById.service";
 
 export const saveImageController = async (
   req: Request,
@@ -103,7 +107,9 @@ export const generateImageController = async (
   try {
     const { prompt, styleTags }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
-    const imageUrl: string = await queryImageFromIdeogram(prompt);
+    const existingImage: Express.Multer.File | undefined = req.file;
+    let imageUrl: string;
+    imageUrl = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
     const fileSize: number = Math.round(imageBuffer.length / 1024);
     const dimensions: ISizeCalculationResult = imageSize(imageBuffer);
@@ -121,15 +127,22 @@ export const generateImageController = async (
       filename: `${fileUuid}-generated`,
       imageType: "image/png",
     });
+    const images: Image[] = [];
     if (!uploadResult) {
       return next(
         new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
       );
     }
-
-    res.status(200).send({
-      link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}-generated`,
-    });
+    const imagesResponse: ImagesResponse = {
+      success: true,
+      data: {
+        items: images,
+        total: images.length,
+        page: 1,
+        pageSize: images.length,
+      },
+    };
+    res.status(200).send(imagesResponse);
   } catch (error) {
     next(error);
   }
