@@ -1,9 +1,14 @@
+import {
+  IdeogramImage,
+  IdeogramRequest,
+  IdeogramResponse,
+} from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
 
 export const queryImageFromIdeogram = async (
-  prompt: string
-): Promise<string> => {
+  request: IdeogramRequest
+): Promise<IdeogramImage[]> => {
   const res = await fetch(process.env.IDEOGRAM_URL!, {
     method: "POST",
     headers: {
@@ -11,9 +16,9 @@ export const queryImageFromIdeogram = async (
       "Api-Key": process.env.IDEOGRAM_KEY!,
     },
     body: JSON.stringify({
-      prompt: prompt,
-      aspect_ratio: "1x1",
-      rendering_speed: "TURBO",
+      prompt: request.prompt,
+      aspect_ratio: request.aspect_ratio,
+      rendering_speed: request.rendering_speed,
       magic_prompt: process.env.IDEOGRAM_MAGIC_PROMPT,
     }),
   });
