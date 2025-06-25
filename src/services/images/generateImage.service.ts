@@ -31,17 +31,8 @@ export const queryImageFromIdeogram = async (
       },
     });
   }
-  const body = await res.json();
-  const imageUrl: string | undefined = body.data[0].url;
-  if (imageUrl == undefined) {
-    throw ApiError.internal({
-      errorInfo: {
-        msg: "Couldn't find Image Url in Ideogram Response",
-        code: 50,
-      },
-    });
-  }
-  return imageUrl;
+  const body: IdeogramResponse = await res.json();
+  return body.data;
 };
 
 export const getFileFromImageUrl = async (
