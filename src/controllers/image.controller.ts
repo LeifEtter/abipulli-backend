@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import {
   errorMessages,
   GenerateImageParams,
+  IdeogramImage,
+  IdeogramRequest,
   Image,
   ImagesResponse,
   ImageUploadResultResponse,
@@ -109,28 +111,6 @@ export const generateImageController = async (
   try {
     const { prompt, styleTags }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
-    const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
-    const fileSize: number = Math.round(imageBuffer.length / 1024);
-    const dimensions: ISizeCalculationResult = imageSize(imageBuffer);
-    const fileUuid = randomUUID();
-    const insertedImageId: number = await insertImageIntoDb({
-      userId,
-      width: dimensions.width,
-      height: dimensions.height,
-      fileSize,
-      fileUuid,
-    });
-    const uploadResult = await uploadImageToHetzner({
-      file: imageBuffer,
-      path: `${process.env.NODE_ENV}/users/${userId}`,
-      filename: `${fileUuid}-generated`,
-      imageType: "image/png",
-    });
-    const images: Image[] = [];
-    if (!uploadResult) {
-      return next(
-        new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
-      );
     // const existingImage: Express.Multer.File | undefined = req.file;
     const ideogramParams: IdeogramRequest = {
       prompt,
@@ -141,14 +121,47 @@ export const generateImageController = async (
     const ideogramImages: IdeogramImage[] = await queryImageFromIdeogram(
       ideogramParams
     );
+    const storedImages: Image[] = [];
+    for (const ideogramImage of ideogramImages) {
+      const imageBuffer: Buffer = await getFileFromImageUrl(ideogramImage.url);
+      const fileSize: number = Math.round(imageBuffer.length / 1024);
+      const dimensions: ISizeCalculationResult = imageSize(imageBuffer);
+      const fileUuid = randomUUID();
+      const imageId: number = await insertImageIntoDb({
+        userId,
+        width: dimensions.width,
+        height: dimensions.height,
+        fileSize,
+        fileUuid,
+      });
+      const storedImage: Image | undefined = await getImageById(imageId);
+      if (!storedImage)
+        return next(
+          new ApiError({
+            code: 500,
+            info: "Something went wrong during image storing",
+          })
+        );
+      try {
+        await uploadImageToHetzner({
+          file: imageBuffer,
+          path: `${process.env.NODE_ENV}/users/${userId}`,
+          filename: `${fileUuid}`,
+          imageType: "image/png",
+        });
+      } catch (error) {
+        await db.delete(images).where(eq(images.id, imageId));
+        throw error;
+      }
+      storedImages.push(storedImage);
     }
     const imagesResponse: ImagesResponse = {
       success: true,
       data: {
-        items: images,
-        total: images.length,
+        items: storedImages,
+        total: storedImages.length,
         page: 1,
-        pageSize: images.length,
+        pageSize: storedImages.length,
       },
     };
     res.status(200).send(imagesResponse);
