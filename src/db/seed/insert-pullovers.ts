@@ -11,13 +11,14 @@ const insertPullover = async (
 ): Promise<void> => {
   const imageUUID = randomUUID();
   const dimensions = imageSize(pullover.file);
-  const uploadImageResult = await uploadImageToHetzner({
-    file: pullover.file,
-    path: `${process.env.NODE_ENV}/general`,
-    filename: `${imageUUID}`,
-    imageType: "image/png",
-  });
-  if (uploadImageResult) {
+
+  try {
+    await uploadImageToHetzner({
+      file: pullover.file,
+      path: `${process.env.NODE_ENV}/general`,
+      filename: `${imageUUID}`,
+      imageType: "image/png",
+    });
     const imageId: number = (
       await db
         .insert(images)
@@ -38,6 +39,8 @@ const insertPullover = async (
       color: pullover.color,
       image_id: imageId,
     });
+  } catch (error) {
+    console.error(error);
   }
 };
 
