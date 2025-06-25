@@ -99,6 +99,8 @@ export const improvePromptController = async (
   }
 };
 
+const MAX_IMAGE_GEN: number = 1;
+
 export const generateImageController = async (
   req: Request,
   res: Response,
@@ -107,8 +109,6 @@ export const generateImageController = async (
   try {
     const { prompt, styleTags }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
-    let imageUrl: string;
-    imageUrl = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
     const fileSize: number = Math.round(imageBuffer.length / 1024);
     const dimensions: ISizeCalculationResult = imageSize(imageBuffer);
@@ -132,6 +132,15 @@ export const generateImageController = async (
         new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
       );
     // const existingImage: Express.Multer.File | undefined = req.file;
+    const ideogramParams: IdeogramRequest = {
+      prompt,
+      aspect_ratio: "1x1",
+      num_images: MAX_IMAGE_GEN,
+      rendering_speed: "TURBO",
+    };
+    const ideogramImages: IdeogramImage[] = await queryImageFromIdeogram(
+      ideogramParams
+    );
     }
     const imagesResponse: ImagesResponse = {
       success: true,
