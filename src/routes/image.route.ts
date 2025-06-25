@@ -16,11 +16,7 @@ import {
   GenerateImageParamsSchema,
   ImproveImageParamsSchema,
   ImproveImageQueryParamsSchema,
-  ManipulateImageInDesignParamsSchema,
 } from "abipulli-types";
-import { auth } from "google-auth-library";
-import { manipulateImageController } from "src/controllers/image.toDesignController";
-
 const router = Router({ mergeParams: true });
 
 router
@@ -56,8 +52,8 @@ router
 
 router.route("/me").get(authenticateHttp, minPower(1), getMyImagesController);
 
-router
-  .route("/improve")
-  .post(authenticateHttp, minPower(1), validateBody(ImproveImageParamsSchema));
+// router
+//   .route("/improve")
+//   .post(authenticateHttp, minPower(1), validateBody(ImproveImageParamsSchema));
 
 export default router;
