@@ -51,18 +51,18 @@ export const saveImageController = async (
       width: imageDimensions.width,
       height: imageDimensions.height,
     });
-    const uploadResult = await uploadImageToHetzner({
-      file: file.buffer,
-      path: `${process.env.NODE_ENV}/users/${userId}`,
-      filename: `${fileUuid}`,
-      imageType: "image/png",
-    });
-    if (!uploadResult) {
+    try {
+      const uploadResult = await uploadImageToHetzner({
+        file: file.buffer,
+        path: `${process.env.NODE_ENV}/users/${userId}`,
+        filename: `${fileUuid}`,
+        imageType: "image/png",
+      });
+    } catch (error) {
       await db.delete(images).where(eq(images.id, insertedImageId));
-      return next(
-        new ApiError({ code: 400, info: errorMessages.imageUploadFailed })
-      );
+      throw error;
     }
+
     const response: ImageUploadResultResponse = {
       success: true,
       data: {
