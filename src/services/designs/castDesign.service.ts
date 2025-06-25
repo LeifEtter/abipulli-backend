@@ -30,9 +30,8 @@ export const castDesignWithRelations = (
       : undefined,
     textElements: design.texts.map((text) => castTextElement(text)),
     images: design.imageToDesign.map((e) => ({
+      imageToDesignId: e.id,
       ...castImage(e.image),
-      positionX: e.x_position ?? 0,
-      positionY: e.y_position ?? 0,
     })),
   };
 };
