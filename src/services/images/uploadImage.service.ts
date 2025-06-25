@@ -1,4 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { errorMessages } from "abipulli-types";
+import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
 import s3 from "src/lib/storage/s3Client";
 
@@ -14,7 +16,7 @@ export const uploadImageToHetzner = async ({
   path,
   filename,
   imageType,
-}: UploadImageParams): Promise<boolean> => {
+}: UploadImageParams) => {
   const uploadCommand = new PutObjectCommand({
     Bucket: "abipulli",
     Key: `${path}/${filename}`,
@@ -22,11 +24,8 @@ export const uploadImageToHetzner = async ({
     ContentType: imageType,
   });
   const uploadResult = await s3.send(uploadCommand);
-  if (uploadResult.$metadata.httpStatusCode == 200) {
-    return true;
-  } else {
-    logger.error("Upload Failure");
+  if (uploadResult.$metadata.httpStatusCode != 200) {
     logger.error(uploadResult);
-    return false;
+    throw new ApiError({ code: 500, info: errorMessages.issueUploadingImage });
   }
 };
