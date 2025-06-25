@@ -107,7 +107,6 @@ export const generateImageController = async (
   try {
     const { prompt, styleTags }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
-    const existingImage: Express.Multer.File | undefined = req.file;
     let imageUrl: string;
     imageUrl = await queryImageFromIdeogram(prompt);
     const imageBuffer: Buffer = await getFileFromImageUrl(imageUrl);
@@ -132,6 +131,7 @@ export const generateImageController = async (
       return next(
         new ApiError({ info: errorMessages.issueUploadingImage, code: 500 })
       );
+    // const existingImage: Express.Multer.File | undefined = req.file;
     }
     const imagesResponse: ImagesResponse = {
       success: true,
