@@ -33,8 +33,10 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://www.postman.com",
-      "http://localhost",
+      // "https://www.postman.com",
+      // "http://localhost",
+      "https://etter.app",
+      "http://localhost:3000",
     ],
     credentials: true,
   })
