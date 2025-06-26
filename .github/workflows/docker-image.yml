@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+env:
+  IMAGE_NAME: ghcr.io/leifetter/abipulli-frontend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: |
+          docker build \
+            --build-arg VITE_API_URL=https://api.etter.app \
+            -t $IMAGE_NAME:latest .
+    - name: 🚀 Push image to GHCR
+      run: docker push $IMAGE_NAME:latest
