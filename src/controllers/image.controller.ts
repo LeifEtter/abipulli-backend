@@ -30,6 +30,7 @@ import {
   getImageById,
   getImagesByUserId,
 } from "src/services/images/getImageById.service";
+import { HETZNER_STORAGE_WITH_BUCKET } from "src/configs/hetzner.config";
 
 export const saveImageController = async (
   req: Request,
@@ -68,7 +69,7 @@ export const saveImageController = async (
     const response: ImageUploadResultResponse = {
       success: true,
       data: {
-        link: `${process.env.HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}`,
+        link: `${HETZNER_STORAGE_WITH_BUCKET}/${process.env.NODE_ENV}/users/${userId}/${fileUuid}`,
         imageId: insertedImageId,
       },
     };

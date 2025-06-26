@@ -3,13 +3,14 @@ import {
   IdeogramRequest,
   IdeogramResponse,
 } from "abipulli-types";
+import { IDEOGRAM_URL } from "src/configs/ideogram.config";
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
 
 export const queryImageFromIdeogram = async (
   request: IdeogramRequest
 ): Promise<IdeogramImage[]> => {
-  const res = await fetch(process.env.IDEOGRAM_URL!, {
+  const res = await fetch(IDEOGRAM_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +20,7 @@ export const queryImageFromIdeogram = async (
       prompt: request.prompt,
       aspect_ratio: request.aspect_ratio,
       rendering_speed: request.rendering_speed,
-      magic_prompt: process.env.IDEOGRAM_MAGIC_PROMPT,
+      magic_prompt: request.magic_prompt,
     }),
   });
   if (!res.ok) {

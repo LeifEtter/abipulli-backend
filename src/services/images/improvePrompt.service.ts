@@ -1,3 +1,4 @@
+import { OPENAI_URL, OPENAPI_MODEL } from "src/configs/openai.config";
 import { GPT_4o_COST } from "src/constants";
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
@@ -5,14 +6,14 @@ import { logger } from "src/lib/logger";
 export const requestImprovedPrompt = async (
   oldPrompt: string
 ): Promise<{ prompt: string; cost: number }> => {
-  const res = await fetch(process.env.OPENAI_URL!, {
+  const res = await fetch(OPENAI_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.OPENAPI_KEY}`,
     },
     body: JSON.stringify({
-      model: process.env.OPENAPI_MODEL,
+      model: OPENAPI_MODEL,
       input: oldPrompt,
     }),
   });
