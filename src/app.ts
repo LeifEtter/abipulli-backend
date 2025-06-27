@@ -53,7 +53,7 @@ app.use(
 app.use(apiErrorHandler);
 
 app.route("/test").get((req: express.Request, res: express.Response): void => {
-  res.status(200).send({ message: "Working" });
+  res.status(200).send({ message: "CI Test" });
 });
 
 io.use(authenticateSocket);
