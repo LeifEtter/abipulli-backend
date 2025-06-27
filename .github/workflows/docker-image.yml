@@ -1,0 +1,34 @@
+name: Docker Image CI
+
+env:
+  IMAGE_NAME: ghcr.io/leifetter/abipulli-frontend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: |
+          docker build \
+            --build-arg VITE_API_URL=https://api.etter.app \
+            -t $IMAGE_NAME:latest .
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_PUSH_TOKEN }}
+    - name: Push image to GHCR
+      run: docker push $IMAGE_NAME:latest
