@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build and Push Image
 
 env:
   IMAGE_NAME: ghcr.io/leifetter/abipulli-backend
