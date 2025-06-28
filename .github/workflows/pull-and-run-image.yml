@@ -1,8 +1,8 @@
-name: Deploy to VPS
+name: Pull and Run Image
 
 on:
   workflow_run:
-    workflows: ["Docker Image CI"]
+    workflows: ["Build and Push Image"]
     types:
       - completed
 
