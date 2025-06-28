@@ -18,6 +18,8 @@ jobs:
       contents: read
 
     steps:
+    - uses: actions/checkout@v4
+    
     - name: Login to GHCR
       uses: docker/login-action@v3
       with:
@@ -28,7 +30,8 @@ jobs:
     - name: Build and push multi-arch Docker image
       uses: docker/build-push-action@v5
       with:
-        context: ./abipulli-backend
+        context: .
+        file: ./Dockerfile
         push: true
         platforms: linux/arm64
         tags: ${{ env.IMAGE_NAME }}:latest
