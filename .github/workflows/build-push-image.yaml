@@ -28,7 +28,7 @@ jobs:
     - name: Build and push multi-arch Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        context: ./abipulli-backend
         push: true
         platforms: linux/arm64
         tags: ${{ env.IMAGE_NAME }}:latest
