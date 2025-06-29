@@ -25,3 +25,5 @@ yarn-error.log*
 .pnp.*
 .VSCodeCounter
 dummyLoginDetails.txt
+notes
+scripts
