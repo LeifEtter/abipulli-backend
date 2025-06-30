@@ -1,1 +1,0 @@
-ALTER TABLE "images" ADD COLUMN "file_size" integer DEFAULT 0;
