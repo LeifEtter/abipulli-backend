@@ -1,8 +1,8 @@
-import { Prompt } from "abipulli-types/dist/types/models/prompt";
 import { eq } from "drizzle-orm";
 import { InsertPrompt, prompts, SelectPrompt } from "src/db";
 import db from "src/db/db";
 import { castPrompt } from "./castPrompt";
+import { Prompt } from "abipulli-types";
 
 export const fetchPromptsForUser = async (
   userId: number

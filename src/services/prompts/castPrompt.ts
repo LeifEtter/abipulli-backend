@@ -1,4 +1,4 @@
-import { Prompt } from "abipulli-types/dist/types/models/prompt";
+import { Prompt } from "abipulli-types";
 import { SelectPrompt } from "src/db";
 
 export const castPrompt = (prompt: SelectPrompt): Prompt => {

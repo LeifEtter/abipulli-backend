@@ -1,8 +1,4 @@
-import { PromptsResponse } from "abipulli-types";
-import {
-  Prompt,
-  PromptCreateParams,
-} from "abipulli-types/dist/types/models/prompt";
+import { Prompt, PromptCreateParams, PromptsResponse } from "abipulli-types";
 import { Request, Response, NextFunction } from "express";
 import { InsertPrompt } from "src/db";
 import { ApiError } from "src/error/ApiError";
