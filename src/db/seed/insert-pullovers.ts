@@ -1,5 +1,5 @@
 import { eq, inArray } from "drizzle-orm";
-import db from "../db";
+import { getDb } from "../db";
 import { InsertImage, pullovers, images, InsertPullover } from "../index";
 import pulloverData, { PulloverDataWithFile } from "./pullover-images";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
