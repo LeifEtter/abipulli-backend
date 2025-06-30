@@ -1,6 +1,6 @@
 import { fakerDE } from "@faker-js/faker";
 import { InsertOrder, orders } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 
 export interface OrderFactory {
   insertSingleOrder: (userId: number) => Promise<number>;

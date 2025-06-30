@@ -1,11 +1,11 @@
 import { chats, InsertChat } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { castChat } from "./castChat.service";
 import { Chat } from "abipulli-types";
 
 export const createChat = async (chat: InsertChat): Promise<Chat> => {
   const insertedChat = (
-    await db
+    await getDb()
       .insert(chats)
       .values({
         order_id: chat.order_id,

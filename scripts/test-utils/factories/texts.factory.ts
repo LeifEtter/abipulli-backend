@@ -1,7 +1,7 @@
 import { fakerDE } from "@faker-js/faker";
 import { eq } from "drizzle-orm";
 import { InsertOrder, orders, textElements } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 
 export interface TextElementFactory {
   insertSingleText: (designId: number) => Promise<number>;

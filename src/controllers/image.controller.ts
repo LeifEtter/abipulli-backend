@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { images } from "src/db/index";
 import { eq } from "drizzle-orm";
 import {
@@ -62,7 +62,7 @@ export const saveImageController = async (
         imageType: "image/png",
       });
     } catch (error) {
-      await db.delete(images).where(eq(images.id, insertedImageId));
+      await getDb().delete(images).where(eq(images.id, insertedImageId));
       throw error;
     }
 
@@ -151,7 +151,7 @@ export const generateImageController = async (
           imageType: "image/png",
         });
       } catch (error) {
-        await db.delete(images).where(eq(images.id, imageId));
+        await getDb().delete(images).where(eq(images.id, imageId));
         throw error;
       }
       storedImages.push(storedImage);

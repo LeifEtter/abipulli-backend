@@ -1,5 +1,5 @@
 import { Design } from "abipulli-types";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { designs, SelectDesignWithRelations } from "src/db/index";
 import { eq } from "drizzle-orm";
 import { castDesignWithRelations } from "./castDesign.service";
@@ -8,7 +8,7 @@ export const getDesignById = async (
   designId: number
 ): Promise<Design | undefined> => {
   const dbDesign: SelectDesignWithRelations | undefined =
-    await db.query.designs.findFirst({
+    await getDb().query.designs.findFirst({
       where: eq(designs.id, designId),
       with: {
         imageToDesign: {
@@ -36,7 +36,7 @@ export const getDesignsForOrder = async (
   orderId: number
 ): Promise<Design[]> => {
   const dbDesigns: SelectDesignWithRelations[] =
-    await db.query.designs.findMany({
+    await getDb().query.designs.findMany({
       where: eq(designs.order_id, orderId),
       with: {
         customer: true,

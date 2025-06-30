@@ -1,12 +1,12 @@
 import { InsertMessage, messages, SelectMessage } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { ApiError } from "src/error/ApiError";
 
 export const createMessage = async (
   msg: InsertMessage
 ): Promise<SelectMessage> => {
   try {
-    const insert = await db.insert(messages).values(msg).returning();
+    const insert = await getDb().insert(messages).values(msg).returning();
     if (!insert || insert.length == 0 || insert[0] == undefined) {
       throw new ApiError({
         code: 500,

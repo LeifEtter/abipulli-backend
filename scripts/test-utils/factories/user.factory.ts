@@ -1,6 +1,6 @@
 import { fakerDE } from "@faker-js/faker";
 import { users } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/constants";
 

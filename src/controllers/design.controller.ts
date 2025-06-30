@@ -7,7 +7,7 @@ import {
   Order,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import {
   getDesignById,
   getDesignsForOrder,
@@ -26,7 +26,7 @@ export const createDesignController = async (
       customer_id: res.locals.user.user_id,
       ...req.body,
     };
-    const createdDesigns = await db
+    const createdDesigns = await getDb()
       .insert(designs)
       .values(design)
       .returning({ id: designs.id });

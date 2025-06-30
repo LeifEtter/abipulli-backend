@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { designs, pullovers, users } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 
 export interface DesignFactory {
   insertSingleDesign: (orderId: number, userId: number) => Promise<number>;

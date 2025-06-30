@@ -1,6 +1,6 @@
 import { fakerDE } from "@faker-js/faker";
 import { images, imageToDesign } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db"; 
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
 import imageSize from "image-size";
 

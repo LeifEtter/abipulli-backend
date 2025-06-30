@@ -1,7 +1,7 @@
 import { ManipulateImageInDesignParams } from "abipulli-types";
 import { and, eq } from "drizzle-orm";
 import { imageToDesign, SelectImageToDesign } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 
 export const manipulateImageOnDesign = async ({
   imageToDesignId,
@@ -10,7 +10,7 @@ export const manipulateImageOnDesign = async ({
   imageToDesignId: number;
   manipulation: ManipulateImageInDesignParams;
 }): Promise<SelectImageToDesign | undefined> => {
-  const result = await db
+  const result = await getDb()
     .update(imageToDesign)
     .set({
       x_position: manipulation.positionX,

@@ -1,13 +1,13 @@
 import { eq } from "drizzle-orm";
 import { chats, SelectChatWithRelations } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { castChat, castChatWithRelations } from "./castChat.service";
 import { Chat } from "abipulli-types";
 
 export const getChatFromDb = async (
   chatId: number
 ): Promise<Chat | undefined> => {
-  const dbChat = await db.query.chats.findFirst({
+  const dbChat = await getDb().query.chats.findFirst({
     where: eq(chats.id, chatId),
   });
   if (!dbChat) {
@@ -21,7 +21,7 @@ export const getChatWithMessagesFromDb = async (
   chatId: number
 ): Promise<Chat | undefined> => {
   const dbChat: SelectChatWithRelations | undefined =
-    await db.query.chats.findFirst({
+    await getDb().query.chats.findFirst({
       where: eq(chats.id, chatId),
       with: {
         messages: true,

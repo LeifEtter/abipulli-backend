@@ -1,13 +1,13 @@
-import db from "../db";
+import { getDb } from "../db";
 import { roles, type InsertRole } from "../index";
 
 async function insertRoles(): Promise<object[]> {
-  const currentRoles = await db.select().from(roles);
+  const currentRoles = await getDb().select().from(roles);
   if (currentRoles.length > 0) {
     return currentRoles;
   }
 
-  await db.delete(roles);
+  await getDb().delete(roles);
 
   const newRoles: InsertRole[] = [
     {
@@ -24,7 +24,10 @@ async function insertRoles(): Promise<object[]> {
     },
   ];
 
-  const insertedRoles = await db.insert(roles).values(newRoles).returning();
+  const insertedRoles = await getDb()
+    .insert(roles)
+    .values(newRoles)
+    .returning();
   return insertedRoles;
 }
 
