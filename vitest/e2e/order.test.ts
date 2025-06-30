@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import request from "supertest";
 import { mockUtils, testUtils } from "./utils";
 import app from "../../src/app";
+import { PostgreSqlContainer } from "@testcontainers/postgresql";
+import { StartedTestContainer } from "testcontainers";
+import { Client } from "pg";
 
 // Globals used in Tests
 let exampleAuthToken: string;
@@ -34,6 +37,20 @@ afterAll(async () => {
 });
 
 describe("order functionality", () => {
+  let postgresContainer;
+  let postgresClient;
+
+  beforeAll(async () => {
+    postgresContainer = await new PostgreSqlContainer(
+      "postgres:13.3-alpine"
+    ).start();
+    postgresClient = new Client({
+      connectionString: postgresContainer.getConnectionUri(),
+    });
+  });
+
+  console.log("ENV" + process.env.DATABASE_URL);
+
   it("should test order creation with correct params", async () => {
     const res = await request(app)
       .post("/order/create")
