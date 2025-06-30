@@ -21,6 +21,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@testcontainers/postgresql": "^11.0.3",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.18",
@@ -36,6 +37,7 @@
     "abipulli-types": "1.0.39",
     "nodemon": "^3.1.9",
     "supertest": "^7.1.0",
+    "testcontainers": "^11.0.3",
     "tsup": "^8.5.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
