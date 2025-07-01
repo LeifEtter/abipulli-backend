@@ -9,18 +9,16 @@ import { users } from "src/db";
 import { getUserById } from "src/services/users/getUser.service";
 import { User } from "abipulli-types";
 import insertRoles from "src/db/seed/insert-roles";
+import { setupFakeDb, teardownFakeDb } from "vitest/helpers/fake.db";
 
 let container: StartedPostgreSqlContainer;
 
 beforeAll(async () => {
-  container = await new PostgreSqlContainer("postgres:13.3-alpine").start();
-  const db = initDb(container.getConnectionUri());
-  await migrate(db, { migrationsFolder: "drizzle/" });
-}, 30000);
+  container = await setupFakeDb();
+});
 
 afterAll(async () => {
-  await getDb().$client.end();
-  await container?.stop();
+  await teardownFakeDb(container);
 });
 
 describe("getUser", () => {
