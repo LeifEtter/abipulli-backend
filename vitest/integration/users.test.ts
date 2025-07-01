@@ -17,30 +17,32 @@ afterAll(async () => {
   await teardownFakeDb(container);
 });
 
-describe("getUser", () => {
-  it("returns correct user by id", async () => {
-    const db = getDb();
-    await insertRoles();
+describe("User Service Integration", () => {
+  describe("getUser()", async () => {
+    it("returns correct user by id", async () => {
+      const db = getDb();
+      await insertRoles();
 
-    const insertedUser = await db
-      .insert(users)
-      .values({
+      const insertedUser = await db
+        .insert(users)
+        .values({
+          email: "gandalf@gmail.com",
+          first_name: "Gandalf",
+          last_name: "the Gray",
+          verified: true,
+          password: "somepass123",
+          school: "OSG",
+          role_id: 2,
+        })
+        .returning();
+
+      const fetchedUser = await getUserById(insertedUser[0]!.id);
+      const matchObject: Partial<User> = {
+        firstName: "Gandalf",
+        lastName: "the Gray",
         email: "gandalf@gmail.com",
-        first_name: "Gandalf",
-        last_name: "the Gray",
-        verified: true,
-        password: "somepass123",
-        school: "OSG",
-        role_id: 2,
-      })
-      .returning();
-
-    const fetchedUser = await getUserById(insertedUser[0]!.id);
-    const matchObject: Partial<User> = {
-      firstName: "Gandalf",
-      lastName: "the Gray",
-      email: "gandalf@gmail.com",
-    };
-    expect(fetchedUser).toMatchObject(matchObject);
+      };
+      expect(fetchedUser).toMatchObject(matchObject);
+    });
   });
 });
