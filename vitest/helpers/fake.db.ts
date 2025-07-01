@@ -2,10 +2,8 @@ import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
 } from "@testcontainers/postgresql";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { getDb, initDb, schema } from "src/db/db";
-import { Pool as PL } from "pg";
+import { getDb, initDb } from "src/db/db";
 
 export const setupFakeDb = async (): Promise<StartedPostgreSqlContainer> => {
   const container = await new PostgreSqlContainer(

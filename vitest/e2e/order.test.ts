@@ -4,7 +4,6 @@ import request from "supertest";
 import { mockUtils, testUtils } from "./utils";
 import app from "../../src/app";
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
-import { StartedTestContainer } from "testcontainers";
 import { Client } from "pg";
 
 // Globals used in Tests

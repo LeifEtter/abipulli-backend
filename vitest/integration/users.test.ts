@@ -1,10 +1,6 @@
-import {
-  PostgreSqlContainer,
-  StartedPostgreSqlContainer,
-} from "@testcontainers/postgresql";
-import { getDb, initDb } from "src/db/db";
+import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { getDb } from "src/db/db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { users } from "src/db";
 import { getUserById } from "src/services/users/getUser.service";
 import { User } from "abipulli-types";
