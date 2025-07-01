@@ -7,7 +7,7 @@ export interface DesignFactory {
 }
 
 const randomPulloverId = async (): Promise<number> => {
-  const pulloverId = await db
+  const pulloverId = await getDb()
     .select({ id: pullovers.id })
     .from(pullovers)
     .orderBy(sql`random()`)
@@ -19,7 +19,7 @@ export const insertSingleDesign = async (
   orderId: number,
   userId: number
 ): Promise<number> => {
-  const design = await db
+  const design = await getDb()
     .insert(designs)
     .values({
       order_id: orderId,

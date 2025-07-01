@@ -17,7 +17,7 @@ const fontFamilies = [
 ];
 
 const insertSingleText = async (designId: number): Promise<number> => {
-  const textId = await db
+  const textId = await getDb()
     .insert(textElements)
     .values({
       design_id: designId,
@@ -37,7 +37,7 @@ const placeTextOnDesign = async (
   textId: number,
   designId: number
 ): Promise<void> => {
-  await db
+  await getDb()
     .update(textElements)
     .set({ design_id: designId })
     .where(eq(textElements.id, textId));

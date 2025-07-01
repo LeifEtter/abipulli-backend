@@ -1,9 +1,8 @@
 import { fakerDE } from "@faker-js/faker";
-import { users } from "src/db";
-import { getDb } from "src/db/db";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/constants";
-
+import { users } from "src/db";
+import { getDb } from "src/db/db";
 export interface UserFactory {
   insertSingleUser: () => Promise<{
     email: string;
@@ -16,7 +15,7 @@ export const insertSingleUser = async () => {
   const email: string = fakerDE.internet.email();
   const password: string = fakerDE.internet.password() + "@123";
   const encryptedPassword: string = await bcrypt.hash(password, SALT_ROUNDS);
-  const insertedUserId = await db
+  const insertedUserId = await getDb()
     .insert(users)
     .values({
       first_name: fakerDE.person.firstName(),

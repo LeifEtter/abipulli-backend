@@ -1,6 +1,6 @@
 import { fakerDE } from "@faker-js/faker";
 import { images, imageToDesign } from "src/db";
-import { getDb } from "src/db/db"; 
+import { getDb } from "src/db/db";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
 import imageSize from "image-size";
 
@@ -29,7 +29,7 @@ const createSingleImageInsert = async (
   uuid: string
 ): Promise<number> => {
   const dimensions = imageSize(image);
-  const insertedImageId = await db
+  const insertedImageId = await getDb()
     .insert(images)
     .values({
       image_height: dimensions.height,
@@ -64,12 +64,14 @@ const uploadSingleRandomDummyImage = async ({
 };
 
 const placeImageOnDesign = async (imageId: number, designId: number) => {
-  await db.insert(imageToDesign).values({
-    image_id: imageId,
-    design_id: designId,
-    x_position: fakerDE.number.int({ min: 0, max: 1000 }),
-    y_position: fakerDE.number.int({ min: 0, max: 1000 }),
-  });
+  await getDb()
+    .insert(imageToDesign)
+    .values({
+      image_id: imageId,
+      design_id: designId,
+      x_position: fakerDE.number.int({ min: 0, max: 1000 }),
+      y_position: fakerDE.number.int({ min: 0, max: 1000 }),
+    });
 };
 
 export const imageFactory: ImageFactory = {
