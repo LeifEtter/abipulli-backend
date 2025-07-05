@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { InsertPrompt, prompts, SelectPrompt } from "src/db";
 import { getDb } from "src/db/db";
-import { castPrompt } from "./castPrompt";
+import { castPrompt } from "./castPrompt.service";
 import { Prompt } from "abipulli-types";
 
 export const fetchPromptsForUser = async (
