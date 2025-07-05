@@ -19,7 +19,7 @@
   "include": [
     "src/**/*",
     "vitest/**/*",
-    "scripts/test-utils/**/*",
+    "vitest/test-utils/**/*",
     "drizzle/**/*"
   ],
   "exclude": ["dist", "node_modules", "scripts", "notes"]
