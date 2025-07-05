@@ -23,7 +23,8 @@ let container: StartedPostgreSqlContainer;
 
 beforeAll(async () => {
   container = await setupFakeDb();
-});
+  await insertRoles();
+}, 50000);
 
 afterAll(async () => {
   await teardownFakeDb(container);
