@@ -17,6 +17,18 @@ afterAll(async () => {
   await teardownFakeDb(container);
 });
 
+let client: PoolClient;
+
+beforeEach(async () => {
+  client = await getDb().$client.connect();
+  await client.query("BEGIN");
+});
+
+afterEach(async () => {
+  await client.query("ROLLBACK");
+  client.release();
+});
+
 describe("User Service Integration", () => {
   describe("getUser()", async () => {
     it("returns correct user by id", async () => {
