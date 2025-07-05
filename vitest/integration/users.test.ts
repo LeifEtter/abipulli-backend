@@ -77,5 +77,16 @@ describe("User Service Integration", () => {
       };
       expect(fetchedUser).toMatchObject(matchObject);
     });
+
+    it("should return undefined", async () => {
+      const fetchedUser = await getUserById(999);
+      expect(fetchedUser).toBe(undefined);
+    });
+  });
+
+  describe("deleteUser", async () => {
+    it("should properly delete a user from the db", async () => {
+      const insertedUser: InsertUser = await userFactory.insertSingleUser();
+    });
   });
 });
