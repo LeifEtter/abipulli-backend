@@ -68,27 +68,12 @@ describe("User Service Integration", () => {
 
   describe("getUser", async () => {
     it("returns correct user by id", async () => {
-      const db = getDb();
-      await insertRoles();
-
-      const insertedUser = await db
-        .insert(users)
-        .values({
-          email: "gandalf@gmail.com",
-          first_name: "Gandalf",
-          last_name: "the Gray",
-          verified: true,
-          password: "somepass123",
-          school: "OSG",
-          role_id: 2,
-        })
-        .returning();
-
-      const fetchedUser = await getUserById(insertedUser[0]!.id);
+      const insertedUser: InsertUser = await userFactory.insertSingleUser();
+      const fetchedUser = await getUserById(insertedUser.id!);
       const matchObject: Partial<User> = {
-        firstName: "Gandalf",
-        lastName: "the Gray",
-        email: "gandalf@gmail.com",
+        firstName: insertedUser.first_name,
+        lastName: insertedUser.last_name,
+        email: insertedUser.email,
       };
       expect(fetchedUser).toMatchObject(matchObject);
     });
