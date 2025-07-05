@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "npx tsup src/index.ts --dts --format esm --out-dir dist",
-    "test": "NODE_ENV=testing vitest",
+    "start-test-db": "docker compose -f docker-compose.test.yml up -d",
+    "shutdown-test-db": "docker compose -f docker-compose.test.yml down",
+    "test": "npm run start-test-db && NODE_ENV=test vitest && npm run shutdown-test-db",
     "dev": "NODE_ENV=development tsx --watch src/index.ts",
     "start": "npm run check && tsx src/index.ts",
     "delete-dist": "rm -rf dist",
