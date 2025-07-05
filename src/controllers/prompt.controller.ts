@@ -5,7 +5,7 @@ import { ApiError } from "src/error/ApiError";
 import {
   fetchPromptsForUser,
   insertPrompt,
-} from "src/services/prompts/getPrompts";
+} from "src/services/prompts/getPrompts.service";
 
 export const getAllPromptsByUserController = async (
   req: Request,

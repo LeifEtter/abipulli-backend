@@ -8,7 +8,7 @@ import {
   createDesignController,
   getDesignsForOrderController,
 } from "src/controllers/design.controller";
-import { placeImageOnDesignController } from "src/controllers/image.toDesignController";
+import { placeImageOnDesignController } from "src/controllers/image.toDesign.controller";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import {
   AddImageToDesignParamsSchema,

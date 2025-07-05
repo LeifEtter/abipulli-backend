@@ -13,6 +13,7 @@ import {
   ImageWithPositionAndScale,
   ImproveImageQueryParams,
   ImproveImageQueryResponse,
+  PaginatedResponse,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
@@ -25,7 +26,7 @@ import { insertImageIntoDb } from "src/services/images/insertImage.service";
 import { randomUUID } from "crypto";
 import imageSize from "image-size";
 import { ISizeCalculationResult } from "image-size/dist/types/interface";
-import { buildBasicPrompt } from "src/services/prompts/buildPrompt";
+import { buildBasicPrompt } from "src/services/prompts/buildPrompt.service";
 import {
   getImageById,
   getImagesByUserId,
@@ -85,12 +86,7 @@ export const improvePromptController = async (
   next: NextFunction
 ) => {
   try {
-    const { motto, description, styleTags }: ImproveImageQueryParams = req.body;
-    const prompt = buildBasicPrompt({
-      motto,
-      description,
-      styleTags,
-    });
+    const prompt = buildBasicPrompt(req.body as ImproveImageQueryParams);
     const improveResult = await requestImprovedPrompt(prompt);
     const improveResponse: ImproveImageQueryResponse = {
       success: true,
@@ -171,6 +167,14 @@ export const generateImageController = async (
   }
 };
 
+const singlePage = (
+  length: number
+): { pageSize: number; total: number; page: number } => ({
+  page: 1,
+  pageSize: length,
+  total: length,
+});
+
 export const getMyImagesController = async (
   req: Request,
   res: Response,
@@ -183,10 +187,8 @@ export const getMyImagesController = async (
     const response: ImagesResponse = {
       success: true,
       data: {
-        page: 1,
-        pageSize: images.length,
-        total: images.length,
         items: images,
+        ...singlePage(images.length),
       },
     };
     res.status(200).json(response);
