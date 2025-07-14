@@ -10,9 +10,34 @@ import { ApiError } from "src/error/ApiError";
 import { getDb } from "src/db/db";
 import {
   getDesignById,
+  getDesignsByUserId,
   getDesignsForOrder,
 } from "src/services/designs/getDesigns.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
+
+export const getAllUserDesignsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId: number = res.locals.user.user_id;
+
+    const designs = await getDesignsByUserId(userId);
+    const designResponse: DesignsResponse = {
+      success: true,
+      data: {
+        items: designs,
+        total: designs.length,
+        page: 1,
+        pageSize: designs.length,
+      },
+    };
+    res.status(200).json(designResponse);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const createDesignController = async (
   req: Request,
