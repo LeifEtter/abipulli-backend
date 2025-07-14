@@ -37,7 +37,7 @@ export const getUserById = async (
   return user;
 };
 
-export const getAllUsers = async (): Promise<User[]> => {
+export const getAllUsers = async (): Promise<Omit<User, "password">[]> => {
   const dbUsers: SelectUser[] = await getDb().query.users.findMany({
     with: { role: true },
   });
