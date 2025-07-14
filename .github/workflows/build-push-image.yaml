@@ -1,7 +1,7 @@
 name: Build and Push Image
 
 env:
-  IMAGE_NAME: ghcr.io/leifetter/abipulli-frontend
+  IMAGE_NAME: ghcr.io/leifetter/abipulli-backend
 
 on:
   push:
