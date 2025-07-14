@@ -8,6 +8,7 @@ import { textElementFactory } from "./factories/texts.factory";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import path from "path";
+import { initDb } from "src/db/db";
 
 const selectRandomDummyImages = (amount: number): Buffer[] =>
   fakerDE.helpers.arrayElements(dummyImages, amount);
@@ -29,9 +30,10 @@ const generateSingleUser = async ({
   textAmount,
 }: GenerateSingleUserInterface): Promise<void> => {
   try {
+    initDb(process.env.DATABASE_URL!);
     // Create User
-    const { email, password, userId } = await userFactory.insertSingleUser();
-    console.log(email, password, userId);
+    const { email, password, id } = await userFactory.insertSingleUser();
+    console.log(email, password, id);
     fs.appendFileSync(
       path.join(__dirname, "dummyLoginDetails.txt"),
       `"email":"${email}","password":"${password}";`
@@ -42,26 +44,26 @@ const generateSingleUser = async ({
     for (const randomImage of randomImages) {
       const uuid = fakerDE.string.uuid();
       const imageId: number = await imageFactory.createSingleImageInsert(
-        userId,
+        id!,
         randomImage,
         uuid
       );
       imageIds.push(imageId);
 
       await imageFactory.uploadSingleRandomDummyImage({
-        userId: userId,
+        userId: id!,
         image: randomImage,
         imageId: imageId,
         uuid,
       });
     }
     // Create 1 order
-    const orderId: number = await orderFactory.insertSingleOrder(userId);
+    const orderId: number = await orderFactory.insertSingleOrder(id!);
 
     for (let i = 0; i < (designAmount ?? 3); i++) {
       const designId: number = await designFactory.insertSingleDesign(
         orderId,
-        userId
+        id!
       );
       await imageFactory.placeImageOnDesign(
         fakerDE.helpers.arrayElement(imageIds),
