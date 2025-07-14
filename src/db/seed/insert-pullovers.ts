@@ -1,5 +1,5 @@
 import { eq, inArray } from "drizzle-orm";
-import db from "../db";
+import { getDb } from "../db";
 import { InsertImage, pullovers, images, InsertPullover } from "../index";
 import pulloverData, { PulloverDataWithFile } from "./pullover-images";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
@@ -20,7 +20,7 @@ const insertPullover = async (
       imageType: "image/png",
     });
     const imageId: number = (
-      await db
+      await getDb()
         .insert(images)
         .values({
           file_uuid: imageUUID,
@@ -32,7 +32,7 @@ const insertPullover = async (
         .returning({ id: images.id })
     )[0]!.id;
 
-    await db.insert(pullovers).values({
+    await getDb().insert(pullovers).values({
       name: pullover.name,
       description: pullover.description,
       base_price: pullover.base_price,
@@ -51,11 +51,11 @@ const insertAllPullovers = async () => {
 };
 
 // const insertPulloverImages = async (): Promise<number[]> => {
-//   await db
+//   await getDb()
 //     .delete(images)
 //     .where(inArray(images.id, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
 
-//   const imageIds = await db
+//   const imageIds = await getDb()
 //     .insert(images)
 //     .values(pulloverImages)
 //     .returning({ id: images.id });
@@ -64,10 +64,10 @@ const insertAllPullovers = async () => {
 
 // async function insertPullovers() {
 //   const imageIds: number[] = await insertPulloverImages();
-//   await db.delete(pullovers);
+//   await getDb().delete(pullovers);
 
 //   ];
-//   const insertedPullovers = await db
+//   const insertedPullovers = await getDb()
 //     .insert(pullovers)
 //     .values(newPullovers)
 //     .returning();

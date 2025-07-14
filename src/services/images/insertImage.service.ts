@@ -1,5 +1,5 @@
 import { images } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { ApiError } from "src/error/ApiError";
 
 interface InsertImageIntoDBParams {
@@ -17,7 +17,7 @@ export const insertImageIntoDb = async ({
   width,
   height,
 }: InsertImageIntoDBParams): Promise<number> => {
-  const result = await db
+  const result = await getDb()
     .insert(images)
     .values({
       user_id: userId,

@@ -2,7 +2,7 @@ import { Chat } from "abipulli-types";
 import { Socket } from "socket.io";
 import { InsertMessage } from "src/db";
 import { ApiError } from "src/error/ApiError";
-import { createMessage } from "src/services/chats/createMessage";
+import { createMessage } from "src/services/chats/createMessage.service";
 
 export const handleMessage = async (socket: Socket) => {
   socket.on("send_message", async (msg: string) => {

@@ -1,5 +1,5 @@
 import { images, imageToDesign, SelectImage } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { eq } from "drizzle-orm";
 import { Image, ImageWithPositionAndScale } from "abipulli-types";
 import { castImage, castImageWithPositionAndScale } from "./castImage.service";
@@ -8,9 +8,11 @@ import { ApiError } from "src/error/ApiError";
 export const getImageById = async (
   imageId: number
 ): Promise<Image | undefined> => {
-  const dbImage: SelectImage | undefined = await db.query.images.findFirst({
-    where: eq(images.id, imageId),
-  });
+  const dbImage: SelectImage | undefined = await getDb().query.images.findFirst(
+    {
+      where: eq(images.id, imageId),
+    }
+  );
   if (!dbImage) return undefined;
   return castImage(dbImage);
 };
@@ -18,7 +20,7 @@ export const getImageById = async (
 export const getImageWithPositionAndScale = async (
   imageToDesignId: number
 ): Promise<ImageWithPositionAndScale> => {
-  const dbImage = await db.query.imageToDesign.findFirst({
+  const dbImage = await getDb().query.imageToDesign.findFirst({
     where: eq(imageToDesign.id, imageToDesignId),
     with: { image: true },
   });
@@ -31,7 +33,7 @@ export const getImageWithPositionAndScale = async (
 export const getImagesByDesignId = async (
   designId: number
 ): Promise<ImageWithPositionAndScale[]> => {
-  const dbImages = await db.query.imageToDesign.findMany({
+  const dbImages = await getDb().query.imageToDesign.findMany({
     where: eq(imageToDesign.design_id, designId),
     with: { image: true },
   });
@@ -42,7 +44,7 @@ export const getImagesByDesignId = async (
 };
 
 export const getImagesByUserId = async (userId: number): Promise<Image[]> => {
-  const dbImages: SelectImage[] = await db
+  const dbImages: SelectImage[] = await getDb()
     .select()
     .from(images)
     .where(eq(images.user_id, userId));

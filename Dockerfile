@@ -15,6 +15,7 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /backend/dist ./dist
 
+#!Replace approach to migrate!!!
 COPY --from=builder /backend/drizzle.config.ts ./
 COPY --from=builder /backend/src/db/index.ts ./src/db/index.ts
 COPY --from=builder /backend/src/db/schemas ./src/db/schemas

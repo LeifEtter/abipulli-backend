@@ -8,7 +8,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "src/error/ApiError";
 import { createChat } from "src/services/chats/createChat.service";
-import { createMessage } from "src/services/chats/createMessage";
+import { createMessage } from "src/services/chats/createMessage.service";
 import { getChatWithMessagesFromDb } from "src/services/chats/getChat.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 

@@ -1,8 +1,10 @@
 import { logger } from "../../lib/logger";
+import { initDb } from "../db";
 import insertPullovers from "./insert-pullovers";
 import insertRoles from "./insert-roles";
 
 async function main() {
+  initDb(process.env.DATABASE_URL!);
   logger.info("### STARTING SEED PROCESS ###");
   const insertedRoles = await insertRoles();
   logger.info(`+++ Inserted Roles Following Roles +++`);

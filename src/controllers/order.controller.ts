@@ -1,4 +1,4 @@
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import { InsertOrder, orders, SelectOrder } from "src/db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
@@ -55,7 +55,7 @@ export const createOrderController = async (
       motto: orderData.motto,
       school_name: orderData.school,
     };
-    const createdOrder = await db
+    const createdOrder = await getDb()
       .insert(orders)
       .values(order)
       .returning({ order_id: orders.id });
@@ -82,7 +82,7 @@ export const updateOrderController = async (
     if (order.customerId != res.locals.user.user_id)
       return next(ApiError.notOwned({ resource: "Order" }));
 
-    await db
+    await getDb()
       .update(orders)
       .set({
         deadline,
@@ -106,7 +106,7 @@ export const deleteOrderController = async (
   try {
     const orderId: number = res.locals.id;
     const { user_id, role_power } = res.locals.user;
-    const deletedOrders = await db
+    const deletedOrders = await getDb()
       .delete(orders)
       .where(eq(orders.id, orderId))
       .returning();

@@ -3,7 +3,7 @@ import {
   manipulateImageController,
   placeImageOnDesignController,
   removeImageFromDesignController,
-} from "src/controllers/image.toDesignController";
+} from "src/controllers/image.toDesign.controller";
 import { Router } from "express";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";

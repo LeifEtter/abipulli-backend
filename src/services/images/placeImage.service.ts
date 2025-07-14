@@ -1,5 +1,5 @@
 import { imageToDesign } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 
 interface PlaceImageOnDesignProps {
   imageId: number;
@@ -18,7 +18,7 @@ export const placeImageOnDesign = async ({
   xScale,
   yScale,
 }: PlaceImageOnDesignProps): Promise<number | undefined> => {
-  const result = await db
+  const result = await getDb()
     .insert(imageToDesign)
     .values({
       image_id: imageId,

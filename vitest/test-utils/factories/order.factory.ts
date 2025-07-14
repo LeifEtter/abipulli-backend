@@ -1,13 +1,13 @@
 import { fakerDE } from "@faker-js/faker";
-import { InsertOrder, orders } from "src/db";
-import db from "src/db/db";
+import { orders } from "src/db";
+import { getDb } from "src/db/db";
 
 export interface OrderFactory {
   insertSingleOrder: (userId: number) => Promise<number>;
 }
 
 export const insertSingleOrder = async (userId: number): Promise<number> => {
-  const orderNumber = await db
+  const orderNumber = await getDb()
     .insert(orders)
     .values({
       user_id: userId,

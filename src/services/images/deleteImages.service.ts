@@ -1,7 +1,7 @@
 import { DeleteObjectsCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { eq } from "drizzle-orm";
 import { images, imageToDesign } from "src/db";
-import db from "src/db/db";
+import { getDb } from "src/db/db";
 import s3 from "src/lib/storage/s3Client";
 
 const getKeysOfImagesInFolder = async (path: string) => {
@@ -33,5 +33,7 @@ export const deleteAllImagesInFolder = async (
 };
 
 export const removeImageFromDesign = async (imageToDesignId: number) => {
-  await db.delete(imageToDesign).where(eq(imageToDesign.id, imageToDesignId));
+  await getDb()
+    .delete(imageToDesign)
+    .where(eq(imageToDesign.id, imageToDesignId));
 };

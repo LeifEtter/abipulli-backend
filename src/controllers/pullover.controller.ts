@@ -1,6 +1,6 @@
 import { Pullover, PulloversResponse } from "abipulli-types";
 import { Request, Response, NextFunction } from "express";
-import { fetchAllPullovers } from "src/services/pullovers/fetchPullovers";
+import { fetchAllPullovers } from "src/services/pullovers/fetchPullovers.service";
 
 export const getAllPulloversController = async (
   req: Request,

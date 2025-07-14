@@ -1,15 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { eq } from "drizzle-orm";
-import db from "../../src/db/db";
 import { InsertOrder, InsertUser, orders, users } from "../../src/db";
+import { getDb } from "src/db/db";
 
 export const testUtils = {
   insertUser: async (user: InsertUser): Promise<number> =>
-    (await db.insert(users).values(user).returning())[0]!.id,
+    (await getDb().insert(users).values(user).returning())[0]!.id,
   insertOrder: async (order: InsertOrder): Promise<number> =>
-    (await db.insert(orders).values(order).returning())[0]!.id,
+    (await getDb().insert(orders).values(order).returning())[0]!.id,
   deleteUser: async (id: number) =>
-    await db.delete(users).where(eq(users.id, id)),
+    await getDb().delete(users).where(eq(users.id, id)),
 };
 
 export const mockUtils = {
@@ -41,4 +41,4 @@ const exampleOrder = {
 };
 
 export const tDeleteUser = async (email: string) =>
-  await db.delete(users).where(eq(users.email, email));
+  await getDb().delete(users).where(eq(users.email, email));
