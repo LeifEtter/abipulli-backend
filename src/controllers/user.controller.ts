@@ -21,6 +21,8 @@ import {
   UserLoginResult,
   UserLoginResponse,
   UserCheckAuthResponse,
+  UserChangePasswordParams,
+  ApiResponse,
 } from "abipulli-types";
 import { logger } from "src/lib/logger";
 import { ApiError } from "src/error/ApiError";
@@ -28,6 +30,7 @@ import {
   getAllUsers,
   getUserById,
   getUserWithPasswordByEmail,
+  getUserWithPasswordById,
 } from "src/services/users/getUser.service";
 import { encryptPassword } from "src/lib/auth/encryptPassword";
 import { createUser } from "src/services/users/createUser.service";
@@ -39,6 +42,7 @@ import { updateUserPassword } from "src/services/users/updateUser.service";
 import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
 import { sendEmail } from "src/lib/webmail/sendEmail";
 import bcrypt from "bcrypt";
+import { SelectUser } from "src/db";
 
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -289,19 +293,22 @@ export const changeUserPasswordController = async (
     const body: UserChangePasswordParams = req.body;
     const user: SelectUser | undefined = await getUserWithPasswordById(userId);
     if (!user) return next(ApiError.notFound({ resource: "User" }));
-    if (
-      !(await passwordIsValid({
-        plainPassword: oldPassword,
-        encryptedPassword: user.password,
-      }))
-    ) {
+    const compareResult = await passwordIsValid({
+      plainPassword: body.oldPassword,
+      encryptedPassword: user.password,
+    });
+    if (!compareResult) {
       return next(
         new ApiError({ code: 401, info: errorMessages.faultyLoginCredentials })
       );
     }
-    const newPasswordHash = await encryptPassword(newPassword);
+    const newPasswordHash = await encryptPassword(body.password);
     await updateUserPassword(userId, newPasswordHash);
-    res.status(200).send({ message: "Password changed successfully" });
+    const response: ApiResponse<string> = {
+      success: true,
+      data: "Password changed",
+    };
+    res.status(200).send(response);
   } catch (error) {
     next(error);
   }
