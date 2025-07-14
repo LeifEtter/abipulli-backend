@@ -164,7 +164,12 @@ export const loginWithEmailController = async (
         id: storedUser.id,
       },
     };
-    res.cookie("jwt_token", token);
+    res.cookie("jwt_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production" ? true : false,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
     res.status(200).send(responseData);
   } catch (err) {
     next(err);
