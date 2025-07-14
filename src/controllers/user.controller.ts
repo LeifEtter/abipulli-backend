@@ -197,7 +197,9 @@ export const deleteUserController = async (
         new ApiError({ code: 400, info: errorMessages.cantDeleteSelf })
       );
     }
-    const userToDelete: User | undefined = await getUserById(userToDeleteId);
+    const userToDelete: Omit<User, "password"> | undefined = await getUserById(
+      userToDeleteId
+    );
     if (!userToDelete) return next(ApiError.notFound({ resource: "User" }));
     if (userToDelete.role!.rolePower >= 10) {
       return next(
@@ -236,7 +238,9 @@ export const getUserDataController = async (
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    const userData = await getUserById(userId);
+    const userData: Omit<User, "password"> | undefined = await getUserById(
+      userId
+    );
     if (!userData) return next(ApiError.notFound({ resource: "User" }));
     const userResponse: UserResponse = {
       success: true,
@@ -277,8 +281,8 @@ export const changeUserPasswordController = async (
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    const { oldPassword, newPassword } = req.body;
-    const user: User | undefined = await getUserById(userId);
+    const body: UserChangePasswordParams = req.body;
+    const user: SelectUser | undefined = await getUserWithPasswordById(userId);
     if (!user) return next(ApiError.notFound({ resource: "User" }));
     if (
       !(await passwordIsValid({
