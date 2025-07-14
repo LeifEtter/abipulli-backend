@@ -153,17 +153,30 @@ export const generateImageController = async (
   next: NextFunction
 ) => {
   try {
-    const { prompt, styleTags }: GenerateImageParams = req.body;
+    const {
+      prompt,
+      styleTags,
+      referenceImageId,
+      aspectRatio,
+    }: GenerateImageParams = req.body;
     const userId: number = res.locals.user.user_id;
     // const existingImage: Express.Multer.File | undefined = req.file;
-    const ideogramParams: IdeogramRequest = {
+    let buffer: Buffer | undefined;
+    if (referenceImageId) {
+      const image = await getImageById(referenceImageId);
+      if (image) {
+        buffer = await getFileFromImageUrl(image.url);
+      }
+    }
+    const queryImageProps: QueryImageFromIdeogramProps = {
       prompt,
-      aspect_ratio: "1x1",
-      num_images: MAX_IMAGE_GEN,
-      rendering_speed: "TURBO",
+      aspectRatio,
+      renderingSpeed: "TURBO",
+      referenceImage: buffer,
     };
+
     const ideogramImages: IdeogramImage[] = await queryImageFromIdeogram(
-      ideogramParams
+      queryImageProps
     );
     const storedImages: Image[] = [];
     for (const ideogramImage of ideogramImages) {
