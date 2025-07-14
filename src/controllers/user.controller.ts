@@ -44,49 +44,6 @@ import { sendEmail } from "src/lib/webmail/sendEmail";
 import bcrypt from "bcrypt";
 import { SelectUser } from "src/db";
 
-// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-// export const signInAnonymous = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const body: AnonymousLoginSchema = req.body;
-//     const token: string = createAnonymousToken(body.ip_address);
-//     res.status(200).send({ token });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-/** Sign in SSO User */
-// export const googleSSOLogin = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const body: GoogleSignOnSchema = req.body;
-//     const token = await client.verifyIdToken({
-//       idToken: body.google_id,
-//       audience: process.env.GOOGLE_CLIENT_ID,
-//     });
-//     const payload: TokenPayload | undefined = token.getPayload();
-//     if (!payload || payload.email == undefined) {
-//       return next(
-//         new ApiError({
-//           code: 401,
-//           info: errorMessages.faultyToken,
-//         })
-//       );
-//     }
-//     const userLoggingIn = getUserByEmail(payload.email!);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const registerUserController = async (
   req: Request,
   res: Response,
