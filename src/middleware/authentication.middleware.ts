@@ -50,7 +50,9 @@ const authenticate = async ({
         new ApiError({ code: 401, info: errorMessages.faultyToken })
       );
     }
-    const user: User | undefined = await getUserById(userData.user_id);
+    const user: Omit<User, "password"> | undefined = await getUserById(
+      userData.user_id
+    );
     if (user == undefined) {
       return throwError(
         new ApiError({ code: 401, info: errorMessages.tokenUserDoesNotExist })

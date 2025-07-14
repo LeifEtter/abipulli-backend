@@ -1,38 +1,50 @@
-import {
-  IdeogramImage,
-  IdeogramRequest,
-  IdeogramResponse,
-} from "abipulli-types";
+import { FormData, fetch } from "undici";
 import { IDEOGRAM_URL } from "src/configs/ideogram.config";
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
+import type { AspectRatio } from "abipulli-types";
+
+export interface QueryImageFromIdeogramProps {
+  prompt: string;
+  aspectRatio: AspectRatio;
+  referenceImage?: Buffer;
+  renderingSpeed: string;
+}
 
 export const queryImageFromIdeogram = async (
-  request: IdeogramRequest
-): Promise<IdeogramImage[]> => {
+  params: QueryImageFromIdeogramProps
+) => {
+  const formData = new FormData();
+
+  formData.append("prompt", params.prompt);
+  formData.append("aspect_ratio", params.aspectRatio);
+  formData.append("rendering_speed", "TURBO");
+  formData.append("magic_prompt", "AUTO");
+  if (params.referenceImage) {
+    const blob = new Blob([params.referenceImage], {
+      type: "image/png",
+    });
+    formData.append("style_reference_images", blob, "reference-image.png");
+  }
   const res = await fetch(IDEOGRAM_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "Api-Key": process.env.IDEOGRAM_KEY!,
     },
-    body: JSON.stringify({
-      prompt: request.prompt,
-      aspect_ratio: request.aspect_ratio,
-      rendering_speed: request.rendering_speed,
-      magic_prompt: request.magic_prompt,
-    }),
+    body: formData,
   });
+
   if (!res.ok) {
     logger.error(await res.text());
     throw ApiError.internal({
       errorInfo: {
         msg: "Ideogram Query failed",
-        code: 50,
+        code: 500,
       },
     });
   }
-  const body: IdeogramResponse = await res.json();
+
+  const body: any = await res.json();
   return body.data;
 };
 

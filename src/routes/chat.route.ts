@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
   createChatController,
   getChatController,
-} from "src/controllers/chat.controller";
+} from "src/controllers/WIP.chat.controller";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
 import {

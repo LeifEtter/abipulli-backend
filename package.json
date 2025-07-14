@@ -13,7 +13,7 @@
     "delete-dist": "rm -rf dist",
     "start-prod-old": "NODE_ENV=production npm run delete-dist && npm run build && node dist/index.js",
     "start-prod": "NODE_ENV=production node dist/index.js",
-    "gen-dummies-dev": "NODE_ENV=development npx tsx test-utils/generateDummies.ts",
+    "gen-dummies-dev": "NODE_ENV=development npx tsx vitest/test-utils/generateDummies.ts",
     "check": "tsc --noEmit",
     "seed-dev": "NODE_ENV=development tsx src/db/seed/seed.ts",
     "seed-prod": "NODE_ENV=production tsx src/db/seed/seed.ts"
@@ -36,7 +36,7 @@
     "@types/supertest": "^6.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
-    "abipulli-types": "1.0.40",
+    "abipulli-types": "1.0.42",
     "nodemon": "^3.1.9",
     "supertest": "^7.1.0",
     "testcontainers": "^11.0.3",
@@ -69,6 +69,7 @@
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "undici": "^7.11.0",
     "zod": "^3.25.17"
   }
 }

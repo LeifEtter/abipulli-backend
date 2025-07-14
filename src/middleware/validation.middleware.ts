@@ -14,6 +14,7 @@ export const extractIssues = (issues: ZodIssue[]): string[] =>
   });
 
 //TODO: Correct error responses to comply with ErrorResponse Type
+//! SEE ABOVE!!!
 export const validateBody =
   (schema: z.ZodType<any>) =>
   (req: Request, res: Response, next: NextFunction) => {
@@ -21,11 +22,12 @@ export const validateBody =
       const result = schema.safeParse(req.body);
       if (!result.success) {
         const issues: string[] = extractIssues(result.error.issues);
-        res.status(400).json({
-          err_code: 16,
-          err_msg: "Validation Error",
-          details: issues,
-        });
+        return next(new ApiError({ code: 400, info: "Something went wrong" }));
+        // res.status(400).json({
+        //   err_code: 16,
+        //   err_msg: "Validation Error",
+        //   details: issues,
+        // });
       } else {
         const sanitizedData = sanitizeElement(result.data);
         req.body = sanitizedData;
@@ -34,17 +36,19 @@ export const validateBody =
     } catch (err) {
       if (err instanceof ZodError) {
         logger.error(err);
-        res.status(400).json({
-          err_code: 16,
-          err_msg: "Error during Validation",
-          details: extractIssues(err.issues),
-        });
+        return next(new ApiError({ code: 400, info: "Something went wrong" }));
+        // res.status(400).json({
+        //   err_code: 16,
+        //   err_msg: "Error during Validation",
+        //   details: extractIssues(err.issues),
+        // });
       } else {
-        res.status(500).json({
-          err_code: 500,
-          err_msg: "Internal Server Error",
-          details: "An unexpected error occurred during validation",
-        });
+        return next(new ApiError({ code: 500, info: "Something went wrong" }));
+        // res.status(500).json({
+        //   err_code: 500,
+        //   err_msg: "Internal Server Error",
+        //   details: "An unexpected error occurred during validation",
+        // });
       }
     }
   };

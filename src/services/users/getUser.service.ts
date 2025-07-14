@@ -13,7 +13,17 @@ export const getUserWithPasswordByEmail = async (
     with: { role: true },
   });
 
-export const getUserById = async (id: number): Promise<User | undefined> => {
+export const getUserWithPasswordById = async (
+  id: number
+): Promise<SelectUser | undefined> =>
+  await getDb().query.users.findFirst({
+    where: eq(users.id, id),
+    with: { role: true },
+  });
+
+export const getUserById = async (
+  id: number
+): Promise<Omit<User, "password"> | undefined> => {
   const dbUser = await getDb().query.users.findFirst({
     where: eq(users.id, id),
     columns: { password: false },
@@ -27,7 +37,7 @@ export const getUserById = async (id: number): Promise<User | undefined> => {
   return user;
 };
 
-export const getAllUsers = async (): Promise<User[]> => {
+export const getAllUsers = async (): Promise<Omit<User, "password">[]> => {
   const dbUsers: SelectUser[] = await getDb().query.users.findMany({
     with: { role: true },
   });

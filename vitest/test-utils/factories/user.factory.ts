@@ -23,7 +23,7 @@ export const insertSingleUser = async () => {
       role_id: 2,
     })
     .returning();
-  return insertedUsers[0]!;
+  return { ...insertedUsers[0]!, password };
 };
 
 export const userFactory: UserFactory = {

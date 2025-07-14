@@ -21,6 +21,8 @@ import {
   UserLoginResult,
   UserLoginResponse,
   UserCheckAuthResponse,
+  UserChangePasswordParams,
+  ApiResponse,
 } from "abipulli-types";
 import { logger } from "src/lib/logger";
 import { ApiError } from "src/error/ApiError";
@@ -28,6 +30,7 @@ import {
   getAllUsers,
   getUserById,
   getUserWithPasswordByEmail,
+  getUserWithPasswordById,
 } from "src/services/users/getUser.service";
 import { encryptPassword } from "src/lib/auth/encryptPassword";
 import { createUser } from "src/services/users/createUser.service";
@@ -39,49 +42,7 @@ import { updateUserPassword } from "src/services/users/updateUser.service";
 import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
 import { sendEmail } from "src/lib/webmail/sendEmail";
 import bcrypt from "bcrypt";
-
-// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-// export const signInAnonymous = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const body: AnonymousLoginSchema = req.body;
-//     const token: string = createAnonymousToken(body.ip_address);
-//     res.status(200).send({ token });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-/** Sign in SSO User */
-// export const googleSSOLogin = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const body: GoogleSignOnSchema = req.body;
-//     const token = await client.verifyIdToken({
-//       idToken: body.google_id,
-//       audience: process.env.GOOGLE_CLIENT_ID,
-//     });
-//     const payload: TokenPayload | undefined = token.getPayload();
-//     if (!payload || payload.email == undefined) {
-//       return next(
-//         new ApiError({
-//           code: 401,
-//           info: errorMessages.faultyToken,
-//         })
-//       );
-//     }
-//     const userLoggingIn = getUserByEmail(payload.email!);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+import { SelectUser } from "src/db";
 
 export const registerUserController = async (
   req: Request,
@@ -151,7 +112,7 @@ export const loginWithEmailController = async (
       logger.error("User supplied invalid credentials");
       return next(
         new ApiError({
-          code: 400,
+          code: 401,
           info: errorMessages.faultyLoginCredentials,
         })
       );
@@ -164,7 +125,12 @@ export const loginWithEmailController = async (
         id: storedUser.id,
       },
     };
-    res.cookie("jwt_token", token);
+    res.cookie("jwt_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production" ? true : false,
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
     res.status(200).send(responseData);
   } catch (err) {
     next(err);
@@ -197,7 +163,9 @@ export const deleteUserController = async (
         new ApiError({ code: 400, info: errorMessages.cantDeleteSelf })
       );
     }
-    const userToDelete: User | undefined = await getUserById(userToDeleteId);
+    const userToDelete: Omit<User, "password"> | undefined = await getUserById(
+      userToDeleteId
+    );
     if (!userToDelete) return next(ApiError.notFound({ resource: "User" }));
     if (userToDelete.role!.rolePower >= 10) {
       return next(
@@ -236,7 +204,9 @@ export const getUserDataController = async (
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    const userData = await getUserById(userId);
+    const userData: Omit<User, "password"> | undefined = await getUserById(
+      userId
+    );
     if (!userData) return next(ApiError.notFound({ resource: "User" }));
     const userResponse: UserResponse = {
       success: true,
@@ -277,22 +247,25 @@ export const changeUserPasswordController = async (
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    const { oldPassword, newPassword } = req.body;
-    const user: User | undefined = await getUserById(userId);
+    const body: UserChangePasswordParams = req.body;
+    const user: SelectUser | undefined = await getUserWithPasswordById(userId);
     if (!user) return next(ApiError.notFound({ resource: "User" }));
-    if (
-      !(await passwordIsValid({
-        plainPassword: oldPassword,
-        encryptedPassword: user.password,
-      }))
-    ) {
+    const compareResult = await passwordIsValid({
+      plainPassword: body.oldPassword,
+      encryptedPassword: user.password,
+    });
+    if (!compareResult) {
       return next(
-        new ApiError({ code: 400, info: errorMessages.faultyLoginCredentials })
+        new ApiError({ code: 401, info: errorMessages.faultyLoginCredentials })
       );
     }
-    const newPasswordHash = await encryptPassword(newPassword);
+    const newPasswordHash = await encryptPassword(body.password);
     await updateUserPassword(userId, newPasswordHash);
-    res.status(200).send({ message: "Password changed successfully" });
+    const response: ApiResponse<string> = {
+      success: true,
+      data: "Password changed",
+    };
+    res.status(200).send(response);
   } catch (error) {
     next(error);
   }
