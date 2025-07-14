@@ -3,11 +3,14 @@ import { getDb } from "src/db/db";
 import { images } from "src/db/index";
 import { eq } from "drizzle-orm";
 import {
+  ApiResponse,
+  CommentOnQueryParams,
   errorMessages,
   GenerateImageParams,
   IdeogramImage,
   IdeogramRequest,
   Image,
+  ImageResponse,
   ImagesResponse,
   ImageUploadResultResponse,
   ImageWithPositionAndScale,
@@ -21,6 +24,7 @@ import { requestImprovedPrompt } from "src/services/images/improvePrompt.service
 import {
   getFileFromImageUrl,
   queryImageFromIdeogram,
+  QueryImageFromIdeogramProps,
 } from "src/services/images/generateImage.service";
 import { insertImageIntoDb } from "src/services/images/insertImage.service";
 import { randomUUID } from "crypto";
@@ -93,6 +97,49 @@ export const improvePromptController = async (
       data: { description: improveResult.prompt },
     };
     res.status(200).send(improveResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const commentOnPrompt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body: CommentOnQueryParams = req.body;
+    const prompt: string = body.description;
+    const comment: string = body.comment;
+    const oldPrompt = `You are improving a visual design prompt for Ideogram.ai. The design is for graduation pullovers (Abitur), to be printed on fabric. 
+      Design constraints:
+      - No background colors
+      - Limited color palette
+      - Bold, graphic, non-photorealistic style
+      - Focus on the theme and wordplay around “ABI”
+      - Suitable for printing on textiles
+
+      You will receive:
+      1. The original image prompt describing a scene.
+      2. A user comment suggesting changes or improvements.
+
+      Your task is to rewrite and improve the prompt to reflect the user's comment. Keep it visually descriptive and concise. You may change composition, characters, objects, or style to better fit the intent. 
+
+      Do not include any formatting (no bullet points, asterisks, or newlines).
+      Do not label any sections like "Original Prompt" or "Comment".
+      Only return the revised prompt as a single paragraph of plain text, suitable to be used directly in an image generator.
+
+      Original prompt:
+      ${prompt}
+
+      User comment:
+      ${comment}`;
+    const improvedPrompt = await requestImprovedPrompt(oldPrompt);
+    const response: ApiResponse<string> = {
+      success: true,
+      data: improvedPrompt.prompt,
+    };
+    res.status(200).send(response);
   } catch (error) {
     next(error);
   }
