@@ -153,12 +153,8 @@ export const generateImageController = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      prompt,
-      styleTags,
-      referenceImageId,
-      aspectRatio,
-    }: GenerateImageParams = req.body;
+    const { prompt, referenceImageId, aspectRatio }: GenerateImageParams =
+      req.body;
     const userId: number = res.locals.user.user_id;
     // const existingImage: Express.Multer.File | undefined = req.file;
     let buffer: Buffer | undefined;

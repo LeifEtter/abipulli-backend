@@ -6,6 +6,7 @@ import {
 } from "src/middleware/validation.middleware";
 import {
   createDesignController,
+  getAllUserDesignsController,
   getDesignsForOrderController,
 } from "src/controllers/design.controller";
 import { placeImageOnDesignController } from "src/controllers/image.toDesign.controller";
@@ -48,5 +49,9 @@ router
     validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController
   );
+
+router
+  .route("/me")
+  .get(authenticateHttp, minPower(1), getAllUserDesignsController);
 
 export default router;
