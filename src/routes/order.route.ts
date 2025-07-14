@@ -12,7 +12,7 @@ import {
   getAllOrdersController,
   updateOrderController,
 } from "src/controllers/order.controller";
-import { createChatForOrderController } from "src/controllers/chat.controller";
+import { createChatForOrderController } from "src/controllers/WIP.chat.controller";
 import {
   ChatCreateParamsSchema,
   OrderCreateParamsSchema,
