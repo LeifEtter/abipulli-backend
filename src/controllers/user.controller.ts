@@ -151,7 +151,7 @@ export const loginWithEmailController = async (
       logger.error("User supplied invalid credentials");
       return next(
         new ApiError({
-          code: 400,
+          code: 401,
           info: errorMessages.faultyLoginCredentials,
         })
       );
@@ -291,7 +291,7 @@ export const changeUserPasswordController = async (
       }))
     ) {
       return next(
-        new ApiError({ code: 400, info: errorMessages.faultyLoginCredentials })
+        new ApiError({ code: 401, info: errorMessages.faultyLoginCredentials })
       );
     }
     const newPasswordHash = await encryptPassword(newPassword);
