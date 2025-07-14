@@ -15,7 +15,11 @@ import {
 } from "../middleware/validation.middleware";
 import { authenticateHttp } from "src/middleware/authentication.middleware";
 import { minPower } from "src/middleware/authorization.middleware";
-import { UserCreateParamsSchema, UserLoginParamsSchema } from "abipulli-types";
+import {
+  UserChangePasswordParamsSchema,
+  UserCreateParamsSchema,
+  UserLoginParamsSchema,
+} from "abipulli-types";
 const router: Router = Router();
 
 /**
@@ -100,6 +104,11 @@ router.route("/").get(authenticateHttp, minPower(10), getAllUsersController);
 
 router
   .route("/me/password")
-  .patch(authenticateHttp, minPower(1), changeUserPasswordController);
+  .patch(
+    authenticateHttp,
+    minPower(1),
+    validateBody(UserChangePasswordParamsSchema),
+    changeUserPasswordController
+  );
 
 export default router;
