@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
+  commentOnPrompt,
   generateImageController,
   getMyImagesController,
+  getSingleImageController,
   improvePromptController,
   saveImageController,
 } from "../controllers/image.controller";
@@ -13,6 +15,7 @@ import {
 } from "src/middleware/validation.middleware";
 import { uploadSingleImage } from "src/middleware/file.middleware";
 import {
+  CommentOnQueryParamsSchema,
   GenerateImageParamsSchema,
   ImproveImageParamsSchema,
   ImproveImageQueryParamsSchema,
@@ -51,6 +54,24 @@ router
   );
 
 router.route("/me").get(authenticateHttp, minPower(1), getMyImagesController);
+
+router
+  .route("/:imageId")
+  .get(
+    authenticateHttp,
+    validateParams({ requiredParams: ["imageId"] }),
+    minPower(1),
+    getSingleImageController
+  );
+
+router
+  .route("/comment")
+  .post(
+    authenticateHttp,
+    minPower(1),
+    validateBody(CommentOnQueryParamsSchema),
+    commentOnPrompt
+  );
 
 // router
 //   .route("/improve")
