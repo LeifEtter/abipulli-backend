@@ -265,3 +265,21 @@ export const getFreeMotivesController = async (
   try {
   } catch (error) {}
 };
+
+export const getSingleImageController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const imageId = res.locals.params.imageId;
+    const image: Image | undefined = await getImageById(imageId!);
+    if (!image) return next(ApiError.notFound({ resource: "Image" }));
+    if (image.userId != res.locals.user.user_id)
+      return next(ApiError.notOwned({ resource: "Image" }));
+    const imageResponse: ImageResponse = { success: true, data: image };
+    res.status(200).send(imageResponse);
+  } catch (error) {
+    next(error);
+  }
+};
