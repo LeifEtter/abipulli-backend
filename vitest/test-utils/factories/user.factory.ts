@@ -1,4 +1,5 @@
 import { fakerDE } from "@faker-js/faker";
+import { Gender } from "abipulli-types";
 import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "src/constants";
 import { InsertUser, users } from "src/db";
@@ -16,10 +17,17 @@ export const insertSingleUser = async () => {
     .values({
       first_name: fakerDE.person.firstName(),
       last_name: fakerDE.person.lastName(),
-      email,
+      birthdate: fakerDE.date.birthdate(),
+      gender: fakerDE.helpers.arrayElement([
+        "divers",
+        "männlich",
+        "weiblich",
+      ]) as Gender,
+      email: fakerDE.internet.email(),
+      mobile_number: fakerDE.phone.number({ style: "international" }),
+      mobile_country_code: fakerDE.helpers.arrayElement(["+49", "+41", "+43"]),
       password: encryptedPassword,
       verified: true,
-      school: fakerDE.location.street() + "Gymnasium",
       role_id: 2,
     })
     .returning();

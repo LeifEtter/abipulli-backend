@@ -12,7 +12,10 @@ export const insertSingleOrder = async (userId: number): Promise<number> => {
     .values({
       user_id: userId,
       deadline: fakerDE.date.anytime(),
-      destination_country: fakerDE.location.country(),
+      school_city: fakerDE.location.city(),
+      school_country_code: fakerDE.helpers.arrayElement(["DE", "CH", "AT"]),
+      graduation_year: fakerDE.number.int({ min: 2025, max: 2027 }),
+      current_grade: fakerDE.number.int({ min: 10, max: 13 }),
       student_amount: fakerDE.number.int({ min: 50, max: 150 }),
       motto: fakerDE.word.words(2),
       school_name: fakerDE.location.street() + "Gymnasium",
