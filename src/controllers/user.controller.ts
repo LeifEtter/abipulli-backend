@@ -270,3 +270,16 @@ export const changeUserPasswordController = async (
     next(error);
   }
 };
+
+export const logoutController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.cookie("jwt_token", null);
+    res.status(200).send("Logout Successful");
+  } catch (error) {
+    next(error);
+  }
+};
