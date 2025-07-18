@@ -18,7 +18,11 @@ export const orders = pgTable(
   "orders",
   {
     id: serial().notNull().primaryKey(),
-    destination_country: varchar(),
+    school_country_code: varchar().notNull(),
+    school_city: varchar().notNull(),
+    school_name: varchar().notNull(),
+    graduation_year: integer().notNull(),
+    current_grade: integer().notNull(),
     student_amount: integer(),
     user_id: integer().notNull(),
     created_at: timestamp().defaultNow().notNull(),
@@ -26,7 +30,6 @@ export const orders = pgTable(
       .notNull()
       .$onUpdate(() => new Date()),
     deadline: timestamp(),
-    school_name: varchar(),
     motto: varchar(),
     status: varchar().notNull(),
     delivery_address: varchar(),
