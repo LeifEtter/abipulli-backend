@@ -41,8 +41,8 @@ import { passwordIsValid } from "src/lib/auth/comparePasswords";
 import { updateUserPassword } from "src/services/users/updateUser.service";
 import { generateVerificationCode } from "src/lib/math/generateVerificationCode";
 import { sendEmail } from "src/lib/webmail/sendEmail";
-import bcrypt from "bcrypt";
 import { SelectUser } from "src/db";
+import { castUserToRegisterToDb } from "src/services/users/castUser.service";
 
 export const registerUserController = async (
   req: Request,
@@ -69,13 +69,12 @@ export const registerUserController = async (
       );
     }
     const password = await encryptPassword(body.password);
+    const castedUser = castUserToRegisterToDb(body);
     await createUser({
-      first_name: body.firstName,
-      last_name: body.lastName,
-      email: body.email,
-      password: password,
-      role_id: (await getRole(1))?.id,
-      verified: process.env.NODE_ENV === "production" ? false : true,
+      ...castedUser,
+      verified: true,
+      password,
+      role_id: 2,
     });
     const registerResponse: MessageResponse = {
       success: true,
@@ -266,6 +265,19 @@ export const changeUserPasswordController = async (
       data: "Password changed",
     };
     res.status(200).send(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logoutController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    res.cookie("jwt_token", null);
+    res.status(200).send("Logout Successful");
   } catch (error) {
     next(error);
   }

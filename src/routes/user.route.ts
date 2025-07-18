@@ -7,6 +7,7 @@ import {
   getAllUsersController,
   getUserDataController,
   loginWithEmailController,
+  logoutController,
   registerUserController,
 } from "../controllers/user.controller";
 import {
@@ -31,6 +32,8 @@ router
 router
   .route("/login")
   .post(validateBody(UserLoginParamsSchema), loginWithEmailController);
+
+router.route("/logout").get(authenticateHttp, minPower(1), logoutController);
 
 // router
 //   .route("/anonymous")

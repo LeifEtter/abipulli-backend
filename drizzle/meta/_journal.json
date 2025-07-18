@@ -8,6 +8,13 @@
       "when": 1751291683234,
       "tag": "0000_melted_giant_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752798216686,
+      "tag": "0001_unusual_tusk",
+      "breakpoints": true
     }
   ]
 }

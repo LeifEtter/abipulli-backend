@@ -14,6 +14,12 @@ import {
   getOrdersByUserID,
 } from "src/services/orders/getOrderById.service";
 import { ApiError } from "src/error/ApiError";
+import {
+  castCreateOrder,
+  castOrder,
+  castOrderToDb,
+} from "src/services/orders/castOrder.service";
+import { insertSingleOrder } from "vitest/test-utils/factories/order.factory";
 
 export const getAllOrdersController = async (
   req: Request,
@@ -46,18 +52,13 @@ export const createOrderController = async (
 ) => {
   try {
     let orderData: OrderCreateParams = req.body;
-    const order: InsertOrder = {
-      status: "pending",
-      deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
-      user_id: res.locals.user.user_id,
-      destination_country: orderData.schoolCountry,
-      student_amount: orderData.studentAmount,
-      motto: orderData.motto,
-      school_name: orderData.school,
-    };
+    const castedOrder = castCreateOrder({
+      orderData,
+      userId: res.locals.user.user_id,
+    });
     const createdOrder = await getDb()
       .insert(orders)
-      .values(order)
+      .values(castedOrder)
       .returning({ order_id: orders.id });
     res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
@@ -72,8 +73,8 @@ export const updateOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { school, motto, schoolCountry, studentAmount }: OrderUpdateParams =
-      req.body;
+    // const { school, motto, schoolCountry, studentAmount }: OrderUpdateParams =
+    //   req.body;
     const deadline = req.body.deadline
       ? new Date(req.body.deadline)
       : undefined;
@@ -82,16 +83,16 @@ export const updateOrderController = async (
     if (order.customerId != res.locals.user.user_id)
       return next(ApiError.notOwned({ resource: "Order" }));
 
-    await getDb()
-      .update(orders)
-      .set({
-        deadline,
-        destination_country: schoolCountry,
-        student_amount: studentAmount,
-        school_name: school,
-        motto,
-      })
-      .where(eq(orders.id, res.locals.id));
+    // await getDb()
+    //   .update(orders)
+    //   .set({
+    //     deadline,
+    //     destination_country: schoolCountry,
+    //     student_amount: studentAmount,
+    //     school_name: school,
+    //     motto,
+    //   })
+    //   .where(eq(orders.id, res.locals.id));
     res.status(200).send("Success");
   } catch (error) {
     next(error);
