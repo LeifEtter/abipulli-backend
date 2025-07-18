@@ -14,6 +14,12 @@ import {
   getOrdersByUserID,
 } from "src/services/orders/getOrderById.service";
 import { ApiError } from "src/error/ApiError";
+import {
+  castCreateOrder,
+  castOrder,
+  castOrderToDb,
+} from "src/services/orders/castOrder.service";
+import { insertSingleOrder } from "vitest/test-utils/factories/order.factory";
 
 export const getAllOrdersController = async (
   req: Request,
@@ -46,18 +52,13 @@ export const createOrderController = async (
 ) => {
   try {
     let orderData: OrderCreateParams = req.body;
-    const order: InsertOrder = {
-      status: "pending",
-      deadline: orderData.deadline ? new Date(orderData.deadline) : undefined,
-      user_id: res.locals.user.user_id,
-      destination_country: orderData.schoolCountry,
-      student_amount: orderData.studentAmount,
-      motto: orderData.motto,
-      school_name: orderData.school,
-    };
+    const castedOrder = castCreateOrder({
+      orderData,
+      userId: res.locals.user.user_id,
+    });
     const createdOrder = await getDb()
       .insert(orders)
-      .values(order)
+      .values(castedOrder)
       .returning({ order_id: orders.id });
     res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
