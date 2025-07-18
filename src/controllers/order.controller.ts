@@ -72,8 +72,8 @@ export const updateOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { school, motto, schoolCountry, studentAmount }: OrderUpdateParams =
-      req.body;
+    // const { school, motto, schoolCountry, studentAmount }: OrderUpdateParams =
+    //   req.body;
     const deadline = req.body.deadline
       ? new Date(req.body.deadline)
       : undefined;
@@ -82,16 +82,16 @@ export const updateOrderController = async (
     if (order.customerId != res.locals.user.user_id)
       return next(ApiError.notOwned({ resource: "Order" }));
 
-    await getDb()
-      .update(orders)
-      .set({
-        deadline,
-        destination_country: schoolCountry,
-        student_amount: studentAmount,
-        school_name: school,
-        motto,
-      })
-      .where(eq(orders.id, res.locals.id));
+    // await getDb()
+    //   .update(orders)
+    //   .set({
+    //     deadline,
+    //     destination_country: schoolCountry,
+    //     student_amount: studentAmount,
+    //     school_name: school,
+    //     motto,
+    //   })
+    //   .where(eq(orders.id, res.locals.id));
     res.status(200).send("Success");
   } catch (error) {
     next(error);
