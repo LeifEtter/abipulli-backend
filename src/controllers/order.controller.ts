@@ -1,5 +1,11 @@
 import { getDb } from "src/db/db";
-import { InsertOrder, orders, SelectOrder } from "src/db/index";
+import {
+  designs,
+  InsertOrder,
+  orders,
+  pullovers,
+  SelectOrder,
+} from "src/db/index";
 import { NextFunction, Response, Request } from "express";
 import { eq } from "drizzle-orm";
 import {
@@ -60,6 +66,14 @@ export const createOrderController = async (
       .insert(orders)
       .values(castedOrder)
       .returning({ order_id: orders.id });
+    const pullover = await getDb().query.pullovers.findFirst();
+    await getDb()
+      .insert(designs)
+      .values({
+        preferred_pullover_id: pullover!.id,
+        order_id: createdOrder[0]?.order_id!,
+        customer_id: res.locals.user.user_id,
+      });
     res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
     next(error);
