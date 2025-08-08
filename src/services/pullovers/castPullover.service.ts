@@ -15,8 +15,10 @@ export const castPullover = (pullover: SelectPulloverWithImage): Pullover => {
     description: pullover.description,
     color: pullover.color,
     basePrice: pullover.base_price,
-    imageId: pullover.image_id,
-    image: castImage(pullover.image),
+    backImageId: pullover.back_image_id,
+    frontImageId: pullover.front_image_id,
+    backImage: castImage(pullover.backImage),
+    frontImage: castImage(pullover.frontImage),
   };
 };
 
@@ -26,6 +28,7 @@ export const castPulloverToDb = (pullover: Pullover): InsertPullover => {
     description: pullover.description,
     color: pullover.color,
     base_price: pullover.basePrice,
-    image_id: pullover.imageId,
+    back_image_id: pullover.backImageId,
+    front_image_id: pullover.frontImageId,
   };
 };
