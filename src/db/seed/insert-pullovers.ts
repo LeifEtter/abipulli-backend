@@ -1,7 +1,11 @@
 import { eq, inArray } from "drizzle-orm";
 import { getDb } from "../db";
 import { InsertImage, pullovers, images, InsertPullover } from "../index";
-import pulloverData, { PulloverDataWithFile } from "./pullover-images";
+import {
+  PulloverDataWithFile,
+  normalPullovers,
+  heavyPullovers,
+} from "./pullover-images";
 import { uploadImageToHetzner } from "src/services/images/uploadImage.service";
 import { randomUUID } from "crypto";
 import imageSize from "image-size";
@@ -9,25 +13,46 @@ import imageSize from "image-size";
 const insertPullover = async (
   pullover: PulloverDataWithFile
 ): Promise<void> => {
-  const imageUUID = randomUUID();
-  const dimensions = imageSize(pullover.file);
+  const frontImageUUID = randomUUID();
+  const frontDimensions = imageSize(pullover.fileFront);
+  const backImageUUID = randomUUID();
+  const backDimensions = imageSize(pullover.fileBack);
 
   try {
     await uploadImageToHetzner({
-      file: pullover.file,
+      file: pullover.fileFront,
       path: `${process.env.NODE_ENV}/general`,
-      filename: `${imageUUID}`,
+      filename: `${frontImageUUID}`,
       imageType: "image/png",
     });
-    const imageId: number = (
+    const frontImageId: number = (
       await getDb()
         .insert(images)
         .values({
-          file_uuid: imageUUID,
+          file_uuid: frontImageUUID,
           generated: false,
           file_env: process.env.NODE_ENV,
-          image_height: dimensions.height,
-          image_width: dimensions.width,
+          image_height: frontDimensions.height,
+          image_width: frontDimensions.width,
+        })
+        .returning({ id: images.id })
+    )[0]!.id;
+
+    await uploadImageToHetzner({
+      file: pullover.fileBack,
+      path: `${process.env.NODE_ENV}/general`,
+      filename: `${backImageUUID}`,
+      imageType: "image/png",
+    });
+    const backImageId: number = (
+      await getDb()
+        .insert(images)
+        .values({
+          file_uuid: backImageUUID,
+          generated: false,
+          file_env: process.env.NODE_ENV,
+          image_height: backDimensions.height,
+          image_width: backDimensions.width,
         })
         .returning({ id: images.id })
     )[0]!.id;
@@ -37,7 +62,8 @@ const insertPullover = async (
       description: pullover.description,
       base_price: pullover.base_price,
       color: pullover.color,
-      image_id: imageId,
+      front_image_id: frontImageId,
+      back_image_id: backImageId,
     });
   } catch (error) {
     console.error(error);
@@ -45,7 +71,10 @@ const insertPullover = async (
 };
 
 const insertAllPullovers = async () => {
-  for (let pullover of pulloverData) {
+  for (let pullover of normalPullovers) {
+    await insertPullover(pullover);
+  }
+  for (let pullover of heavyPullovers) {
     await insertPullover(pullover);
   }
 };
