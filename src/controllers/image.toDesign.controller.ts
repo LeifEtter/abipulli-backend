@@ -152,7 +152,6 @@ export const getAllImagesForDesignController = async (
     };
     res.status(200).send(imageResponse);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
