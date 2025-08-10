@@ -67,13 +67,11 @@ export const createOrderController = async (
       .values(castedOrder)
       .returning({ order_id: orders.id });
     const pullover = await getDb().query.pullovers.findFirst();
-    await getDb()
-      .insert(designs)
-      .values({
-        preferred_pullover_id: pullover!.id,
-        order_id: createdOrder[0]?.order_id!,
-        customer_id: res.locals.user.user_id,
-      });
+    await getDb().insert(designs).values({
+      preferred_pullover_id: pullover!.id,
+      order_id: createdOrder[0]!.order_id!,
+      customer_id: res.locals.user.user_id,
+    });
     res.status(201).send({ order_id: createdOrder[0]?.order_id });
   } catch (error) {
     next(error);
