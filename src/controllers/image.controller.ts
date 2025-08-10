@@ -253,14 +253,14 @@ export const getMyImagesController = async (
   }
 };
 
-export const getFreeMotivesController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-  } catch (error) {}
-};
+// export const getFreeMotivesController = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//   } catch (error) {}
+// };
 
 export const getSingleImageController = async (
   req: Request,
