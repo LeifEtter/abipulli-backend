@@ -45,6 +45,7 @@ export const placeImageOnDesignController = async (
       yPosition: body.positionY,
       xScale: body.scaleX,
       yScale: body.scaleY,
+      isBackside: body.isBackside,
     });
     if (!result)
       throw next(

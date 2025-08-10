@@ -30,6 +30,7 @@ export const castDesignWithRelations = (
       : undefined,
     textElements: design.texts.map((text) => castTextElement(text)),
     images: design.imageToDesign.map((e) => ({
+      isBackside: e.isBackside,
       imageToDesignId: e.id,
       ...castImage(e.image),
     })),

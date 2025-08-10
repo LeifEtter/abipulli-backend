@@ -4,6 +4,7 @@ import {
   pgTable,
   real,
   serial,
+  boolean,
 } from "drizzle-orm/pg-core";
 import { images } from "./image.entity";
 import { designs } from "./design.entity";
@@ -19,6 +20,7 @@ export const imageToDesign = pgTable(
     y_position: integer().notNull().default(0),
     x_scale: real().notNull().default(1),
     y_scale: real().notNull().default(1),
+    isBackside: boolean().notNull().default(false),
   },
   (table) => [
     foreignKey({

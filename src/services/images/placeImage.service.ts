@@ -8,6 +8,7 @@ interface PlaceImageOnDesignProps {
   yPosition: number;
   xScale: number;
   yScale: number;
+  isBackside: boolean;
 }
 
 export const placeImageOnDesign = async ({
@@ -17,6 +18,7 @@ export const placeImageOnDesign = async ({
   yPosition,
   xScale,
   yScale,
+  isBackside,
 }: PlaceImageOnDesignProps): Promise<number | undefined> => {
   const result = await getDb()
     .insert(imageToDesign)
@@ -27,6 +29,7 @@ export const placeImageOnDesign = async ({
       y_position: yPosition,
       x_scale: xScale,
       y_scale: yScale,
+      isBackside: isBackside,
     })
     .returning({ id: imageToDesign.id });
   return result[0]?.id;
