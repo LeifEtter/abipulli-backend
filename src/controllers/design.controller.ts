@@ -45,11 +45,11 @@ export const createDesignController = async (
   next: NextFunction
 ) => {
   try {
-    req.body as DesignCreateParams;
+    const body = req.body as DesignCreateParams;
     const design: InsertDesign = {
       order_id: res.locals.params.orderId!,
       customer_id: res.locals.user.user_id,
-      ...req.body,
+      preferred_pullover_id: body.preferredPulloverId,
     };
     const createdDesigns = await getDb()
       .insert(designs)
