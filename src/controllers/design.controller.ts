@@ -1,7 +1,9 @@
 import { designs, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
 import {
+  Design,
   DesignCreateParams,
+  DesignResponse,
   DesignsResponse,
   errorMessages,
   Order,
@@ -51,11 +53,21 @@ export const createDesignController = async (
       customer_id: res.locals.user.user_id,
       preferred_pullover_id: body.preferredPulloverId,
     };
-    const createdDesigns = await getDb()
+    const result = await getDb()
       .insert(designs)
       .values(design)
       .returning({ id: designs.id });
-    res.status(201).send({ design_id: createdDesigns[0]!.id });
+    if (!result[0])
+      return next(
+        new ApiError({
+          code: 400,
+          info: "Couldn't create design",
+          resource: "Design",
+        })
+      );
+    const createdDesign: Design | undefined = await getDesignById(result[0].id);
+    const response: DesignResponse = { data: createdDesign, success: true };
+    res.status(201).send(response);
   } catch (error) {
     next(error);
   }
