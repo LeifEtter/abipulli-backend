@@ -1,0 +1,1 @@
+ALTER TABLE "image_to_design" RENAME COLUMN "isBackside" TO "is_backside";
