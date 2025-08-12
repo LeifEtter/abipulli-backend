@@ -18,7 +18,8 @@ export const pullovers = pgTable(
     description: varchar().notNull(),
     base_price: integer().notNull(),
     color: varchar().notNull(),
-    image_id: integer().notNull(),
+    front_image_id: integer().notNull(),
+    back_image_id: integer().notNull(),
     created_at: timestamp().notNull().defaultNow(),
     updated_at: timestamp()
       .notNull()
@@ -27,9 +28,14 @@ export const pullovers = pgTable(
   },
   (table) => [
     foreignKey({
-      columns: [table.image_id],
+      columns: [table.front_image_id],
       foreignColumns: [images.id],
-      name: "fk_pullover_image",
+      name: "fk_pullover_front_image",
+    }).onDelete("cascade"),
+    foreignKey({
+      columns: [table.back_image_id],
+      foreignColumns: [images.id],
+      name: "fk_pullover_back_image",
     }).onDelete("cascade"),
   ]
 );
@@ -38,12 +44,17 @@ export type InsertPullover = typeof pullovers.$inferInsert;
 export type SelectPullover = typeof pullovers.$inferSelect;
 
 export type SelectPulloverWithImage = SelectPullover & {
-  image: SelectImage;
+  backImage: SelectImage;
+  frontImage: SelectImage;
 };
 
 export const pulloverRelations = relations(pullovers, ({ one }) => ({
-  image: one(images, {
-    fields: [pullovers.image_id],
+  frontImage: one(images, {
+    fields: [pullovers.front_image_id],
+    references: [images.id],
+  }),
+  backImage: one(images, {
+    fields: [pullovers.back_image_id],
     references: [images.id],
   }),
 }));

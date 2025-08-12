@@ -1,7 +1,9 @@
 import { designs, InsertDesign } from "src/db/index";
 import { NextFunction, Request, Response } from "express";
 import {
+  Design,
   DesignCreateParams,
+  DesignResponse,
   DesignsResponse,
   errorMessages,
   Order,
@@ -14,6 +16,7 @@ import {
   getDesignsForOrder,
 } from "src/services/designs/getDesigns.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
+import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 export const getAllUserDesignsController = async (
   req: Request,
@@ -45,17 +48,27 @@ export const createDesignController = async (
   next: NextFunction
 ) => {
   try {
-    req.body as DesignCreateParams;
+    const body = req.body as DesignCreateParams;
     const design: InsertDesign = {
       order_id: res.locals.params.orderId!,
       customer_id: res.locals.user.user_id,
-      ...req.body,
+      preferred_pullover_id: body.preferredPulloverId,
     };
-    const createdDesigns = await getDb()
+    const result = await getDb()
       .insert(designs)
       .values(design)
       .returning({ id: designs.id });
-    res.status(201).send({ design_id: createdDesigns[0]!.id });
+    if (!result[0])
+      return next(
+        new ApiError({
+          code: 400,
+          info: "Couldn't create design",
+          resource: "Design",
+        })
+      );
+    const createdDesign: Design | undefined = await getDesignById(result[0].id);
+    const response: DesignResponse = { data: createdDesign, success: true };
+    res.status(201).send(response);
   } catch (error) {
     next(error);
   }
@@ -101,6 +114,25 @@ export const getDesignsForOrderController = async (
       },
     };
     res.status(200).json(designResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteDesignController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const designId: number = res.locals.params.designId!;
+    const userId: number = res.locals.user.user_id;
+    const designToDelete: Design | undefined = await getDesignById(designId);
+    if (!designToDelete) return next(ApiError.notFound({ resource: "Design" }));
+    if (designToDelete.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Design" }));
+    await deleteDesignById(designId);
+    res.status(200).send("Design deleted successfully");
   } catch (error) {
     next(error);
   }

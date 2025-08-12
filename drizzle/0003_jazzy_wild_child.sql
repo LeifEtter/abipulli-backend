@@ -1,0 +1,1 @@
+ALTER TABLE "image_to_design" ADD COLUMN "isBackside" boolean DEFAULT false NOT NULL;

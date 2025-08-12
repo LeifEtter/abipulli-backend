@@ -88,7 +88,6 @@ export const authenticateHttp = (
 export const authenticateSocket = async (socket: Socket, next: any) => {
   const token: string | undefined =
     socket.handshake.auth.token ?? socket.handshake.query["jwt_token"];
-  console.log("Authenticating");
   await authenticate({
     token: token,
     setUser: (user: TokenContent) => {

@@ -6,7 +6,7 @@ import { SelectPulloverWithImage } from "src/db";
 export const fetchAllPullovers = async (): Promise<Pullover[]> => {
   const dbPullovers: SelectPulloverWithImage[] =
     await getDb().query.pullovers.findMany({
-      with: { image: true },
+      with: { frontImage: true, backImage: true },
     });
   const castedPullovers: Pullover[] = dbPullovers.map((pullover) =>
     castPullover(pullover)

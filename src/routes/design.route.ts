@@ -6,6 +6,7 @@ import {
 } from "src/middleware/validation.middleware";
 import {
   createDesignController,
+  deleteDesignController,
   getAllUserDesignsController,
   getDesignsForOrderController,
 } from "src/controllers/design.controller";
@@ -16,6 +17,7 @@ import {
   DesignCreateParamsSchema,
 } from "abipulli-types";
 import imageToDesignRouter from "./image.toDesign.route";
+import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 const router = Router({ mergeParams: true });
 
@@ -48,6 +50,15 @@ router
     validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
     validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController
+  );
+
+router
+  .route("/:designId")
+  .delete(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["orderId", "designId"] }),
+    deleteDesignController
   );
 
 router

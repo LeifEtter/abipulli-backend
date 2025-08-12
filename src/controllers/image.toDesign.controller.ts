@@ -45,6 +45,7 @@ export const placeImageOnDesignController = async (
       yPosition: body.positionY,
       xScale: body.scaleX,
       yScale: body.scaleY,
+      isBackside: body.isBackside,
     });
     if (!result)
       throw next(
@@ -152,7 +153,6 @@ export const getAllImagesForDesignController = async (
     };
     res.status(200).send(imageResponse);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

@@ -19,7 +19,8 @@ export const getDesignById = async (
         texts: true,
         preferredPullover: {
           with: {
-            image: true,
+            backImage: true,
+            frontImage: true,
           },
         },
         customer: true,
@@ -43,7 +44,8 @@ export const getDesignsForOrder = async (
         order: true,
         preferredPullover: {
           with: {
-            image: true,
+            backImage: true,
+            frontImage: true,
           },
         },
         imageToDesign: {
@@ -66,7 +68,8 @@ export const getDesignsByUserId = async (userId: number): Promise<Design[]> => {
         order: true,
         preferredPullover: {
           with: {
-            image: true,
+            backImage: true,
+            frontImage: true,
           },
         },
         imageToDesign: {
