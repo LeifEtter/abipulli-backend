@@ -16,6 +16,7 @@ import {
   getDesignsForOrder,
 } from "src/services/designs/getDesigns.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
+import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 export const getAllUserDesignsController = async (
   req: Request,
@@ -113,6 +114,25 @@ export const getDesignsForOrderController = async (
       },
     };
     res.status(200).json(designResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteDesignController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const designId: number = res.locals.params.designId!;
+    const userId: number = res.locals.user.user_id;
+    const designToDelete: Design | undefined = await getDesignById(designId);
+    if (!designToDelete) return next(ApiError.notFound({ resource: "Design" }));
+    if (designToDelete.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Design" }));
+    await deleteDesignById(designId);
+    res.status(200).send("Design deleted successfully");
   } catch (error) {
     next(error);
   }
