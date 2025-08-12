@@ -1,9 +1,12 @@
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
 import nodemailer from "nodemailer";
+import dns from "dns";
+import SMTPConnection from "nodemailer/lib/smtp-connection";
+
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const transporter = nodemailer.createTransport({
-  name: "Abipulli",
   host: "smtp.zoho.eu",
   port: 587,
   secure: false,
@@ -15,7 +18,19 @@ const transporter = nodemailer.createTransport({
   connectionTimeout: 5000,
   greetingTimeout: 5000,
   socketTimeout: 10000,
-});
+  tls: { servername: "smtp.zoho.eu", rejectUnauthorized: true },
+  dnsLookup: (
+    hostname: string,
+    _opts: unknown,
+    cb: (
+      err: NodeJS.ErrnoException | null,
+      address: string,
+      family: number
+    ) => void
+  ) => {
+    dns.lookup(hostname, { family: 4 }, cb);
+  },
+} as SMTPTransport.Options);
 
 export const sendEmail = async (
   email: string,
