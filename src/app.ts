@@ -19,7 +19,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cookie: true,
   cors: {
-    origin: "*",
+    origin: ["https://etter.app"],
     credentials: true,
   },
 });
@@ -30,15 +30,17 @@ app.use(express.urlencoded({ limit: "100kb", extended: true }));
 app.use(httpLogger);
 app.use(cookieParser());
 
+const origins = () => {
+  const originList: string[] = ["https://etter.app"];
+  if (process.env.NODE_ENV == "dev" || process.env.NODE_ENV == "development") {
+    originList.push("http://localhost:3000", "http://localhost:5173");
+  }
+  return originList;
+};
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      // "https://www.postman.com",
-      // "http://localhost",
-      "https://etter.app",
-      "http://localhost:3000",
-    ],
+    origin: origins(),
     credentials: true,
   })
 );
