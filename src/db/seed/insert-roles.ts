@@ -11,14 +11,17 @@ async function insertRoles(): Promise<object[]> {
 
   const newRoles: InsertRole[] = [
     {
+      id: 0,
       role_name: "anonymous",
       role_power: 0,
     },
     {
+      id: 1,
       role_name: "registered",
       role_power: 1,
     },
     {
+      id: 2,
       role_name: "admin",
       role_power: 10,
     },
