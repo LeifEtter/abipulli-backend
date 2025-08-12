@@ -62,12 +62,17 @@ export const registerUserController = async (
     }
     // if (process.env.NODE_ENV === "production") {
     //   const verificationCode = generateVerificationCode();
+
+    //   console.log("sending email");
     //   await sendEmail(
     //     body.email,
     //     "Abipulli.com Verification Code",
     //     `Your verification code is ${verificationCode}`
     //   );
     // }
+    const verificationCode = generateVerificationCode();
+    //
+
     const password = await encryptPassword(body.password);
     const castedUser = castUserToRegisterToDb(body);
     await createUser({
@@ -87,6 +92,14 @@ export const registerUserController = async (
       },
     };
     res.status(201).json(registerResponse);
+
+    setImmediate(async () => {
+      await sendEmail(
+        body.email,
+        "Abipulli.com Verification Code",
+        `Your verification code is ${verificationCode}`
+      );
+    });
   } catch (error) {
     logger.error(error);
     next(error);
