@@ -3,6 +3,7 @@ import { logger } from "src/lib/logger";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
+  name: "Abipulli",
   host: "smtp.zoho.eu",
   port: 465,
   secure: true,
