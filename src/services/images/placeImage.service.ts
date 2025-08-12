@@ -29,7 +29,7 @@ export const placeImageOnDesign = async ({
       y_position: yPosition,
       x_scale: xScale,
       y_scale: yScale,
-      isBackside: isBackside,
+      is_backside: isBackside,
     })
     .returning({ id: imageToDesign.id });
   return result[0]?.id;

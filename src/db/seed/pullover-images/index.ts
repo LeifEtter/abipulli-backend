@@ -153,7 +153,7 @@ export const normalPullovers: PulloverDataWithFile[] = [
     fileFront: whiteFront,
     fileBack: whiteBack,
     name: "Normal Oversized Weiß",
-    description: "Normal Heavy 100% Wolle Oversized Pullover",
+    description: "Weißer Normal 100% Wolle Oversized Pullover",
     base_price: 30,
     color: "weiss",
     hoodie: false,

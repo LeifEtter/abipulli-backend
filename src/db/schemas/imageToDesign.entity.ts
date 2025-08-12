@@ -20,7 +20,7 @@ export const imageToDesign = pgTable(
     y_position: integer().notNull().default(0),
     x_scale: real().notNull().default(1),
     y_scale: real().notNull().default(1),
-    isBackside: boolean().notNull().default(false),
+    is_backside: boolean().notNull().default(false),
   },
   (table) => [
     foreignKey({

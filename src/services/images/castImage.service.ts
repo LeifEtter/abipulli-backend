@@ -57,6 +57,6 @@ export const castImageWithPositionAndScale = (
     url: buildImageUrl(imageToDesign.image),
     width: imageToDesign.image.image_width,
     height: imageToDesign.image.image_height,
-    isBackside: imageToDesign.isBackside,
+    isBackside: imageToDesign.is_backside,
   };
 };
