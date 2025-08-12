@@ -60,14 +60,14 @@ export const registerUserController = async (
         })
       );
     }
-    if (process.env.NODE_ENV === "production") {
-      const verificationCode = generateVerificationCode();
-      await sendEmail(
-        body.email,
-        "Abipulli.com Verification Code",
-        `Your verification code is ${verificationCode}`
-      );
-    }
+    // if (process.env.NODE_ENV === "production") {
+    //   const verificationCode = generateVerificationCode();
+    //   await sendEmail(
+    //     body.email,
+    //     "Abipulli.com Verification Code",
+    //     `Your verification code is ${verificationCode}`
+    //   );
+    // }
     const password = await encryptPassword(body.password);
     const castedUser = castUserToRegisterToDb(body);
     await createUser({
@@ -79,10 +79,11 @@ export const registerUserController = async (
     const registerResponse: MessageResponse = {
       success: true,
       data: {
-        message:
-          process.env.NODE_ENV === "production"
-            ? "Verification email sent"
-            : "User created",
+        message: "User Created",
+        // message:
+        //   process.env.NODE_ENV === "production"
+        //     ? "Verification email sent"
+        //     : "User created",
       },
     };
     res.status(201).json(registerResponse);
