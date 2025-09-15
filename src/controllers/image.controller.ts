@@ -36,6 +36,7 @@ import {
   getImagesByUserId,
 } from "src/services/images/getImageById.service";
 import { HETZNER_STORAGE_WITH_BUCKET } from "src/configs/hetzner.config";
+import { normalizeToSDR } from "src/lib/misc/normalizeToSDR";
 
 export const saveImageController = async (
   req: Request,
@@ -60,8 +61,9 @@ export const saveImageController = async (
       height: imageDimensions.height,
     });
     try {
+      const normalizedImage = await normalizeToSDR(file.buffer, "png");
       const uploadResult = await uploadImageToHetzner({
-        file: file.buffer,
+        file: normalizedImage,
         path: `${process.env.NODE_ENV}/users/${userId}`,
         filename: `${fileUuid}`,
         imageType: "image/png",
