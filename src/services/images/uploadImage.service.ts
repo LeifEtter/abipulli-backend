@@ -1,4 +1,4 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { errorMessages } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
 import { logger } from "src/lib/logger";
