@@ -21,9 +21,7 @@ export const queryImageFromIdeogram = async (
   formData.append("rendering_speed", "TURBO");
   formData.append("magic_prompt", "AUTO");
   if (params.referenceImage) {
-    const blob = new Blob([params.referenceImage], {
-      type: "image/png",
-    });
+    const blob: Blob = new Blob([params.referenceImage as BlobPart]);
     formData.append("style_reference_images", blob, "reference-image.png");
   }
   const res = await fetch(IDEOGRAM_URL, {
