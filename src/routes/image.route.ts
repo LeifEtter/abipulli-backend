@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   commentOnPrompt,
+  deleteImageController,
   generateImageController,
   getMyImagesController,
   getSingleImageController,
@@ -29,6 +30,15 @@ router
     minPower(1),
     uploadSingleImage("image"),
     saveImageController
+  );
+
+router
+  .route("/:imageId")
+  .delete(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["imageId"] }),
+    deleteImageController
   );
 
 // router
