@@ -30,7 +30,7 @@ router
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
     validateBody(DesignCreateParamsSchema),
-    createDesignController
+    createDesignController,
   );
 
 router
@@ -39,7 +39,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
-    getDesignsForOrderController
+    getDesignsForOrderController,
   );
 
 router
@@ -49,7 +49,7 @@ router
     minPower(1),
     validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
     validateBody(AddImageToDesignParamsSchema),
-    placeImageOnDesignController
+    placeImageOnDesignController,
   );
 
 router
@@ -58,7 +58,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId", "designId"] }),
-    deleteDesignController
+    deleteDesignController,
   );
 
 router
