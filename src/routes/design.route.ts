@@ -17,11 +17,13 @@ import {
   DesignCreateParamsSchema,
 } from "abipulli-types";
 import imageToDesignRouter from "./image.toDesign.route";
+import pulloverRouter from "./pullover.route";
 import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 const router = Router({ mergeParams: true });
 
 router.use("/:designId/image", imageToDesignRouter);
+router.use("/:designId/pullover", pulloverRouter);
 
 router
   .route("/")
