@@ -93,13 +93,11 @@ export const registerUserController = async (
     };
     res.status(201).json(registerResponse);
 
-    setImmediate(async () => {
-      await sendEmail(
-        body.email,
-        "Abipulli.com Verification Code",
-        `Your verification code is ${verificationCode}`
-      );
-    });
+    sendEmail(
+      body.email,
+      "Abipulli.com Verification Code",
+      `Your verification code is ${verificationCode}`,
+    );
   } catch (error) {
     logger.error(error);
     next(error);
