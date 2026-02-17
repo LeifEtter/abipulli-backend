@@ -36,6 +36,11 @@ import {
   getImagesByUserId,
 } from "src/services/images/getImageById.service";
 import { HETZNER_STORAGE_WITH_BUCKET } from "src/configs/hetzner.config";
+import { normalizeToSDR } from "src/lib/misc/normalizeToSDR";
+import {
+  deleteImageById,
+  deleteImageFromHetzner,
+} from "src/services/images/deleteImage.service";
 
 export const saveImageController = async (
   req: Request,
@@ -60,8 +65,9 @@ export const saveImageController = async (
       height: imageDimensions.height,
     });
     try {
+      const normalizedImage = await normalizeToSDR(file.buffer, "png");
       const uploadResult = await uploadImageToHetzner({
-        file: file.buffer,
+        file: normalizedImage,
         path: `${process.env.NODE_ENV}/users/${userId}`,
         filename: `${fileUuid}`,
         imageType: "image/png",
@@ -70,7 +76,6 @@ export const saveImageController = async (
       await getDb().delete(images).where(eq(images.id, insertedImageId));
       throw error;
     }
-
     const response: ImageUploadResultResponse = {
       success: true,
       data: {
@@ -275,6 +280,34 @@ export const getSingleImageController = async (
       return next(ApiError.notOwned({ resource: "Image" }));
     const imageResponse: ImageResponse = { success: true, data: image };
     res.status(200).send(imageResponse);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteImageController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId: number = res.locals.user.user_id;
+    const imageId: number = res.locals.params.imageId!;
+    const image = await getImageById(imageId);
+
+    if (!image) return next(ApiError.notFound({ resource: "Image" }));
+    if (image.userId != userId)
+      return next(ApiError.notOwned({ resource: "Image" }));
+
+    // https://abipulli.nbg1.your-objectstorage.com/produ…ion/users/32/7a61983b-aca9-4c61-8d09-a8695c193ec3
+    const splitImageUrl: string[] = image.url.split("/");
+    const fileName: string = splitImageUrl[splitImageUrl.length - 1]!;
+    await deleteImageFromHetzner({
+      path: `${process.env.NODE_ENV}/users/${userId}`,
+      filename: fileName,
+    });
+    await deleteImageById(image.id);
+    res.status(200).send("Image Deleted");
   } catch (error) {
     next(error);
   }

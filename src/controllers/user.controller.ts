@@ -47,7 +47,7 @@ import { castUserToRegisterToDb } from "src/services/users/castUser.service";
 export const registerUserController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const body: UserCreateParams = req.body;
   try {
@@ -57,7 +57,7 @@ export const registerUserController = async (
         new ApiError({
           code: 400,
           info: errorMessages.emailAlreadyRegistered,
-        })
+        }),
       );
     }
     // if (process.env.NODE_ENV === "production") {
@@ -93,13 +93,11 @@ export const registerUserController = async (
     };
     res.status(201).json(registerResponse);
 
-    setImmediate(async () => {
-      await sendEmail(
-        body.email,
-        "Abipulli.com Verification Code",
-        `Your verification code is ${verificationCode}`
-      );
-    });
+    sendEmail(
+      body.email,
+      "Abipulli.com Verification Code",
+      `Your verification code is ${verificationCode}`,
+    );
   } catch (error) {
     logger.error(error);
     next(error);
@@ -109,7 +107,7 @@ export const registerUserController = async (
 export const loginWithEmailController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const body: UserLoginParams = req.body;
@@ -127,7 +125,7 @@ export const loginWithEmailController = async (
         new ApiError({
           code: 401,
           info: errorMessages.faultyLoginCredentials,
-        })
+        }),
       );
     }
     const token = createToken(storedUser.id, storedUser.role.role_power);
@@ -153,7 +151,7 @@ export const loginWithEmailController = async (
 export const deleteUserSelfController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId: number = res.locals.user!.user_id!;
@@ -167,22 +165,21 @@ export const deleteUserSelfController = async (
 export const deleteUserController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userToDeleteId = res.locals.params!.userId!;
     if (userToDeleteId == res.locals.user!.user_id!) {
       return next(
-        new ApiError({ code: 400, info: errorMessages.cantDeleteSelf })
+        new ApiError({ code: 400, info: errorMessages.cantDeleteSelf }),
       );
     }
-    const userToDelete: Omit<User, "password"> | undefined = await getUserById(
-      userToDeleteId
-    );
+    const userToDelete: Omit<User, "password"> | undefined =
+      await getUserById(userToDeleteId);
     if (!userToDelete) return next(ApiError.notFound({ resource: "User" }));
     if (userToDelete.role!.rolePower >= 10) {
       return next(
-        new ApiError({ code: 401, info: errorMessages.rolePowerTooLow })
+        new ApiError({ code: 401, info: errorMessages.rolePowerTooLow }),
       );
     }
     await deleteAllUserData(userToDeleteId);
@@ -195,7 +192,7 @@ export const deleteUserController = async (
 export const checkTokenController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = res.locals.user.user_id;
@@ -213,13 +210,12 @@ export const checkTokenController = async (
 export const getUserDataController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = res.locals.user.user_id;
-    const userData: Omit<User, "password"> | undefined = await getUserById(
-      userId
-    );
+    const userData: Omit<User, "password"> | undefined =
+      await getUserById(userId);
     if (!userData) return next(ApiError.notFound({ resource: "User" }));
     const userResponse: UserResponse = {
       success: true,
@@ -234,7 +230,7 @@ export const getUserDataController = async (
 export const getAllUsersController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const users = await getAllUsers();
@@ -256,7 +252,7 @@ export const getAllUsersController = async (
 export const changeUserPasswordController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = res.locals.user.user_id;
@@ -269,7 +265,7 @@ export const changeUserPasswordController = async (
     });
     if (!compareResult) {
       return next(
-        new ApiError({ code: 401, info: errorMessages.faultyLoginCredentials })
+        new ApiError({ code: 401, info: errorMessages.faultyLoginCredentials }),
       );
     }
     const newPasswordHash = await encryptPassword(body.password);
@@ -287,7 +283,7 @@ export const changeUserPasswordController = async (
 export const logoutController = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     res.cookie("jwt_token", null);

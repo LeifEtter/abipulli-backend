@@ -17,11 +17,13 @@ import {
   DesignCreateParamsSchema,
 } from "abipulli-types";
 import imageToDesignRouter from "./image.toDesign.route";
+import pulloverRouter from "./pullover.route";
 import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 const router = Router({ mergeParams: true });
 
 router.use("/:designId/image", imageToDesignRouter);
+router.use("/:designId/pullover", pulloverRouter);
 
 router
   .route("/")
@@ -30,7 +32,7 @@ router
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
     validateBody(DesignCreateParamsSchema),
-    createDesignController
+    createDesignController,
   );
 
 router
@@ -39,7 +41,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId"] }),
-    getDesignsForOrderController
+    getDesignsForOrderController,
   );
 
 router
@@ -49,7 +51,7 @@ router
     minPower(1),
     validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
     validateBody(AddImageToDesignParamsSchema),
-    placeImageOnDesignController
+    placeImageOnDesignController,
   );
 
 router
@@ -58,7 +60,7 @@ router
     authenticateHttp,
     minPower(1),
     validateParams({ requiredParams: ["orderId", "designId"] }),
-    deleteDesignController
+    deleteDesignController,
   );
 
 router

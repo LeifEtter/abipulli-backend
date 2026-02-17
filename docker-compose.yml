@@ -2,7 +2,7 @@ services:
   dev_db:
     container_name: abipulli-dev-db
     image: postgres:16
-    restart: unless-stopped
+    restart: no
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
