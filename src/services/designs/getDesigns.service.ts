@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { castDesignWithRelations } from "./castDesign.service";
 
 export const getDesignById = async (
-  designId: number
+  designId: number,
 ): Promise<Design | undefined> => {
   const dbDesign: SelectDesignWithRelations | undefined =
     await getDb().query.designs.findFirst({
@@ -34,7 +34,7 @@ export const getDesignById = async (
 };
 
 export const getDesignsForOrder = async (
-  orderId: number
+  orderId: number,
 ): Promise<Design[]> => {
   const dbDesigns: SelectDesignWithRelations[] =
     await getDb().query.designs.findMany({

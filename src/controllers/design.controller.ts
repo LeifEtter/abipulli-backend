@@ -6,6 +6,7 @@ import {
   DesignResponse,
   DesignsResponse,
   errorMessages,
+  ImageWithPositionAndScale,
   Order,
 } from "abipulli-types";
 import { ApiError } from "src/error/ApiError";
@@ -17,16 +18,25 @@ import {
 } from "src/services/designs/getDesigns.service";
 import { getOrderById } from "src/services/orders/getOrderById.service";
 import { deleteDesignById } from "src/services/designs/deleteDesign.service";
+import { getImagesByDesignId } from "src/services/images/getImageById.service";
 
 export const getAllUserDesignsController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId: number = res.locals.user.user_id;
 
-    const designs = await getDesignsByUserId(userId);
+    const designsWithoutImages = await getDesignsByUserId(userId);
+    const designs = [];
+    for (const design of designsWithoutImages) {
+      const images: ImageWithPositionAndScale[] = await getImagesByDesignId(
+        design.id,
+      );
+      design.images = images;
+      designs.push(design);
+    }
     const designResponse: DesignsResponse = {
       success: true,
       data: {
@@ -45,7 +55,7 @@ export const getAllUserDesignsController = async (
 export const createDesignController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const body = req.body as DesignCreateParams;
@@ -64,7 +74,7 @@ export const createDesignController = async (
           code: 400,
           info: "Couldn't create design",
           resource: "Design",
-        })
+        }),
       );
     const createdDesign: Design | undefined = await getDesignById(result[0].id);
     const response: DesignResponse = { data: createdDesign, success: true };
@@ -77,7 +87,7 @@ export const createDesignController = async (
 export const retrieveDesignController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const designId: number = res.locals.params.designId!;
@@ -92,18 +102,27 @@ export const retrieveDesignController = async (
 export const getDesignsForOrderController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     // check for correct user id in order
     const orderId: number = res.locals.params.orderId!;
     const userId: number = res.locals.params.userId!;
-
+    console.log("get");
     const order: Order | undefined = await getOrderById(orderId);
     if (!order) return next(ApiError.notFound({ resource: "Order" }));
     // if (order.customerId != userId)
     //   return next(ApiError.notOwned({ resource: "Order" }));
-    const designs = await getDesignsForOrder(orderId);
+    const designsWithoutImages = await getDesignsForOrder(orderId);
+    const designs: Design[] = [];
+    for (const design of designs) {
+      const images: ImageWithPositionAndScale[] = await getImagesByDesignId(
+        design.id,
+      );
+      design.images = images;
+      designs.push(design);
+    }
+    console.log(designs);
     const designResponse: DesignsResponse = {
       success: true,
       data: {
@@ -122,7 +141,7 @@ export const getDesignsForOrderController = async (
 export const deleteDesignController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const designId: number = res.locals.params.designId!;
