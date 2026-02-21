@@ -7,6 +7,7 @@ import {
 import {
   createDesignController,
   deleteDesignController,
+  duplicateDesignController,
   getAllUserDesignsController,
   getDesignsForOrderController,
 } from "src/controllers/design.controller";
@@ -18,7 +19,6 @@ import {
 } from "abipulli-types";
 import imageToDesignRouter from "./image.toDesign.route";
 import pulloverRouter from "./pullover.route";
-import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 
 const router = Router({ mergeParams: true });
 
@@ -52,6 +52,15 @@ router
     validateParams({ requiredParams: ["orderId", "designId", "imageId"] }),
     validateBody(AddImageToDesignParamsSchema),
     placeImageOnDesignController,
+  );
+
+router
+  .route("/:designId/duplicate")
+  .post(
+    authenticateHttp,
+    minPower(1),
+    validateParams({ requiredParams: ["designId"] }),
+    duplicateDesignController,
   );
 
 router
