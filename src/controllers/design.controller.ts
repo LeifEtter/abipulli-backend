@@ -19,6 +19,7 @@ import {
 import { getOrderById } from "src/services/orders/getOrderById.service";
 import { deleteDesignById } from "src/services/designs/deleteDesign.service";
 import { getImagesByDesignId } from "src/services/images/getImageById.service";
+import { duplicateDesign } from "src/services/designs/duplicateDesign.service";
 
 export const getAllUserDesignsController = async (
   req: Request,
@@ -152,6 +153,27 @@ export const deleteDesignController = async (
       return next(ApiError.notOwned({ resource: "Design" }));
     await deleteDesignById(designId);
     res.status(200).send("Design deleted successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const duplicateDesignController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const designId: number = res.locals.params.designId!;
+    const userId: number = res.locals.user.user_id;
+    console.log(designId);
+    const designToDuplicate: Design | undefined = await getDesignById(designId);
+    if (!designToDuplicate)
+      return next(ApiError.notFound({ resource: "Design" }));
+    if (designToDuplicate.customerId != userId)
+      return next(ApiError.notOwned({ resource: "Design" }));
+    await duplicateDesign({ designId });
+    res.status(200).send("Design duplicated successfully");
   } catch (error) {
     next(error);
   }
